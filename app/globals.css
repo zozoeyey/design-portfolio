@@ -1,0 +1,307 @@
+@import "tailwindcss";
+
+/*
+  Design tokens extracted from the original Framer project.
+  Fonts: Satoshi (Fontshare) for UI/body, Instrument Serif (Google) for accent headings.
+  Both are loaded via <link> tags in app/layout.tsx.
+*/
+
+:root {
+  /* Neutrals */
+  --black: rgb(9, 9, 9);
+  --gray-700: rgb(38, 38, 38);
+  --gray-500: rgb(94, 94, 94);
+  --gray-300: rgb(176, 176, 176);
+  --medium-gray: rgb(119, 119, 119);
+  --white-100: rgb(250, 251, 254); /* page background */
+  --white-50: rgb(255, 255, 255); /* card background */
+  --white: rgb(255, 255, 255);
+
+  --background: var(--white-100);
+  --foreground: var(--black);
+}
+
+@theme inline {
+  --color-black: var(--black);
+  --color-gray-700: var(--gray-700);
+  --color-gray-500: var(--gray-500);
+  --color-gray-300: var(--gray-300);
+  --color-medium-gray: var(--medium-gray);
+  --color-white-100: var(--white-100);
+  --color-white-50: var(--white-50);
+  --color-paper: var(--white);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/* Accent serif helper — italic, as used across the original site */
+.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Rich text (case-study body copy) */
+.prose p {
+  margin: 0 0 1rem 0;
+  line-height: 1.7;
+  color: var(--gray-700);
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+.prose strong {
+  color: var(--black);
+  font-weight: 700;
+}
+/* Light-on-dark variant for dark story bands */
+.prose-invert p {
+  color: rgb(198, 198, 210);
+}
+.prose-invert strong {
+  color: var(--white);
+}
+
+/* Subtle entrance animation */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+/* Text filled with lavender halftone dots (used for big numerals) */
+.halftone-text {
+  color: transparent;
+  background-image: radial-gradient(rgb(167, 139, 250) 1.4px, transparent 1.7px);
+  background-size: 7px 7px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0.9;
+}
+
+/* ---------------------------------------------------------------------------
+   Custom cursor — pure CSS, zero lag. A lavender sparkle that turns into a
+   heart over anything clickable. Coarse pointers (touch) ignore cursor styles,
+   and text fields keep the I-beam.
+   --------------------------------------------------------------------------- */
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2226%22%20height=%2226%22%20viewBox=%220%200%2026%2026%22%3E%3Cpath%20d=%22M13%201.5%20C14.4%208%2017.5%2011.1%2024.5%2013%20C17.5%2014.9%2014.4%2018%2013%2024.5%20C11.6%2018%208.5%2014.9%201.5%2013%20C8.5%2011.1%2011.6%208%2013%201.5%20Z%22%20fill=%22rgb%28139,115,220%29%22%20stroke=%22white%22%20stroke-width=%221.6%22%20stroke-linejoin=%22round%22/%3E%3C/svg%3E") 13 13, auto;
+  }
+
+  a,
+  button,
+  [role="button"],
+  select,
+  label,
+  summary,
+  a *,
+  button * {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2230%22%20height=%2230%22%20viewBox=%220%200%2030%2030%22%3E%3Cg%20transform=%22rotate%2845%2015%2015%29%22%3E%3Cpath%20d=%22M15%201.5%20C16.7%209.3%2020.7%2013.3%2028.5%2015%20C20.7%2016.7%2016.7%2020.7%2015%2028.5%20C13.3%2020.7%209.3%2016.7%201.5%2015%20C9.3%2013.3%2013.3%209.3%2015%201.5%20Z%22%20fill=%22rgb%28124,96,214%29%22%20stroke=%22white%22%20stroke-width=%221.6%22%20stroke-linejoin=%22round%22/%3E%3Ccircle%20cx=%2215%22%20cy=%2215%22%20r=%222.4%22%20fill=%22rgb%28196,178,255%29%22/%3E%3C/g%3E%3C/svg%3E") 15 15, pointer;
+  }
+
+  input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+  textarea {
+    cursor: text;
+  }
+}
+
+/* Story cards (About page prototype) — panel swap animation */
+@keyframes story-swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.story-swap {
+  animation: story-swap-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-swap {
+    animation: none;
+  }
+  .story-card {
+    transition: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Liquid glass system — shared by the navbar, buttons, and card surfaces.
+   Defined in the components layer so Tailwind utilities can override pieces.
+   .glass       frosted light glass (real backdrop blur) — navbar, chips, pills
+   .glass-dark  smoked glass — primary buttons
+   .glass-card  glass-look card surface (no backdrop-filter: cheap at any size)
+   --------------------------------------------------------------------------- */
+@layer components {
+  .glass,
+  .glass-dark,
+  .glass-card {
+    position: relative;
+    isolation: isolate;
+  }
+  /* shared grain */
+  .glass::before,
+  .glass-dark::before,
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.92); /* fallback */
+    border: 1px solid rgba(9, 9, 9, 0.12);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+      inset 1px 0 0 rgba(255, 255, 255, 0.35),
+      inset -1px 0 0 rgba(255, 255, 255, 0.35);
+  }
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .glass {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.6),
+        rgba(255, 255, 255, 0.35) 55%,
+        rgba(255, 255, 255, 0.5)
+      );
+      -webkit-backdrop-filter: blur(26px) saturate(2);
+      backdrop-filter: blur(26px) saturate(2);
+    }
+  }
+  /* soft sheen sweeping across the top */
+  .glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 18%,
+      rgba(255, 255, 255, 0.65) 38%,
+      rgba(255, 255, 255, 0.18) 50%,
+      transparent 62%
+    );
+  }
+
+  /* smoked glass — primary buttons */
+  .glass-dark {
+    background: linear-gradient(
+      135deg,
+      rgba(24, 22, 32, 0.94),
+      rgba(52, 45, 74, 0.88) 55%,
+      rgba(20, 18, 28, 0.92)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
+    backdrop-filter: blur(10px) saturate(1.5);
+  }
+  .glass-dark::before {
+    opacity: 0.08;
+  }
+
+  /* glass-look card surface — same edges/grain, no backdrop-filter */
+  .glass-card {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(255, 255, 255, 0.68) 55%,
+      rgba(255, 255, 255, 0.85)
+    );
+    border: 1px solid rgba(9, 9, 9, 0.1);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .glass-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.4) 46%,
+      rgba(255, 255, 255, 0.1) 55%,
+      transparent 70%
+    );
+  }
+}
+
+/* Liquid-glass hover for plate cards: a sheen that sweeps across the media */
+.plate-sheen {
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: -80%;
+  width: 55%;
+  transform: skewX(-18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5) 45%,
+    rgba(255, 255, 255, 0.15) 60%,
+    transparent
+  );
+  pointer-events: none;
+  transition: left 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+.group:hover .plate-sheen {
+  left: 130%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .plate-sheen {
+    display: none;
+  }
+}
