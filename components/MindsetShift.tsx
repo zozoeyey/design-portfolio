@@ -1,4 +1,4 @@
-import { Connector } from "@/components/ObservationMap";
+import { Connector } from "@/components/Connector";
 
 /**
  * "Did it ship? → Did it reduce team work?" mindset-shift graphic, in code
