@@ -15,7 +15,7 @@ function HalftoneMark() {
       width="22"
       height="22"
       aria-hidden="true"
-      className="shrink-0 text-[rgb(167,139,250)]"
+      className="shrink-0 text-accent"
     >
       {dots.map(([x, y, r], i) => (
         <circle key={i} cx={x} cy={y} r={r} fill="currentColor" />
@@ -24,13 +24,19 @@ function HalftoneMark() {
   );
 }
 
-export default function SectionLabel({ children }: { children: React.ReactNode }) {
+export default function SectionLabel({
+  children,
+  as: Heading = "h2",
+}: {
+  children: React.ReactNode;
+  as?: "h1" | "h2";
+}) {
   return (
     <div className="flex items-center gap-4">
       <HalftoneMark />
-      <h2 className="font-serif text-4xl italic leading-none text-black sm:text-5xl">
+      <Heading className="font-serif text-title italic text-black">
         {children}
-      </h2>
+      </Heading>
       <div
         aria-hidden="true"
         className="ml-2 h-px flex-1"

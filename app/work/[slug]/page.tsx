@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProject, projects } from "@/lib/data";
+import { getProject, playground, projects } from "@/lib/data";
 import Reveal from "@/components/Reveal";
+import ProjectCard from "@/components/ProjectCard";
+import PlateCard from "@/components/PlateCard";
+import SectionLabel from "@/components/SectionLabel";
 import ObservationMap from "@/components/ObservationMap";
 import MindsetShift from "@/components/MindsetShift";
 import BeforeAfter from "@/components/BeforeAfter";
-
-const container = "mx-auto w-full max-w-[1100px] px-6 sm:px-12";
+import { container, eyebrow, sectionGap, tagColors } from "@/lib/ui";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -30,10 +32,8 @@ export async function generateMetadata({
 function MetaItem({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-xs uppercase tracking-widest text-medium-gray">
-        {label}
-      </div>
-      <div className="mt-1 text-sm text-black">{value}</div>
+      <div className={eyebrow}>{label}</div>
+      <div className="mt-2 text-base leading-relaxed text-black sm:text-lg">{value}</div>
     </div>
   );
 }
@@ -48,127 +48,84 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   const idx = projects.findIndex((p) => p.slug === slug);
-  const next = projects[(idx + 1) % projects.length];
+  // Playground pieces suggest other playground pieces; work projects suggest work.
+  const moreFromPlayground = project.playgroundOnly
+    ? playground.filter((i) => i.slug !== slug).slice(0, 2)
+    : null;
+  const others = projects.filter((p) => p.slug !== slug && !p.playgroundOnly);
+  const more = [0, 1].map((k) => others[(idx + k) % others.length]);
 
-  const mentiLayout = project.slug === "valueglance";
+  const mentiLayout = project.layoutV2 === true;
 
   return (
     <article className={mentiLayout ? "" : "pt-32 sm:pt-40"}>
       {mentiLayout ? (
         <>
-          {/* Full-bleed hero banner at its natural aspect (uncropped) */}
+          {/* Hero banner, same width as the navbar */}
           {project.headerImage && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={project.headerImage} alt="" className="w-full" />
+            <div className={`${container} pt-28 sm:pt-32`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={project.headerImage}
+                alt=""
+                className="w-full overflow-hidden rounded-3xl"
+              />
+            </div>
           )}
 
           {/* Case info: title + subtitle + blurb + problem/outcome, meta rail right */}
           <header className={`${container} mt-12`}>
             <Reveal>
-              <div className="grid gap-10 md:grid-cols-[minmax(0,8fr)_minmax(0,3fr)] md:gap-16">
-                <div>
-                  <Link
-                    href="/#mywork"
-                    className="text-sm text-medium-gray transition-colors hover:text-black"
-                  >
-                    ← All work
-                  </Link>
-                  <div className="mt-6 flex flex-wrap items-center gap-3">
-                    <span
-                      className="rounded-full px-3 py-1 text-xs font-medium text-white"
-                      style={{ backgroundColor: project.color }}
-                    >
-                      {project.tag}
-                    </span>
-                    <span className="text-sm text-medium-gray">{project.year}</span>
-                  </div>
-                  <h1 className="mt-6 text-4xl font-bold tracking-tight text-black sm:text-5xl">
-                    {project.name}
-                  </h1>
-                  <p className="mt-3 max-w-3xl text-xl font-semibold leading-snug text-medium-gray sm:text-2xl sm:leading-[1.35]">
-                    {project.summary}
-                  </p>
+              {/* Title block, full width */}
+              <Link
+                href="/#mywork"
+                className="text-sm text-gray-500 transition-colors hover:text-black"
+              >
+                ← All work
+              </Link>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <span
+                  className="rounded-full px-3 py-1 text-xs font-bold"
+                  style={tagColors(project.color)}
+                >
+                  {project.tag}
+                </span>
+                <span className="text-sm text-gray-500">{project.year}</span>
+              </div>
+              <h1 className="mt-6 text-display font-bold tracking-tight text-black">
+                {project.name}
+              </h1>
+              <p className="mt-3 max-w-3xl text-lead font-medium text-gray-500">
+                {project.summary}
+              </p>
 
-                  {/* Blurb (the old Overview) */}
-                  <div
-                    className="prose mt-8 max-w-none text-lg"
-                    dangerouslySetInnerHTML={{ __html: project.overview }}
-                  />
+              {/* Blurb */}
+              <div
+                className="prose mt-10 max-w-[65ch] text-lg"
+                dangerouslySetInnerHTML={{ __html: project.overview }}
+              />
 
-                  {/* Problem / Outcome */}
-                  {(project.problem || project.outcome) && (
-                    <div className="mt-10 grid gap-8 border-t border-black/10 pt-8 sm:grid-cols-2">
-                      {project.problem && (
-                        <div>
-                          <div className="text-xs font-bold uppercase tracking-widest text-medium-gray">
-                            Problem
-                          </div>
-                          <p className="mt-2 leading-relaxed text-gray-700">{project.problem}</p>
-                        </div>
-                      )}
-                      {project.outcome && (
-                        <div>
-                          <div className="text-xs font-bold uppercase tracking-widest text-medium-gray">
-                            Outcome
-                          </div>
-                          <p className="mt-2 leading-relaxed text-gray-700">{project.outcome}</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-dark mt-8 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm text-white transition-transform hover:scale-[1.03]"
+                >
+                  Visit live site →
+                </a>
+              )}
 
-                {/* Meta rail */}
-                <aside className="flex flex-row flex-wrap gap-8 md:flex-col md:pt-24">
-                  <MetaItem label="Role" value={project.role} />
-                  <MetaItem label="Timeline" value={project.duration} />
-                  <MetaItem label="Team" value={project.team} />
-                  <MetaItem label="Tools" value={project.tools} />
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="glass-dark inline-flex items-center gap-2 self-start rounded-full px-5 py-2.5 text-sm text-white transition-transform hover:scale-[1.03]"
-                    >
-                      Visit live site →
-                    </a>
-                  )}
-                </aside>
+              {/* Meta panel */}
+              <div className="glass-card mt-12 grid grid-cols-2 gap-x-6 gap-y-8 rounded-3xl p-6 sm:p-8 lg:grid-cols-4">
+                <MetaItem label="Role" value={project.role} />
+                <MetaItem label="Duration" value={project.duration} />
+                <MetaItem label="Tools" value={project.tools} />
+                <MetaItem label="Team" value={project.team} />
               </div>
             </Reveal>
           </header>
 
-          {/* Hero media */}
-          {(project.mainVideo || project.headerImage) && (
-            <div className={`${container} mt-14`}>
-              <Reveal>
-                <div
-                  className="overflow-hidden rounded-3xl"
-                  style={{ backgroundColor: project.color }}
-                >
-                  {project.mainVideo ? (
-                    <video
-                      className="h-full w-full object-cover"
-                      src={project.mainVideo}
-                      poster={project.headerImage ?? undefined}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                    />
-                  ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={project.headerImage!}
-                      alt={project.name}
-                      className="h-full w-full object-cover"
-                    />
-                  )}
-                </div>
-              </Reveal>
-            </div>
-          )}
         </>
       ) : (
         <>
@@ -177,20 +134,20 @@ export default async function ProjectPage({
             <Reveal>
               <Link
                 href="/#mywork"
-                className="text-sm text-medium-gray transition-colors hover:text-black"
+                className="text-sm text-gray-500 transition-colors hover:text-black"
               >
                 ← All work
               </Link>
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <span
-                  className="rounded-full px-3 py-1 text-xs font-medium text-white"
-                  style={{ backgroundColor: project.color }}
+                  className="rounded-full px-3 py-1 text-xs font-bold"
+                  style={tagColors(project.color)}
                 >
                   {project.tag}
                 </span>
-                <span className="text-sm text-medium-gray">{project.year}</span>
+                <span className="text-sm text-gray-500">{project.year}</span>
               </div>
-              <h1 className="mt-4 text-4xl font-medium tracking-tight text-black sm:text-6xl">
+              <h1 className="mt-4 text-display font-medium tracking-tight text-black">
                 {project.name}
               </h1>
               <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-500">
@@ -243,7 +200,7 @@ export default async function ProjectPage({
           {/* Meta grid */}
           <div className={`${container} mt-12`}>
             <Reveal>
-              <div className="glass-card grid grid-cols-2 gap-6 rounded-3xl p-8 sm:grid-cols-4">
+              <div className="glass-card grid grid-cols-2 gap-x-6 gap-y-8 rounded-3xl p-6 sm:p-8 lg:grid-cols-4">
                 <MetaItem label="Role" value={project.role} />
                 <MetaItem label="Duration" value={project.duration} />
                 <MetaItem label="Tools" value={project.tools} />
@@ -253,13 +210,13 @@ export default async function ProjectPage({
           </div>
 
           {/* Overview */}
-          <section className={`${container} mt-16`}>
+          <section className={`${container} ${sectionGap}`}>
             <Reveal>
-              <h2 className="font-serif text-2xl italic text-black sm:text-3xl">
+              <h2 className="font-serif text-heading italic text-black">
                 Overview
               </h2>
               <div
-                className="prose mt-4 max-w-3xl text-lg"
+                className="prose mt-4 max-w-[65ch] text-lg"
                 dangerouslySetInnerHTML={{ __html: project.overview }}
               />
             </Reveal>
@@ -287,32 +244,47 @@ export default async function ProjectPage({
 
       {/* Features */}
       {project.features.length > 0 && (
-        <section className={`${container} mt-16`}>
-          <Reveal>
-            <h2 className="font-serif text-2xl italic text-black sm:text-3xl">
-              Solution
-            </h2>
-          </Reveal>
-          <div className={mentiLayout ? "mt-10 flex flex-col gap-20" : "mt-6 flex flex-col gap-10"}>
-            {project.features.map((f) => {
-              const m = mentiLayout ? f.title.match(/^(Feature #\d+)\s*[:—-]?\s*(.*)$/i) : null;
-              return (
+        <section className={sectionGap}>
+          <div className={container}>
+            <Reveal>
+              <h2
+                className={
+                  mentiLayout
+                    ? "font-serif text-title italic text-black"
+                    : "font-serif text-heading italic text-black"
+                }
+              >
+                {project.featuresHeading ?? "Solution"}
+              </h2>
+            </Reveal>
+          </div>
+          <div className={mentiLayout ? "mt-10" : "mt-6"}>
+            {project.features.map((f, fi) => {
+              const m = mentiLayout ? f.title.match(/^([A-Za-z]+ #\d+)\s*[:—-]?\s*(.*)$/i) : null;
+              const dark = mentiLayout && f.band === "dark";
+              const body = (
               <Reveal key={f.title}>
-                {m ? (
+                {mentiLayout ? (
                   <div className="grid gap-6 md:grid-cols-2 md:gap-16">
-                    <h3 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-                      <span className="block text-black">{m[1]}</span>
-                      <span className="block text-medium-gray">{m[2]}</span>
+                    <h3 className="text-heading font-bold tracking-tight">
+                      {m ? (
+                        <>
+                          <span className={`block ${dark ? "text-white" : "text-black"}`}>{m[1]}</span>
+                          <span className={`block ${dark ? "text-gray-300" : "text-gray-500"}`}>{m[2]}</span>
+                        </>
+                      ) : (
+                        <span className={`block ${dark ? "text-white" : "text-black"}`}>{f.title}</span>
+                      )}
                     </h3>
                     {f.desc && (
-                      <p className="self-center text-lg leading-relaxed text-gray-500">{f.desc}</p>
+                      <p className={`self-center whitespace-pre-line text-lg leading-relaxed ${dark ? "text-[rgb(198,198,210)]" : "text-gray-500"}`}>{f.desc}</p>
                     )}
                   </div>
                 ) : (
                   <h3 className="text-lg font-medium text-black">{f.title}</h3>
                 )}
                 {f.video && (
-                  <div className={`${mentiLayout ? "mt-8" : "mt-4"} overflow-hidden rounded-3xl border border-black/5 bg-white-50`}>
+                  <div className={`${mentiLayout ? "mt-12" : "mt-4"} overflow-hidden rounded-3xl border border-black/5 bg-white-50`}>
                     <video
                       className="h-full w-full object-cover"
                       src={f.video}
@@ -323,43 +295,105 @@ export default async function ProjectPage({
                     />
                   </div>
                 )}
+                {f.images && f.images.length > 0 && (
+                  <div
+                    className={`mx-auto grid max-w-4xl items-center gap-4 ${mentiLayout ? "mt-12" : "mt-4"}`}
+                    style={{
+                      gridTemplateColumns: `repeat(${Math.min(f.images.length, 3)}, minmax(0, 1fr))`,
+                    }}
+                  >
+                    {f.images.map((src) => (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        key={src}
+                        src={src}
+                        alt=""
+                        loading="lazy"
+                        className="w-full rounded-2xl"
+                      />
+                    ))}
+                  </div>
+                )}
                 {f.image && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={f.image}
                     alt={f.title}
                     loading="lazy"
-                    className="mt-4 w-full rounded-3xl"
+                    className={`mx-auto max-h-[85vh] w-auto max-w-full rounded-3xl ${mentiLayout ? "mt-12" : "mt-4"}`}
                   />
                 )}
               </Reveal>
+              );
+              return dark ? (
+                <div key={f.title} className="mt-16 bg-[rgb(58,60,68)]">
+                  <div className={`${container} py-16 sm:py-24`}>{body}</div>
+                </div>
+              ) : (
+                <div key={f.title} className={`${container} ${fi === 0 ? "" : mentiLayout ? "pt-28" : "pt-16"}`}>
+                  {body}
+                </div>
               );
             })}
           </div>
         </section>
       )}
 
+      {/* Most memorable moment */}
+      {project.memorable && (mentiLayout ? (
+        <section className={`${container} ${sectionGap}`}>
+          <Reveal>
+            <div className="glass-card rounded-3xl p-8 sm:p-12">
+              <p className={eyebrow}>
+                Most memorable moment
+              </p>
+              <h2 className="mt-4 max-w-4xl font-serif text-title italic text-black">
+                {project.memorable.title}
+              </h2>
+              <div
+                className="prose mt-8 max-w-[65ch] text-lg"
+                dangerouslySetInnerHTML={{ __html: project.memorable.body }}
+              />
+            </div>
+          </Reveal>
+        </section>
+      ) : (
+      <section className={`${container} ${sectionGap}`}>
+        <Reveal>
+          <div className="glass-card rounded-3xl p-8 sm:p-12">
+            <div className={eyebrow}>
+              Most memorable moment
+            </div>
+            <h2 className="mt-3 font-serif text-heading italic text-black">
+              {project.memorable.title}
+            </h2>
+            <div
+              className="prose mt-5 max-w-[65ch]"
+              dangerouslySetInnerHTML={{ __html: project.memorable.body }}
+            />
+          </div>
+        </Reveal>
+      </section>
+      ))}
+
       {/* Story */}
-      {mentiLayout ? (
-        <section className="mt-24">
+      {project.stories.length > 0 && (mentiLayout ? (
+        <section className={sectionGap}>
           <div className={container}>
             <Reveal>
-              <h2 className="font-serif text-2xl italic text-black sm:text-3xl">
+              <p className={eyebrow}>
+                The story
+              </p>
+              <h2 className="mt-4 max-w-4xl font-serif text-title italic text-black">
                 {project.storyHeading}
               </h2>
             </Reveal>
           </div>
           {/* Full-bleed alternating bands, one per chapter */}
-          <div className="mt-10">
+          <div className="mt-14">
             {project.stories.map((s, i) => {
-              const variant = i % 3;
-              const dark = variant === 1;
-              const bg =
-                variant === 0
-                  ? `color-mix(in oklab, ${project.color} 7%, var(--white-100))`
-                  : variant === 1
-                    ? "rgb(18, 17, 24)"
-                    : "rgb(238, 239, 245)";
+              const dark = i % 2 === 1;
+              const bg = dark ? "rgb(58, 60, 68)" : "rgb(242, 243, 247)";
               const parts = s.subheading.split(/(?<=[.!?])\s+/);
               return (
                 <div key={s.subheading} style={{ backgroundColor: bg }}>
@@ -367,7 +401,7 @@ export default async function ProjectPage({
                     <Reveal>
                       <div className="grid gap-8 md:grid-cols-2 md:gap-16">
                         <div>
-                        <h3 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+                        <h3 className="text-heading font-bold tracking-tight">
                           {parts.map((t, k) => (
                             <span
                               key={t}
@@ -378,7 +412,7 @@ export default async function ProjectPage({
                                     : "text-gray-300"
                                   : k === 0
                                     ? "text-black"
-                                    : "text-medium-gray"
+                                    : "text-gray-500"
                               }`}
                             >
                               {t}
@@ -390,15 +424,8 @@ export default async function ProjectPage({
                             {s.tags.map((t) => (
                               <span
                                 key={t}
-                                className={`rounded-full px-3 py-1 text-xs font-semibold ${dark ? "border border-white/20 bg-white/10 text-gray-300" : ""}`}
-                                style={
-                                  dark
-                                    ? undefined
-                                    : {
-                                        color: `color-mix(in oklab, ${project.color} 45%, var(--gray-700))`,
-                                        backgroundColor: `color-mix(in oklab, ${project.color} 14%, var(--white))`,
-                                      }
-                                }
+                                className={`rounded-full px-3 py-1 text-xs font-bold ${dark ? "border border-white/20 bg-white/10 text-white/85" : ""}`}
+                                style={dark ? undefined : tagColors(project.color)}
                               >
                                 {t}
                               </span>
@@ -442,9 +469,9 @@ export default async function ProjectPage({
           </div>
         </section>
       ) : (
-        <section className={`${container} mt-20`}>
+        <section className={`${container} ${sectionGap}`}>
           <Reveal>
-            <h2 className="font-serif text-2xl italic text-black sm:text-3xl">
+            <h2 className="font-serif text-heading italic text-black">
               {project.storyHeading}
             </h2>
           </Reveal>
@@ -475,46 +502,35 @@ export default async function ProjectPage({
             ))}
           </div>
         </section>
-      )}
+      ))}
 
-      {/* Most memorable moment */}
-      <section className={`${container} mt-20`}>
+      {/* See more projects */}
+      <section className={`${container} ${sectionGap}`}>
         <Reveal>
-          <div className="glass-card rounded-3xl p-8 sm:p-12">
-            <div className="text-xs uppercase tracking-widest text-medium-gray">
-              Most memorable moment
-            </div>
-            <h2 className="mt-3 font-serif text-2xl italic text-black sm:text-3xl">
-              {project.memorable.title}
-            </h2>
-            <div
-              className="prose mt-5 max-w-3xl"
-              dangerouslySetInnerHTML={{ __html: project.memorable.body }}
-            />
-          </div>
+          <SectionLabel>More projects</SectionLabel>
         </Reveal>
-      </section>
-
-      {/* Next project */}
-      <section className={`${container} mt-20`}>
-        <Reveal>
-          <Link
-            href={`/work/${next.slug}`}
-            className="glass-card group flex items-center justify-between rounded-3xl p-8 transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.25)]"
-          >
-            <div>
-              <div className="text-xs uppercase tracking-widest text-medium-gray">
-                Next project
-              </div>
-              <div className="mt-2 text-2xl font-medium text-black">
-                {next.name}
-              </div>
-            </div>
-            <span className="text-2xl transition-transform group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
-        </Reveal>
+        <div className="mt-10 grid gap-x-6 gap-y-12 md:grid-cols-2">
+          {moreFromPlayground
+            ? moreFromPlayground.map((item, i) => (
+                <Reveal key={item.slug} delay={i * 80}>
+                  <PlateCard
+                    href={item.link}
+                    external={item.link.startsWith("http")}
+                    name={item.name}
+                    line={item.summary}
+                    tag={item.tag}
+                    year={item.year}
+                    color={item.color}
+                    image={item.image}
+                  />
+                </Reveal>
+              ))
+            : more.map((p, i) => (
+                <Reveal key={p.slug} delay={i * 80}>
+                  <ProjectCard project={p} />
+                </Reveal>
+              ))}
+        </div>
       </section>
     </article>
   );

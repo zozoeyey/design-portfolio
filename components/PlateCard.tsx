@@ -1,4 +1,6 @@
 import Link from "next/link";
+import AutoVideo from "@/components/AutoVideo";
+import { tagColors } from "@/lib/ui";
 
 /**
  * Shared "tinted plate" card used by Work (ProjectCard) and Playground.
@@ -29,14 +31,10 @@ export default function PlateCard({
   video?: string | null;
 }) {
   const media = video ? (
-    <video
+    <AutoVideo
       className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.03]"
       src={video}
       poster={image ?? undefined}
-      autoPlay
-      muted
-      loop
-      playsInline
     />
   ) : image ? (
     // eslint-disable-next-line @next/next/no-img-element
@@ -70,7 +68,7 @@ export default function PlateCard({
         {/* liquid-glass hover: sweeping sheen + frosted chip */}
         <span aria-hidden="true" className="plate-sheen" />
         <span
-          className="glass absolute bottom-3 right-3 inline-flex translate-y-2 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-black opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
+          className="glass absolute bottom-3 right-3 inline-flex translate-y-2 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold text-black opacity-0 transition-[opacity,transform] duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
         >
           View
           <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
@@ -83,18 +81,10 @@ export default function PlateCard({
           <h3 className="text-xl font-bold text-black">{name}</h3>
           <p className="mt-1.5 max-w-[44ch] text-base leading-relaxed text-gray-500">{line}</p>
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-1.5 text-sm text-medium-gray">
+        <div className="flex shrink-0 flex-col items-end gap-1.5 text-sm text-gray-500">
           <span
-            className="rounded-full px-3 py-1 font-semibold"
-            style={{
-              // Darken the accent so the label clears WCAG AA (≥4.5:1) against the tint,
-              // regardless of how light the project color is.
-              color:
-                color === "rgb(0, 0, 0)"
-                  ? "var(--gray-700)"
-                  : `color-mix(in oklab, ${color} 45%, var(--gray-700))`,
-              backgroundColor: `color-mix(in oklab, ${color} 16%, var(--white))`,
-            }}
+            className="rounded-full px-3 py-1 font-bold"
+            style={tagColors(color)}
           >
             {tag}
           </span>

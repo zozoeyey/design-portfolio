@@ -184,20 +184,26 @@ function Sticker({ c, isActive, onClick }: { c: Card; isActive: boolean; onClick
       onClick={onClick}
       aria-pressed={isActive}
       style={{ "--tilt": c.rotate } as React.CSSProperties}
-      className={`story-card group flex flex-col items-center gap-0.5 transition-all duration-300 ease-[cubic-bezier(.2,.9,.3,1.2)] ${
+      className={`story-card group flex flex-col items-center gap-0.5 transition-[transform,opacity,filter] duration-300 ease-[cubic-bezier(.2,.9,.3,1.2)] ${
         isActive
           ? "z-10 rotate-0 scale-110 opacity-100"
-          : "rotate-[var(--tilt)] opacity-70 hover:rotate-0 hover:scale-105 hover:opacity-100"
+          : "rotate-[var(--tilt)] opacity-50 grayscale hover:rotate-0 hover:scale-105 hover:opacity-100 hover:grayscale-0"
       }`}
     >
       <HalftoneGlyph glyph={c.emoji} src={c.icon} color={c.color} spacing={c.spacing} />
       <span className="text-sm font-bold leading-tight text-black">{c.label}</span>
       <span
-        className="text-xs font-semibold leading-tight"
+        className="text-xs font-bold leading-tight"
         style={{ color: `color-mix(in oklab, ${c.color} 45%, var(--gray-700))` }}
       >
         {c.sub}
       </span>
+      {/* active marker: a short bar in the card's own color */}
+      <span
+        aria-hidden="true"
+        className={`mt-2 h-1 w-6 rounded-full transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0"}`}
+        style={{ backgroundColor: c.color }}
+      />
     </button>
   );
 }
@@ -210,9 +216,9 @@ export default function StoryCards() {
     <div>
       {/* Greeting on top, halftone icons in one line, story below */}
       <div>
-        <p className="mb-10 text-center font-serif text-4xl italic text-black sm:text-5xl">
-          Nice to meet you &mdash; I&apos;m Zoey!
-        </p>
+        <h1 className="mb-10 text-center font-serif text-display italic text-black">
+          Nice to meet you &mdash; I&rsquo;m Zoey!
+        </h1>
         <div className="flex flex-wrap items-start justify-center gap-x-6 gap-y-5 md:flex-nowrap md:justify-between md:gap-x-2">
           {CARDS.map((c) => (
             <Sticker key={c.id} c={c} isActive={c.id === activeId} onClick={() => setActiveId(c.id)} />
@@ -225,7 +231,7 @@ export default function StoryCards() {
           className="relative mx-auto mt-10 max-w-[52ch] text-center"
         >
           <div key={active.id} className="story-swap">
-            <p className="text-[16px] leading-relaxed text-gray-700">{active.body}</p>
+            <p className="text-base leading-relaxed text-gray-700">{active.body}</p>
           </div>
         </div>
       </div>

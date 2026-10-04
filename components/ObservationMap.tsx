@@ -71,12 +71,12 @@ export default function ObservationMap({ color }: { color: string }) {
               style={{ borderColor: `color-mix(in oklab, ${color} 30%, transparent)` }}
             >
               <span
-                className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.14em] md:hidden"
+                className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] md:hidden"
                 style={{ color: label(color) }}
               >
                 What I observed
               </span>
-              <p className="text-[15px] font-medium leading-relaxed text-gray-700">{p.obs}</p>
+              <p className="text-base font-medium leading-relaxed text-gray-700">{p.obs}</p>
             </div>
 
             <Connector color={color} />
@@ -87,12 +87,12 @@ export default function ObservationMap({ color }: { color: string }) {
               style={{ borderColor: `color-mix(in oklab, ${LAVENDER} 35%, transparent)` }}
             >
               <span
-                className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.14em] md:hidden"
+                className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] md:hidden"
                 style={{ color: label(LAVENDER) }}
               >
                 What users said
               </span>
-              <p className="font-serif text-[17px] italic leading-relaxed text-gray-700">
+              <p className="font-serif text-lg italic leading-relaxed text-gray-700">
                 &ldquo;{p.quote}&rdquo;
               </p>
             </div>

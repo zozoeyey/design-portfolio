@@ -33,10 +33,10 @@ export default function MindsetShift({ color }: { color: string }) {
       <div className="grid items-stretch gap-3 md:grid-cols-[1fr_4rem_1fr] md:gap-6">
         {/* Old framing */}
         <div className="relative rounded-2xl border border-black/10 bg-white/60 px-6 py-10 text-center sm:py-14">
-          <span className="absolute -top-3 right-5 rounded-full border border-black/10 bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-medium-gray">
+          <span className="absolute -top-3 right-5 rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-gray-500">
             Old
           </span>
-          <p className="text-2xl font-bold tracking-tight text-gray-500 sm:text-3xl">
+          <p className="text-heading font-bold tracking-tight text-gray-500">
             Did it ship?
           </p>
           <StrikeDots />
@@ -55,12 +55,12 @@ export default function MindsetShift({ color }: { color: string }) {
           }}
         >
           <span
-            className="absolute -top-3 right-5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white"
+            className="absolute -top-3 right-5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-white"
             style={{ backgroundColor: color }}
           >
             New
           </span>
-          <p className="text-2xl font-bold tracking-tight text-black sm:text-3xl">
+          <p className="text-heading font-bold tracking-tight text-black">
             Did it reduce team&nbsp;work?
           </p>
         </div>
@@ -69,7 +69,7 @@ export default function MindsetShift({ color }: { color: string }) {
       {/* footnote */}
       <p className="mx-auto mt-8 w-fit rounded-full border border-black/10 bg-white/70 px-5 py-2 text-center text-sm text-gray-700">
         Tag / Tooltip / Scrolling Bar{" "}
-        <span className="font-semibold" style={{ color: `color-mix(in oklab, ${color} 45%, var(--gray-700))` }}>
+        <span className="font-bold" style={{ color: `color-mix(in oklab, ${color} 45%, var(--gray-700))` }}>
           → reused across 3+ pages by other designers
         </span>
       </p>

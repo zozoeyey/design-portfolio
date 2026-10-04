@@ -54,17 +54,17 @@ export default function Navbar() {
         >
           <span className="relative block h-3 w-4">
             <span
-              className={`absolute left-0 block h-0.5 w-4 bg-black transition-all ${
+              className={`absolute left-0 block h-0.5 w-4 bg-black transition-[top,transform,opacity] ${
                 open ? "top-1.5 rotate-45" : "top-0"
               }`}
             />
             <span
-              className={`absolute left-0 top-1.5 block h-0.5 w-4 bg-black transition-all ${
+              className={`absolute left-0 top-1.5 block h-0.5 w-4 bg-black transition-[top,transform,opacity] ${
                 open ? "opacity-0" : "opacity-100"
               }`}
             />
             <span
-              className={`absolute left-0 block h-0.5 w-4 bg-black transition-all ${
+              className={`absolute left-0 block h-0.5 w-4 bg-black transition-[top,transform,opacity] ${
                 open ? "top-1.5 -rotate-45" : "top-3"
               }`}
             />

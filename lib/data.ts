@@ -25,8 +25,8 @@ export const nav = [
 ];
 
 export const hero = {
-  greeting: "Hi, I'm Zoey!",
-  tagline: "I Connect dots others don't see.",
+  greeting: "Hi, I’m Zoey!",
+  tagline: "I connect dots others don’t see.",
 };
 
 export const approach = [
@@ -43,12 +43,7 @@ export const approach = [
     title: "Think in Prototypes.",
     desc: "I think with my hands. The faster I can make it real, the faster we learn.",
     link: { label: "More About Me", href: "/about" },
-    images: [
-      "/approach/02-canvas.png",
-      "/media/7JHztXGEabvitQeTj9z7nVj1c.png",
-      "/media/KQdRKsjveuYd3Re4TZR5QhA3SCI.png",
-      "/media/vgzrsxf8f1v0kuQkTxsD33njXa0.png",
-    ],
+    images: ["/approach/02-canvas-b.png"],
   },
   {
     n: "03",
@@ -135,7 +130,16 @@ export const travelPhotos = [
 // Work — full case studies
 // ---------------------------------------------------------------------------
 
-export type Feature = { title: string; desc?: string | null; video?: string | null; image?: string | null };
+export type Feature = {
+  title: string;
+  desc?: string | null;
+  video?: string | null;
+  image?: string | null;
+  /** Optional multi-image gallery shown below the text (banner layout). */
+  images?: string[];
+  /** Full-bleed band background behind this feature (banner layout only). */
+  band?: "dark" | null;
+};
 export type Story = { subheading: string; body: string; image?: string | null; tags?: string[]; graphic?: "observation-map" | "mindset-shift" | "before-after" | null };
 
 export type Project = {
@@ -148,6 +152,12 @@ export type Project = {
   color: string; // accent color
   liveUrl?: string | null;
   headerImage?: string | null;
+  /** Use the banner-style case-study layout (big hero image, story bands, coded graphics). */
+  layoutV2?: boolean;
+  /** Playground pieces with an internal case study: hidden from the home "My Work" grid. */
+  playgroundOnly?: boolean;
+  /** Heading for the features section (default "Solution"). */
+  featuresHeading?: string;
   /** Optional "Problem / Outcome" pair shown in the case-study header. */
   problem?: string | null;
   outcome?: string | null;
@@ -158,7 +168,7 @@ export type Project = {
   team: string;
   overview: string; // html
   features: Feature[];
-  memorable: { title: string; body: string }; // body = html
+  memorable?: { title: string; body: string }; // body = html
   storyHeading: string;
   stories: Story[];
   tags: string[];
@@ -167,6 +177,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "valueglance",
+    layoutV2: true,
     name: "ValueGlance",
     tag: "Fintech SaaS",
     summary:
@@ -175,11 +186,11 @@ export const projects: Project[] = [
     year: "2026",
     color: "rgb(44, 131, 127)",
     liveUrl: "https://valueglance.com/",
-    headerImage: "/media/TVS2lcdNrIEo4kLVG0RjZToTJUI.png",
+    headerImage: "/media/valueglance-header.webp",
     mainVideo: "/media/KDNoSSV9lbHOkF6Dm9F2NzFnv4Q.mp4",
     role: "UX Designer",
-    duration: "Oct 2025 - Jan 2026",
-    tools: "Linear, Figma, Notion",
+    duration: "Oct 2025 - Present",
+    tools: "Linear, Figma, Notion, Claude Code",
     team: "1 CTO (PM), 1 Design Lead, 2 UX Designer, 4 Engineers",
     problem:
       "How might we present dense financial data clearly on mobile, when charts, tooltips, and info boxes routinely ran off-screen?",
@@ -345,6 +356,7 @@ export const projects: Project[] = [
   },
   {
     slug: "connectlink",
+    layoutV2: true,
     name: "Connect Link",
     tag: "Webapp Saas",
     summary:
@@ -396,6 +408,114 @@ export const projects: Project[] = [
       "Edge Cases", "Design Handoff & Documentation", "Handoff Meeting",
     ],
   },
+  {
+    slug: "neurafutures",
+    playgroundOnly: true,
+    layoutV2: true,
+    name: "Neura Futures",
+    tag: "Graphic Design",
+    summary:
+      "Speculative-design graphics for brain-computer interfaces — a 70+ page booklet, a BCI-Fi history collage, and event posters for MIT Media Lab's Fluid Interfaces group.",
+    claim: "Graphic designs for Brain Computer Interaction @ MIT Media Lab's Fluid Interface group.",
+    year: "2023",
+    color: "rgb(0, 0, 0)",
+    liveUrl: null,
+    headerImage: "/media/neurafutures/01-2Je3MMj8UYENR9BR8GaCO5mbKU.png",
+    mainVideo: null,
+    role: "Graphic Designer",
+    duration: "Oct 2022 - Mar 2023",
+    tools: "Figma, Adobe Illustrator, Procreate",
+    team: "MIT Media Lab — Fluid Interfaces group",
+    overview:
+      "<p>I worked as a graphic designer with MIT Media Lab's Fluid Interfaces group on NeuraFutures — a speculative-design project asking how far brain-computer interfaces should go. My work spanned updating posters and data visualizations, creating new designs for NeuraFutures, refreshing the BCI history collage, and helping produce the BCI introductory brochure designed for speakers of Augmenting Brains 2022. Beyond print, I led 3+ in-person demo events and helped establish the physical installations that carried the work into the room.</p>",
+    tags: ["Print Design", "Data Visualization", "Exhibition Design", "Speculative Design"],
+    featuresHeading: "Deliverables",
+    features: [
+      {
+        title: "Deliverable #1: Brain-Computer Interaction brochure",
+        desc: "A 70+ page booklet cataloguing BCI props and science from 500+ books, movies, and shows — from Cerebro to the Neuralyser — each rated on reality factor, neurafictionality, and a BCI forecast.",
+        image: "/media/neurafutures/02-NiJFOq9lnnNt1vEa2lbwhETTQw.png",
+      },
+      {
+        title: "Deliverable #2: BCI-Fi history collage",
+        desc: "A century-spanning collage tracing brain-computer interfaces through science and fiction, from Galvani's frog legs in 1780 to the pandemic era.",
+        image: "/media/neurafutures/05-PGkWcSQCGeBZjxI8PPTEG5I3dYM.png",
+      },
+      {
+        title: "Deliverable #3: Event posters",
+        band: "dark",
+        desc: "Poster and banner system for Augmenting Brains 2022 at the MIT Museum — BCI hardware woven through the typography.",
+        image: "/media/neurafutures/07-CS5lAphE4c1PScKnIAsNuBzTc.png",
+      },
+    ],
+    storyHeading: "",
+    stories: [],
+  },
+  {
+    slug: "mixvox",
+    playgroundOnly: true,
+    layoutV2: true,
+    name: "MixVox",
+    tag: "Instrument",
+    summary:
+      "A musical instrument made up of three dolls — each carries a different sound, so players compose personalized music through touch.",
+    claim: "A musical instrument made up of three dolls. Each doll carries a different sound.",
+    year: "2024",
+    color: "rgb(232, 219, 39)",
+    liveUrl: null,
+    headerImage: "/media/mixvox/01.png",
+    mainVideo: null,
+    role: "Software & Hardware Developer, Product Designer",
+    duration: "Jan - Mar 2024",
+    tools: "Rhino, Arduino IDE, Python, Node.js, p5.js",
+    team: "MIT Design Academy",
+    overview:
+      "<p>MixVox is a musical instrument made up of three dolls. Each doll carries a different sound, so players can create personalized music through interactions. It offers a playful, accessible way to experiment with sound and rhythm, blending music creation with tactile interaction — empowering users of all ages to express themselves musically, sparking curiosity and creativity.</p>",
+    tags: ["Physical Computing", "Sound", "Toy Design", "Arduino"],
+    featuresHeading: "How It Came Together",
+    features: [
+      {
+        title: "A simple game about sound and rhythm",
+        desc: "We folded a physical instrument into a 1D game format — players navigate the dolls along the line, laying down unique sounds as they go. Ever played Incredibox or Chrome Music Lab? We wanted to make the physical version of those.",
+        images: ["/media/mixvox/02.png", "/media/mixvox/03.png"],
+      },
+      {
+        title: "How to Play",
+        desc: "Rotate the handles on the sides of the dolls to move them and place colored audio blocks in the sequence — the blue doll by brushing its teeth, the yellow doll by tapping its belly, and the red doll by blowing into its ears.",
+        // 3x2 grid: each doll photo sits above its instrument icon
+        images: [
+          "/media/mixvox/04.png",
+          "/media/mixvox/05.png",
+          "/media/mixvox/06.png",
+          "/media/mixvox/07.png",
+          "/media/mixvox/08.png",
+          "/media/mixvox/09.png",
+        ],
+        // wide color-mixing diagram, full width below the grid
+        image: "/media/mixvox/10.png",
+      },
+      {
+        title: "State Diagram",
+        images: ["/media/mixvox/11.png", "/media/mixvox/12.png"],
+      },
+      {
+        title: "Code — how to tie them together!",
+        images: ["/media/mixvox/13.png"],
+      },
+      {
+        title: "Lessons Learned",
+        band: "dark",
+        desc: "It's better to make one thing that works really well instead of a lot of things that don't really work.\n\nThink creatively: what are the possibilities besides just literal representation?\n\nIterate your ideas, test with users, and iterate, and test over and over.",
+      },
+      {
+        title: "Recognition",
+        desc: "Our work was featured on both @mitdesignacad and @mitarchitecture's Instagram!",
+        images: ["/media/mixvox/14.png", "/media/mixvox/15.png"],
+      },
+    ],
+    storyHeading: "",
+    stories: [],
+  },
 ];
 
 export function getProject(slug: string) {
@@ -408,6 +528,7 @@ export function getProject(slug: string) {
 
 export type PlaygroundItem = {
   slug: string;
+  category: "coding" | "physical-ai" | "graphic-design";
   name: string;
   tag: string;
   year: string;
@@ -420,6 +541,7 @@ export type PlaygroundItem = {
 export const playground: PlaygroundItem[] = [
   {
     slug: "colorimia",
+    category: "physical-ai",
     name: "Colorimia",
     tag: "Embodied AI",
     year: "2024",
@@ -430,16 +552,18 @@ export const playground: PlaygroundItem[] = [
   },
   {
     slug: "mixvox",
+    category: "physical-ai",
     name: "MixVox",
     tag: "Instrument",
     year: "2024",
     summary: "A musical instrument made up of three dolls. Each doll carries a different sound.",
     color: "rgb(232, 219, 39)",
-    link: "https://yzwzoey.framer.website/mixvox",
+    link: "/work/mixvox",
     image: "/media/v8K6sJNQ2oN7TIcQI1xnetzF4w.webp",
   },
   {
     slug: "dream",
+    category: "coding",
     name: "What's In Your Dream",
     tag: "Data Visualization",
     year: "2023",
@@ -450,12 +574,13 @@ export const playground: PlaygroundItem[] = [
   },
   {
     slug: "neurafutures",
+    category: "graphic-design",
     name: "Neura Futures",
     tag: "Graphic Design",
     year: "2023",
     summary: "Graphic designs for Brain Computer Interaction @ MIT Media Lab's Fluid Interface group.",
     color: "rgb(0, 0, 0)",
-    link: "https://yzwzoey.framer.website/neurafutures",
+    link: "/work/neurafutures",
     image: "/media/hpBQU7e3jED2frOfvIouJYDy0Q.webp",
   },
 ];

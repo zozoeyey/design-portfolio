@@ -11,21 +11,20 @@ import Reveal from "@/components/Reveal";
 import ProjectCard from "@/components/ProjectCard";
 import HalftoneHero from "@/components/HalftoneHero";
 import Carousel from "@/components/Carousel";
-
-const container = "mx-auto w-full max-w-[1440px] px-6 sm:px-12 md:px-20";
+import { container, sectionStack } from "@/lib/ui";
 
 export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-[88vh] overflow-hidden">
+      <section className="relative flex min-h-[88svh] flex-col justify-center overflow-hidden">
         <HalftoneHero />
-        <div className={`${container} relative pt-40 pb-20 sm:pt-48`}>
+        <div className={`${container} relative pt-32 pb-16`}>
         <Reveal>
-          <p className="font-serif text-4xl italic text-black sm:text-6xl">
+          <p className="font-serif text-lead italic text-gray-700">
             {hero.greeting}
           </p>
-          <h1 className="mt-3 max-w-3xl text-4xl font-medium leading-[1.1] tracking-tight text-black sm:text-6xl">
+          <h1 className="mt-4 max-w-3xl text-display font-medium tracking-tight text-black">
             {hero.tagline}
           </h1>
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -33,7 +32,7 @@ export default function Home() {
               href="/about"
               className="group inline-flex items-center gap-2 glass-dark rounded-full px-5 py-2.5 text-sm text-white transition-transform hover:scale-[1.03]"
             >
-              About Me
+              About me
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </Link>
             <Link
@@ -48,15 +47,16 @@ export default function Home() {
         </div>
       </section>
 
+      <div className={sectionStack}>
       {/* My Approach */}
-      <section className={`${container} py-20`}>
+      <section className={container}>
         <Reveal>
-          <SectionLabel>My Approach</SectionLabel>
+          <SectionLabel>My approach</SectionLabel>
         </Reveal>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {approach.map((a, i) => (
             <Reveal key={a.n} delay={i * 80}>
-              <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl glass-card p-4 transition-colors duration-500 hover:border-[rgb(167,139,250)]/40">
+              <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl glass-card bg-background bg-none p-4 transition-colors duration-500 after:hidden hover:border-accent/40">
                 <Carousel images={a.images} alt={a.title} className="relative z-10" />
                 {/* big halftone numeral, bottom-right */}
                 <span
@@ -69,12 +69,12 @@ export default function Home() {
                   <h3 className="text-xl font-bold tracking-tight text-black">
                     {a.title}
                   </h3>
-                  <p className="mt-2 max-w-[85%] text-[15px] leading-relaxed text-gray-500">
+                  <p className="mt-2 max-w-[85%] text-base leading-relaxed text-gray-500">
                     {a.desc}
                   </p>
                   <Link
                     href={a.link.href}
-                    className="group/link mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-black underline-offset-4 hover:text-[rgb(139,115,220)]"
+                    className="group/link mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-bold text-black underline-offset-4 hover:text-accent-strong"
                   >
                     {a.link.label}
                     <span className="transition-transform group-hover/link:translate-x-0.5">→</span>
@@ -87,12 +87,12 @@ export default function Home() {
       </section>
 
       {/* My Work */}
-      <section id="mywork" className={`${container} scroll-mt-28 py-20`}>
+      <section id="mywork" className={`${container} scroll-mt-28`}>
         <Reveal>
-          <SectionLabel>My Work</SectionLabel>
+          <SectionLabel>My work</SectionLabel>
         </Reveal>
         <div className="mt-10 grid gap-x-6 gap-y-12 md:grid-cols-2">
-          {projects.map((p, i) => (
+          {projects.filter((p) => !p.playgroundOnly).map((p, i) => (
             <Reveal key={p.slug} delay={i * 80}>
               <ProjectCard project={p} />
             </Reveal>
@@ -101,19 +101,19 @@ export default function Home() {
       </section>
 
       {/* How I Collaborate */}
-      <section className={`${container} py-20`}>
+      <section className={container}>
         <Reveal>
-          <SectionLabel>How I Collaborate</SectionLabel>
+          <SectionLabel>How I collaborate</SectionLabel>
         </Reveal>
         <div className="mt-10 flex flex-col divide-y divide-black/10 border-y border-black/10">
           {collaborate.map((c, i) => (
             <Reveal key={c.label} delay={i * 80}>
-              <div className="group grid gap-3 py-8 md:grid-cols-[12rem_18rem_1fr] md:items-baseline md:gap-10">
-                <span className="font-serif text-3xl italic text-black transition-colors group-hover:text-[rgb(139,115,220)] sm:text-4xl">
+              <div className="group grid gap-3 py-8 lg:grid-cols-[12rem_18rem_1fr] lg:items-baseline lg:gap-10">
+                <span className="font-serif text-heading italic text-black transition-colors group-hover:text-accent-strong">
                   {c.label}
                 </span>
-                <h3 className="text-lg font-semibold text-black">{c.title}</h3>
-                <p className="text-[15px] leading-relaxed text-gray-500">{c.desc}</p>
+                <h3 className="text-lg font-bold text-black">{c.title}</h3>
+                <p className="text-base leading-relaxed text-gray-500">{c.desc}</p>
               </div>
             </Reveal>
           ))}
@@ -121,14 +121,14 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className={`${container} py-20`}>
+      <section className={container}>
         <Reveal>
-          <SectionLabel>Testimonial</SectionLabel>
+          <SectionLabel>Testimonials</SectionLabel>
         </Reveal>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {testimonials.map((t, i) => (
             <Reveal key={t.name} delay={i * 80}>
-              <figure className="flex h-full flex-col justify-between rounded-3xl glass-card p-8">
+              <figure className="flex h-full flex-col justify-between rounded-3xl glass-card bg-background bg-none p-8 after:hidden">
                 <blockquote className="text-lg leading-relaxed text-gray-700">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
@@ -138,11 +138,11 @@ export default function Home() {
                     src={t.avatar}
                     alt={t.name}
                     loading="lazy"
-                    className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-[rgb(167,139,250)]/40"
+                    className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-accent/40"
                   />
                   <div>
                     <div className="font-medium text-black">{t.name}</div>
-                    <div className="text-sm text-medium-gray">{t.role}</div>
+                    <div className="text-sm text-gray-500">{t.role}</div>
                   </div>
                 </figcaption>
               </figure>
@@ -150,6 +150,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      </div>
     </>
   );
 }

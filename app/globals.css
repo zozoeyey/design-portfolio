@@ -12,10 +12,13 @@
   --gray-700: rgb(38, 38, 38);
   --gray-500: rgb(94, 94, 94);
   --gray-300: rgb(176, 176, 176);
-  --medium-gray: rgb(119, 119, 119);
   --white-100: rgb(250, 251, 254); /* page background */
   --white-50: rgb(255, 255, 255); /* card background */
   --white: rgb(255, 255, 255);
+
+  /* Accent (lavender) — decorative fills vs. text/hover */
+  --accent: rgb(167, 139, 250);
+  --accent-strong: oklch(0.52 0.156 291.7); /* 5.6:1 on the page — safe for text */
 
   --background: var(--white-100);
   --foreground: var(--black);
@@ -26,7 +29,8 @@
   --color-gray-700: var(--gray-700);
   --color-gray-500: var(--gray-500);
   --color-gray-300: var(--gray-300);
-  --color-medium-gray: var(--medium-gray);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-white-100: var(--white-100);
   --color-white-50: var(--white-50);
   --color-paper: var(--white);
@@ -36,6 +40,24 @@
   --font-sans: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
   --font-serif: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+
+  /*
+    Type scale — size by role, not by breakpoint. The top four are fluid so
+    headings grow smoothly from phone to desktop instead of jumping at 640px.
+    Below them, use Tailwind's fixed steps:
+      text-lg   body-lg  (case-study prose)
+      text-base body     (every other paragraph)
+      text-sm   caption  (years, roles, buttons, nav)
+      text-xs   label    (uppercase eyebrows, tags — the floor)
+  */
+  --text-display: clamp(2.25rem, 1.65rem + 2.6vw, 3.75rem); /* 36 → 60 */
+  --text-display--line-height: 1.1;
+  --text-title: clamp(1.875rem, 1.5rem + 1.6vw, 2.75rem); /* 30 → 44 */
+  --text-title--line-height: 1.1;
+  --text-heading: clamp(1.5rem, 1.25rem + 1vw, 2rem); /* 24 → 32 */
+  --text-heading--line-height: 1.2;
+  --text-lead: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem); /* 20 → 28 */
+  --text-lead--line-height: 1.35;
 }
 
 * {
@@ -53,7 +75,18 @@ body {
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
+  font-synthesis: none;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+blockquote {
+  text-wrap: pretty;
 }
 
 /* Accent serif helper — italic, as used across the original site */
@@ -106,7 +139,7 @@ body {
 /* Text filled with lavender halftone dots (used for big numerals) */
 .halftone-text {
   color: transparent;
-  background-image: radial-gradient(rgb(167, 139, 250) 1.4px, transparent 1.7px);
+  background-image: radial-gradient(var(--accent) 1.4px, transparent 1.7px);
   background-size: 7px 7px;
   -webkit-background-clip: text;
   background-clip: text;

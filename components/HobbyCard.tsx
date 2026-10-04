@@ -51,19 +51,19 @@ export default function HobbyCard({
           className="absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-black/5 bg-white-50 p-3 shadow-[0_20px_50px_-25px_rgba(0,0,0,0.35)]"
           style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
         >
-          <div className="relative flex-1 overflow-hidden rounded-2xl">
+          <div className="relative flex-1 overflow-hidden rounded-xl">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={images[0]} alt={name} loading="lazy" className="h-full w-full object-cover" />
           </div>
           <div className="flex items-end justify-between px-2 pb-0.5 pt-3">
-            <span className="font-serif text-2xl italic text-black sm:text-3xl">{name}</span>
-            <span className="mb-1 text-xs uppercase tracking-widest text-[rgb(139,115,220)]">flip ↻</span>
+            <span className="font-serif text-heading italic text-black">{name}</span>
+            <span className="mb-1 text-xs uppercase tracking-[0.14em] text-accent-strong">flip ↻</span>
           </div>
         </div>
 
         {/* Back: story on lavender halftone */}
         <div
-          className="absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-[rgb(167,139,250)]/40 bg-[rgb(246,243,255)] p-6 sm:p-8"
+          className="absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-accent/40 bg-[rgb(246,243,255)] p-6 sm:p-8"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
@@ -74,14 +74,14 @@ export default function HobbyCard({
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 opacity-40"
             style={{
-              backgroundImage: "radial-gradient(rgb(167,139,250) 1.1px, transparent 1.3px)",
+              backgroundImage: "radial-gradient(var(--accent) 1.1px, transparent 1.3px)",
               backgroundSize: "12px 12px",
               maskImage: "radial-gradient(80% 60% at 80% 100%, #000 0%, transparent 100%)",
               WebkitMaskImage: "radial-gradient(80% 60% at 80% 100%, #000 0%, transparent 100%)",
             }}
           />
-          <span className="relative font-serif text-2xl italic text-black">{name}</span>
-          <p className="relative mt-3 overflow-y-auto pr-1 text-[15px] leading-relaxed text-gray-700 sm:text-base lg:max-w-[60ch]">
+          <span className="relative font-serif text-heading italic text-black">{name}</span>
+          <p className="relative mt-3 overflow-y-auto pr-1 text-base leading-relaxed text-gray-700 lg:max-w-[60ch]">
             {body}
           </p>
         </div>

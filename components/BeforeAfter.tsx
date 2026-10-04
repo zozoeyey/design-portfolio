@@ -4,7 +4,6 @@
  * screenshots cropped from the original composite export.)
  */
 
-const ROSE = "rgb(196, 92, 120)";
 
 function Panel({
   img,
@@ -44,7 +43,7 @@ export default function BeforeAfter({ color, dark = false }: { color: string; da
       <Panel
         img="/media/valueglance-before-desktop.png"
         label="Before"
-        labelColor={dark ? "rgb(228, 140, 165)" : ROSE}
+        labelColor={dark ? "oklch(0.78 0.1 5)" : "oklch(0.52 0.13 5)"}
         dark={dark}
         alt="Original desktop-first chart with wide controls and dense axes"
         caption="The charts were desktop-first — dense double axes, wide range sliders, and controls with no answer for a small screen."

@@ -31,7 +31,7 @@ export default function Carousel({
 
   return (
     <div
-      className={`group/car relative overflow-hidden rounded-2xl bg-white ${className}`}
+      className={`group/car relative overflow-hidden rounded-lg bg-white ${className}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -81,8 +81,8 @@ export default function Carousel({
               type="button"
               aria-label={`Go to image ${k + 1}`}
               onClick={(e) => { e.preventDefault(); setI(k); }}
-              className={`h-1.5 rounded-full transition-all ${
-                k === i ? "w-4 bg-[rgb(167,139,250)]" : "w-1.5 bg-black/25"
+              className={`h-1.5 rounded-full transition-[width,background-color] ${
+                k === i ? "w-4 bg-accent" : "w-1.5 bg-black/25"
               }`}
             />
           ))}
