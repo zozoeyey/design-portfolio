@@ -106,9 +106,25 @@ blockquote {
 .prose p:last-child {
   margin-bottom: 0;
 }
+/* Key phrases: a soft marker under the lower part of the line, in the
+   project's theme color (--hl, set by CaseStudy; lavender elsewhere), so a
+   skimmer can read just the highlights. Use sparingly (~1 per paragraph). */
 .prose strong {
   color: var(--black);
-  font-weight: 700;
+  font-weight: 500;
+  background-image: linear-gradient(
+    transparent 58%,
+    color-mix(in oklab, var(--hl, var(--accent)) 30%, transparent) 58%
+  );
+  padding-inline: 0.1em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.prose-invert strong {
+  background-image: linear-gradient(
+    transparent 58%,
+    color-mix(in oklab, var(--hl, var(--accent)) 45%, transparent) 58%
+  );
 }
 /* Light-on-dark variant for dark story bands */
 .prose-invert p {
@@ -336,5 +352,60 @@ blockquote {
 @media (prefers-reduced-motion: reduce) {
   .plate-sheen {
     display: none;
+  }
+}
+
+/* Case-study Contents panel: rises from the pill */
+@keyframes contents-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.contents-panel {
+  animation: contents-in 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .contents-panel {
+    animation: none;
+  }
+}
+
+/* Playground preview: the image fades in when the selection changes */
+@keyframes playground-swap-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.playground-swap {
+  animation: playground-swap-in 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .playground-swap {
+    animation: none;
+  }
+}
+
+/* Blinking terminal cursor (Playground embed loading line) */
+@keyframes terminal-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.terminal-cursor {
+  animation: terminal-blink 1s step-end infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal-cursor {
+    animation: none;
   }
 }

@@ -1,0 +1,85 @@
+/* Portfolio review deck (unlisted). Slides are 16:9 cards whose type scales
+   with the card width (cqw), so every slide keeps the PDF's proportions. */
+
+/* This page stands alone: hide the site navbar and footer. */
+body:has(.deck) > header,
+body:has(.deck) > footer {
+  display: none;
+}
+
+.deck {
+  --c: var(--accent-strong);
+  counter-reset: slide;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-inline: auto;
+  width: min(100% - 32px, 1440px);
+  padding-block: 32px 96px;
+}
+
+.slide {
+  --c: inherit;
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 6.75cqw;
+  scroll-margin-top: 16px;
+  counter-increment: slide;
+}
+.slide[data-theme="intro"] { --c: var(--accent-strong); }
+.slide[data-theme="vg"] { --c: rgb(26, 34, 83); } /* ValueGlance primary navy */
+.slide[data-theme="cm"] { --c: rgb(21, 93, 252); }
+
+.slide-no::before {
+  content: counter(slide);
+}
+.slide-no {
+  position: absolute;
+  top: 2.2cqw;
+  right: 2.6cqw;
+  font-size: 0.85cqw;
+  font-variant-numeric: tabular-nums;
+  color: var(--gray-500);
+}
+
+.s-display { font-size: 4.4cqw; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; color: var(--c); }
+.s-title { font-size: 2.5cqw; line-height: 1.15; font-weight: 700; letter-spacing: -0.015em; color: var(--c); }
+.s-sub { margin-top: 1.1cqw; font-size: 1.8cqw; line-height: 1.35; color: var(--gray-700); }
+.s-h { font-size: 1.85cqw; line-height: 1.2; font-weight: 700; color: var(--black); }
+.s-body { font-size: 1.35cqw; line-height: 1.5; color: var(--gray-700); }
+.s-cap { font-size: 1.2cqw; line-height: 1.4; color: var(--gray-500); }
+.s-eyebrow {
+  font-size: 0.95cqw;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+.s-dot { color: var(--c); padding-inline: 0.4em; }
+
+/* media */
+.s-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 1.2cqw;
+}
+.s-panel {
+  border-radius: 1.6cqw;
+  background: color-mix(in oklab, var(--c) 7%, var(--white-100));
+}
+.s-video {
+  display: block;
+  width: 100%;
+  border-radius: 1.2cqw;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 2cqw 4cqw -2cqw rgb(20 20 40 / 0.3);
+}
+.s-pick {
+  border-radius: 1.6cqw;
+  padding: 2cqw;
+  box-shadow: inset 0 0 0 0.2cqw var(--c);
+}

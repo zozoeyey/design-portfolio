@@ -140,7 +140,7 @@ export type Feature = {
   /** Full-bleed band background behind this feature (banner layout only). */
   band?: "dark" | null;
 };
-export type Story = { subheading: string; body: string; image?: string | null; tags?: string[]; graphic?: "observation-map" | "mindset-shift" | "before-after" | null };
+export type Story = { subheading: string; body: string; image?: string | null; tags?: string[]; graphic?: "observation-map" | "mindset-shift" | "before-after" | "requests-overlap" | "onboarding-wipe" | null };
 
 export type Project = {
   slug: string;
@@ -152,8 +152,8 @@ export type Project = {
   color: string; // accent color
   liveUrl?: string | null;
   headerImage?: string | null;
-  /** Use the banner-style case-study layout (big hero image, story bands, coded graphics). */
-  layoutV2?: boolean;
+  /** Poster for the work card when it differs from headerImage (e.g. first frame of mainVideo). */
+  cardImage?: string | null;
   /** Playground pieces with an internal case study: hidden from the home "My Work" grid. */
   playgroundOnly?: boolean;
   /** Heading for the features section (default "Solution"). */
@@ -177,7 +177,6 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "valueglance",
-    layoutV2: true,
     name: "ValueGlance",
     tag: "Fintech SaaS",
     summary:
@@ -187,7 +186,8 @@ export const projects: Project[] = [
     color: "rgb(44, 131, 127)",
     liveUrl: "https://valueglance.com/",
     headerImage: "/media/valueglance-header.webp",
-    mainVideo: "/media/KDNoSSV9lbHOkF6Dm9F2NzFnv4Q.mp4",
+    mainVideo: "/media/valueglance/card.mp4",
+    cardImage: "/media/valueglance/card-poster.jpg",
     role: "UX Designer",
     duration: "Oct 2025 - Present",
     tools: "Linear, Figma, Notion, Claude Code",
@@ -213,7 +213,7 @@ export const projects: Project[] = [
     memorable: {
       title: "I don't measure my work by what ships. I measure it by what sticks.",
       body:
-        "<p>The most impactful design decisions aren't always the ones that add new features. Often, they are the ones that simplify the system so the entire team can move faster without breaking things.</p><p>During this project, I was tasked with redesigning complex mobile data visualizations for individual investors. Instead of just fixing the layouts, I focused on building a scalable architecture, standardizing core components like Tags, Tooltips, and Scrolling Bars. While this work felt granular, its impact was immediate: other designers began pulling these components into their own workflows to solve entirely different problems. By prioritizing the \"logic\" over the \"pixel,\" I didn't just deliver a set of screens; I created a multiplier that reduced team friction and eliminated redundant design cycles.</p><p>What I learned from this experience is that the true measure of a design's value isn't just its visual polish, but its ability to lower the cost of execution for the whole team. My goal is no longer just to ship a product, but to build the sustainable foundation that makes the next ten versions possible.</p>",
+        "<p>The most impactful design decisions aren't always the ones that add new features. Often, they are the ones that <strong>simplify the system so the entire team can move faster</strong> without breaking things.</p><p>During this project, I was tasked with redesigning complex mobile data visualizations for individual investors. Instead of just fixing the layouts, I focused on building a scalable architecture, standardizing core components like Tags, Tooltips, and Scrolling Bars. While this work felt granular, its impact was immediate: <strong>other designers began pulling these components into their own workflows</strong> to solve entirely different problems. By prioritizing the \"logic\" over the \"pixel,\" I didn't just deliver a set of screens; I created a multiplier that reduced team friction and eliminated redundant design cycles.</p><p>What I learned from this experience is that the true measure of a design's value isn't just its visual polish, but its ability to <strong>lower the cost of execution for the whole team</strong>. My goal is no longer just to ship a product, but to build the sustainable foundation that makes the next ten versions possible.</p>",
     },
     storyHeading: "Designing for Visual Clarity in a Complex Cross-Platform Investment Tool",
     stories: [
@@ -270,24 +270,27 @@ export const projects: Project[] = [
     memorable: {
       title: "Before I learn the answers, I learn what to ask",
       body:
-        "<p>What stayed with me wasn't just shipping the MVP, it was the moment I realized that as a designer, my value doesn't come from having all the answers, but from being the person who isn't afraid to ask why.</p><p>When I first joined this AI marketing project, I felt like an outsider. I was sitting in rooms where everyone was talking about SEO strategies and UGC content loops, and I honestly didn't know what half the acronyms meant. There was this huge pressure to \"catch up\" and act like an expert, but I decided to do the opposite. I started asking the most basic, fundamental questions about how our customers actually made money and where their manual work was failing them. By treating my own lack of domain knowledge as a tool for simplification, I was able to help the team strip away the jargon and focus on the core logic that eventually defined our product's strategy.</p><p>I used to think that being a senior designer meant being the smartest person in the room about the industry. Now, I realize it's about being the most curious. If I can ask the right questions to uncover the basic logic of a business, I can design a solution for it, even if I've never worked in that field before. Clear thinking will always beat domain expertise when it comes to solving a new problem.</p>",
+        "<p>What stayed with me wasn't just shipping the MVP, it was the moment I realized that as a designer, my value doesn't come from having all the answers, but from <strong>being the person who isn't afraid to ask why</strong>.</p><p>When I first joined this AI marketing project, I felt like an outsider. I was sitting in rooms where everyone was talking about SEO strategies and UGC content loops, and I honestly didn't know what half the acronyms meant. There was this huge pressure to \"catch up\" and act like an expert, but I decided to do the opposite. I started asking the most basic, fundamental questions about how our customers actually made money and where their manual work was failing them. By <strong>treating my own lack of domain knowledge as a tool for simplification</strong>, I was able to help the team strip away the jargon and focus on the core logic that eventually defined our product's strategy.</p><p>I used to think that being a senior designer meant being the smartest person in the room about the industry. Now, I realize it's about being the most curious. If I can ask the right questions to uncover the basic logic of a business, I can design a solution for it, even if I've never worked in that field before. <strong>Clear thinking will always beat domain expertise</strong> when it comes to solving a new problem.</p>",
     },
     storyHeading: "From Zero to Campaign: Designing an End-to-End AI Marketing Tool for Small Businesses",
     stories: [
       {
         subheading: "Not every need is a direction.",
+        tags: ["Stakeholder Interviews", "Affinity Mapping", "Problem Identification", "Persona"],
         body:
           "<p>As discovery progressed, our three early paying clients each wanted something different, brand sentiment monitoring, UGC-driven content, and sales-driven content generation. I had no marketing background and didn't know what SEO or UGC even meant, but instead of trying to master the domain, I kept asking one question: which of these needs shares the same root problem? That focus helped us avoid building a product that tried to do everything and ended up doing nothing well, we held our scope and shipped a coherent MVP. What I learned is that designers don't need to become domain experts; they need to ask sharper questions than the room.</p>",
-        image: "/media/iqyzTQwyxnkpEkKUlJSYnVdh1E.png",
+        graphic: "requests-overlap",
       },
       {
         subheading: "Less polish. More principle.",
+        tags: ["Design Direction", "Information Architecture", "Lo-fi Sketch", "Design Critiques"],
         body:
           "<p>Once the direction became clear, I started designing the onboarding flow, and immediately hit a real tension between two competing needs. The technical side needed enough user input to generate accurate results; the user side needed to see value as quickly as possible. I set one design constraint for myself: the fewest questions it takes to get someone to their first AI-generated result. Competitor SaaS products looked polished and I felt the pull to match them, but I held that constraint instead — our team stayed focused on shipping something functional rather than something impressive. An MVP's job is to validate logic, not win visual comparisons.</p>",
-        image: "/media/nKYErIMDZou2hoS06ccvfiuBAw8.png",
+        graphic: "onboarding-wipe",
       },
       {
         subheading: "Not the hand-off. The hands-on.",
+        tags: ["Feasibility Adjustments", "Cross-functional Collaboration", "Ship Quick Iterations", "Design Handoff & Documentation"],
         body:
           "<p>When it came time to ship, I didn't hand the designs off, I built them myself. Using Figma MCP connected to Claude Code, I established a loop: design, generate code, deploy, test, adjust, completing the full cycle in a few hours. For features beyond my technical reach, I sat in real-time with the CTO, watching implementation happen and making immediate feasibility adjustments when something couldn't be built as designed. What changed wasn't just the speed, it was my judgment. I stopped asking for things I couldn't defend technically, and started knowing the difference between what was worth fighting for and what could be solved a different way.</p>",
         image: "/media/XCCRJrEOaiKO8kH3KkLrqWk7co.png",
@@ -325,24 +328,27 @@ export const projects: Project[] = [
     memorable: {
       title: "Designing for Trust Over Warmth",
       body:
-        "<p>The most memorable moment that stayed with me most wasn't a metric—it was a user reaction. While designing an eligibility results page, I added motivational language with emojis to make the experience feel supportive and human. But during usability testing, a participant hesitated and said, \"I'm not sure if I can take this seriously.\"</p><p>That feedback made me realize I had prioritized warmth over credibility in a high-stakes context. For undocumented students making decisions about their educational future, trust matters more than friendliness.</p><p>I redesigned the page by removing emojis from the header, shifting encouragement into secondary text, and emphasizing clarity and institutional legitimacy. This experience reshaped how I think about empathy in design—not as making something feel good, but as helping users feel confident in critical moments.</p>",
+        "<p>The most memorable moment that stayed with me most wasn't a metric—it was <strong>a user reaction</strong>. While designing an eligibility results page, I added motivational language with emojis to make the experience feel supportive and human. But during usability testing, a participant hesitated and said, \"I'm not sure if I can take this seriously.\"</p><p>That feedback made me realize I had prioritized warmth over credibility in a high-stakes context. For undocumented students making decisions about their educational future, <strong>trust matters more than friendliness</strong>.</p><p>I redesigned the page by removing emojis from the header, shifting encouragement into secondary text, and emphasizing clarity and institutional legitimacy. This experience reshaped how I think about empathy in design—not as making something feel good, but as <strong>helping users feel confident in critical moments</strong>.</p>",
     },
     storyHeading: "Designing for high-stakes decision-making in underserved communities",
     stories: [
       {
         subheading: "Clarity is my responsibility",
+        tags: ["Research", "Information Architecture", "Design Strategy", "Stakeholder Alignment"],
         body:
           "<p>When this project started, the client knew the form wasn't working, but no one could point to why. The PM said \"users are dropping off,\" but there was no consensus on whether it was the length, the language, or the structure. I ran a competitive analysis across government eligibility tools, fintech onboarding flows, and multi-step form best practices, drew my own conclusions about what patterns would reduce cognitive load, and built a research document that mapped single-page vs. multi-section forms with clear trade-offs. That gave the team a working foundation—a direction I could explain and a structure the engineer could build toward. What I learned is that when no one hands you a clear problem definition, defining it yourself is not extra work. It's the actual job.</p>",
         image: "/media/KIC87lLkZoJ11Wk99lK7auPurc.png",
       },
       {
         subheading: "When Feedback Challenged My Assumptions",
+        tags: ["Usability Testing", "Design Iteration", "Design Critique", "Cross-Functional Collaboration"],
         body:
           "<p>I designed an eligibility results page with emojis and motivational language to make the experience feel encouraging. During usability testing with five users, one participant paused and said, \"I'm not sure if I can take this seriously.\" That stopped me cold. I had prioritized warmth over credibility—a fundamental misread for users making high-stakes decisions about education and finances.</p><p>I revisited the design. I removed the emojis from the header, moved motivational copy into supporting text, and restructured the results page to surface unmet requirements first with clear, institutional language. I presented the rationale to the client: trust isn't built through friendliness. It's built through precision. The revised design made it into production.</p><p>What I realized: empathy in design isn't about making things feel good—it's about understanding what users need to feel confident.</p>",
         image: "/media/vrBLPlvfgGNHVdCEtBRhdFBgXo.png",
       },
       {
         subheading: "From first design system to production-ready foundation",
+        tags: ["Design System", "Responsive Design", "Developer Handoff", "Implementation QA"],
         body:
           "<p>Once the design direction was validated, I built Immigrants Rising's first design system from scratch. I aligned with the engineer on technical constraints, referenced Tailwind CSS and @shadcn/ui for component structure, and built a scalable system in Figma covering typography, spacing, breakpoints, and component states.</p><p>But when handoff came, the developer flagged inconsistencies I had missed—edge cases in form validation states and responsive behavior I hadn't documented. I compiled an Implementation Document that mapped every component to its Tailwind equivalent, annotated responsive breakpoints with exact pixel values, and scheduled a walkthrough to address gaps in real time.</p><p>What I carry from this: being thorough isn't enough if you haven't yet learned what thorough means for that specific deliverable. Ownership means making the system usable for the person who has to build from it.</p>",
         image: "/media/n8uKUQRt4HtLG5ZVvKF3sC7usqA.png",
@@ -356,7 +362,6 @@ export const projects: Project[] = [
   },
   {
     slug: "connectlink",
-    layoutV2: true,
     name: "Connect Link",
     tag: "Webapp Saas",
     summary:
@@ -379,24 +384,27 @@ export const projects: Project[] = [
     memorable: {
       title: "From Task-Taker to Decision-Maker.",
       body:
-        "<p>What stayed with me wasn't the final high-fidelity handoff, it was the moment I realized that as an intern, my job wasn't just to fill placeholders, but to have the courage to question a flawed direction.</p><p>While mapping the structure for a new community feature, I noticed the existing wireframes forced users through a confusing navigation path that cluttered the experience with irrelevant options. As a new intern, I felt a huge internal conflict, I worried whether I had the standing to challenge the established flow. However, I translated that doubt into design logic, analyzing common industry patterns and proposing a simplified hierarchy that stripped away the noise. During the design review, I pushed past my nerves to present the structural issues I'd identified. My rationale resonated with the leadership, and my decision to streamline the interface was fully adopted for the product launch.</p><p>This experience taught me that design influence isn't granted by seniority; it's earned through professional judgment. When I felt like I didn't have the \"right\" to speak up, that was exactly when the product needed someone to bridge the gap between a placeholder and a functional solution. I've learned that being an owner means looking past the assigned task to protect the integrity of the user experience.</p>",
+        "<p>What stayed with me wasn't the final high-fidelity handoff, it was the moment I realized that as an intern, my job wasn't just to fill placeholders, but to <strong>have the courage to question a flawed direction</strong>.</p><p>While mapping the structure for a new community feature, I noticed the existing wireframes forced users through a confusing navigation path that cluttered the experience with irrelevant options. As a new intern, I felt a huge internal conflict, I worried whether I had the standing to challenge the established flow. However, I translated that doubt into design logic, analyzing common industry patterns and proposing a simplified hierarchy that stripped away the noise. During the design review, I pushed past my nerves to present the structural issues I'd identified. My rationale resonated with the leadership, and <strong>my decision to streamline the interface was fully adopted</strong> for the product launch.</p><p>This experience taught me that <strong>design influence isn't granted by seniority; it's earned through professional judgment</strong>. When I felt like I didn't have the \"right\" to speak up, that was exactly when the product needed someone to bridge the gap between a placeholder and a functional solution. I've learned that being an owner means looking past the assigned task to protect the integrity of the user experience.</p>",
     },
     storyHeading: "Designing for Community Engagement in Early-Stage Professional Networking Apps",
     stories: [
       {
         subheading: "Ambiguity is my starting point.",
+        tags: ["Persona", "Problem Identification", "Opportunity Mapping", "Design Direction"],
         body:
           "<p>When this project started, there was no clear direction on how to approach the design, no one told me which platform to reference, or whether to create something entirely new for our users. I ran a competitor analysis across Reddit, Quora, and Product Hunt, drew my own conclusions about what patterns would fit, and built a self-imposed weekly schedule since the PM had no specific timeline requirements. That gave me a working foundation, a direction I could explain and a structure I could be accountable to. What I learned is that when no one hands you a map, building your own is not extra work. It's the actual job.</p>",
         image: "/media/6C2yVGiOuQNS6nIrCMUKKsk13c.png",
       },
       {
         subheading: "Soft voice. Firm logic.",
+        tags: ["Architecture", "Brainstorm", "Lo-fi Sketch", "Design Critiques"],
         body:
           "<p>As discovery progressed, I inherited a wireframe for the Discussion Board and felt something was structurally off, even as the most junior person on the team, I knew I had to say something. I mapped the information architecture, named a specific problem: three tabs at the top forced users to think about sections irrelevant to their current task, and I proposed replacing them with breadcrumb navigation instead. I was nervous the team wouldn't take it seriously, but the Design Lead supported the direction, and it made it into the final design. What I realized is that a quiet voice backed by clear reasoning carries more weight than I expected.</p>",
         image: "/media/pT07E6Paej302lZXmJ99sEFGVx8.png",
       },
       {
         subheading: "From first-timer to accountable owner.",
+        tags: ["Design System", "Edge Cases", "Design Handoff & Documentation", "Handoff Meeting"],
         body:
           "<p>Once the direction became clear, I had to build a component library from scratch, something I had never done before. I didn't wait to be shown how. I scheduled a one-on-one with the Design Lead, learned the fundamentals of building components in Figma, and applied them directly to the Discussion Board's design system. But when the handoff came, the PM and other designers asked questions I hadn't prepared for, edge cases I had missed entirely. That moment was uncomfortable, and clarifying. What I carry from it is this: being thorough isn't enough if you haven't yet learned what thorough means for that specific deliverable.</p>",
         image: "/media/aOBSZjIhHOFMgpJcmdfyB50HKk.png",
@@ -411,7 +419,6 @@ export const projects: Project[] = [
   {
     slug: "neurafutures",
     playgroundOnly: true,
-    layoutV2: true,
     name: "Neura Futures",
     tag: "Graphic Design",
     summary:
@@ -454,7 +461,6 @@ export const projects: Project[] = [
   {
     slug: "mixvox",
     playgroundOnly: true,
-    layoutV2: true,
     name: "MixVox",
     tag: "Instrument",
     summary:
@@ -528,7 +534,7 @@ export function getProject(slug: string) {
 
 export type PlaygroundItem = {
   slug: string;
-  category: "coding" | "physical-ai" | "graphic-design";
+  category: "product-design" | "coding" | "physical-ai" | "graphic-design";
   name: string;
   tag: string;
   year: string;
@@ -536,9 +542,29 @@ export type PlaygroundItem = {
   color: string;
   link: string;
   image: string;
+  /** Live page shown inside the Playground preview (must allow iframing). */
+  embed?: string;
+  /** "phone" shows the embed in a phone-sized frame (mobile web apps). */
+  embedFrame?: "desktop" | "phone";
+  /** Demo video played in the Playground preview (poster = `image`). */
+  video?: string;
 };
 
 export const playground: PlaygroundItem[] = [
+  {
+    slug: "pebbles",
+    category: "product-design",
+    name: "Pebbles",
+    tag: "Mobile App",
+    year: "2025",
+    summary:
+      "A mobile app that helps parents of kids 3–11 respond to big emotions, with strategies, reflection, and peer support.",
+    color: "rgb(253, 209, 92)",
+    link: "https://pebbles-sel.vercel.app/",
+    image: "/media/pebbles/cover.png",
+    embed: "https://pebbles-sel.vercel.app/",
+    embedFrame: "phone",
+  },
   {
     slug: "colorimia",
     category: "physical-ai",
@@ -548,7 +574,8 @@ export const playground: PlaygroundItem[] = [
     summary: "A physical visualization device that extracts real-world colors and creates images using generative AI.",
     color: "rgb(222, 87, 67)",
     link: "https://drive.google.com/file/d/19S4dJ27skl1WqS8lyCyzeUlImYKRkNxF/view",
-    image: "/media/hRfzX5ao3qXE6QOKM51RtycMlc.jpg",
+    image: "/media/colorimia/poster.jpg",
+    video: "/media/colorimia/colorimia.mp4",
   },
   {
     slug: "mixvox",
@@ -571,6 +598,7 @@ export const playground: PlaygroundItem[] = [
     color: "rgb(220, 174, 242)",
     link: "https://zozoeyey.github.io/MIT-4.032/",
     image: "/media/ED7cnytyUuZY5fFps9gykNdirs.webp",
+    embed: "https://zozoeyey.github.io/MIT-4.032/",
   },
   {
     slug: "neurafutures",

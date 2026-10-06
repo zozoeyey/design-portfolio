@@ -2,7 +2,7 @@
 // serif, and a hairline that runs out to the right edge and fades.
 // Used on every page, so this is the one place to tune section headings.
 
-function HalftoneMark() {
+export function HalftoneMark({ size = 22 }: { size?: number }) {
   // a tiny dot cluster — the same dot language as the hero / logo
   const dots = [
     [9, 2, 1.6], [4, 6, 2.2], [14, 6, 2.2],
@@ -12,8 +12,8 @@ function HalftoneMark() {
   return (
     <svg
       viewBox="0 0 18 19"
-      width="22"
-      height="22"
+      width={size}
+      height={size}
       aria-hidden="true"
       className="shrink-0 text-accent"
     >

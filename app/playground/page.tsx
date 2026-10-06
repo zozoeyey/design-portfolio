@@ -3,6 +3,7 @@ import { playground } from "@/lib/data";
 import SectionLabel from "@/components/SectionLabel";
 import Reveal from "@/components/Reveal";
 import PlateCard from "@/components/PlateCard";
+import PlaygroundExplorer from "@/components/PlaygroundExplorer";
 import { container } from "@/lib/ui";
 
 export const metadata: Metadata = {
@@ -10,20 +11,36 @@ export const metadata: Metadata = {
   description: "Experiments, side projects, and things Zoey makes for fun.",
 };
 
+const intro = (
+  <>
+    <SectionLabel as="h1">Playground</SectionLabel>
+    <p className="mt-4 max-w-xl text-base leading-relaxed text-gray-500">
+      Experiments and side projects — where I explore hardware, generative tools, data, and graphic
+      design outside client work.
+    </p>
+  </>
+);
+
 export default function PlaygroundPage() {
   return (
-    <section className={`${container} pt-40 sm:pt-48`}>
-      <Reveal>
-        <SectionLabel as="h1">Playground</SectionLabel>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-gray-500">
-          Experiments and side projects — where I explore hardware, generative
-          tools, data, and graphic design outside client work.
-        </p>
-      </Reveal>
+    <section className={`${container} pt-40 sm:pt-48 lg:max-w-none lg:pr-8 lg:pl-[max(5rem,calc((100%-1440px)/2+5rem))] lg:pt-28`}>
+      {/* Large screens: left edge matches the site container; the right runs
+          wider (32px from the window edge) so the preview can breathe */}
+      {/* Phones and tablets: header on top */}
+      <div className="lg:hidden">
+        <Reveal>{intro}</Reveal>
+      </div>
 
-      <div className="mt-12 flex flex-col gap-24">
+      {/* Large screens: list + preview */}
+      <div className="hidden lg:block">
+        <PlaygroundExplorer items={playground} intro={intro} />
+      </div>
+
+      {/* Phones and tablets: cards by category */}
+      <div className="mt-12 flex flex-col gap-24 lg:hidden">
       {(
         [
+          { key: "product-design", title: "Product design" },
           { key: "coding", title: "Coding" },
           { key: "physical-ai", title: "Physical AI" },
           { key: "graphic-design", title: "Graphic design" },

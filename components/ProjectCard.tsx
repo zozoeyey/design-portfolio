@@ -11,7 +11,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       tag={project.tag}
       year={project.year}
       color={project.color}
-      image={project.headerImage}
+      image={project.cardImage ?? project.headerImage}
       video={project.mainVideo}
     />
   );
