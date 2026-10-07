@@ -1,0 +1,4 @@
+body:has(.deck-notes) > header,
+body:has(.deck-notes) > footer {
+  display: none;
+}

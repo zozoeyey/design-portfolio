@@ -1,4 +1,4 @@
-// Portfolio review deck — June 2026. Unlisted: nothing links here and it is
+// Portfolio review deck — October 2026. Unlisted: nothing links here and it is
 // excluded from search. One long page, one 16:9 card per slide.
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
@@ -155,14 +155,130 @@ function Pick({ theme, title, a, b, va, vb }: { theme: Theme; title: string; a: 
   );
 }
 
+// "The Iteration": V1 + V2 on the left, the final three screens on the right. Also drawn blurred behind
+// the V1 / V2 focus slides that follow it.
+function IterationBoard() {
+  return (
+    <>
+    <h2 className="s-title">The Iteration</h2>
+    <div className="mt-[2cqw] flex min-h-0 flex-1 items-center justify-center gap-[2.6cqw]">
+      <div className="flex w-[30cqw] flex-col gap-[1.4cqw]">
+        <figure className="flex flex-col gap-[0.6cqw]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/deck/vg-v1-white.jpg"
+            alt="V1: the chart with an Edit button, linked to the metric picker sheet it opens"
+            className="aspect-[1793/1725] w-full rounded-[0.8cqw] bg-white object-contain shadow-[0_0_0_0.1cqw_rgba(26,34,83,0.1)]"
+          />
+          <figcaption className="text-[1.1cqw] text-[var(--gray-700)]">
+            <b className="text-[var(--c)]">V1</b> · Edit opens a metric sheet
+          </figcaption>
+        </figure>
+        <figure className="flex items-end gap-[1cqw]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/deck/vg-v2.jpg"
+            alt="V2 concept sketch: metric chips above the chart, values shown for the scrubbed date"
+            className="aspect-[816/752] w-[13cqw] rounded-[0.6cqw] object-contain shadow-[0_0_0_0.1cqw_rgba(26,34,83,0.1)]"
+          />
+          <figcaption className="text-[1.1cqw] leading-snug text-[var(--gray-700)]">
+            <b className="text-[var(--c)]">V2</b> · Concept:
+            <br />
+            pick metrics on the chart
+          </figcaption>
+        </figure>
+      </div>
+      <span className="w-[0.1cqw] self-stretch bg-[color-mix(in_oklch,var(--c)_15%,transparent)]" aria-hidden="true" />
+      <div className="flex flex-col gap-[1cqw]">
+        <p className="text-[1.2cqw] font-bold uppercase tracking-[0.08em] text-[var(--c)]">Final</p>
+        <div className="relative">
+        <ol className="flex gap-[3cqw]">
+          {[
+            ["vg-final-1", "Metrics above the chart", "Final chart: a metric strip above the chart shows values for the scrubbed date, with an Edit chart metrics drawer below"],
+            ["vg-final-2", "Edit chart metrics", "Edit chart metrics sheet: save a custom view and toggle metrics by Quality, Value and Growth"],
+            ["vg-final-3", "All Metrics reference", "All Metrics page: each metric expands to its formula, definition and an example"],
+          ].map(([src, label, alt], i) => (
+            <li key={src} className="flex flex-col gap-[0.8cqw]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/deck/${src}.jpg`}
+                alt={alt}
+                className="aspect-[590/1282] h-[42cqw] max-w-none shrink-0 rounded-[1.2cqw] object-cover object-top shadow-[0_0_0_0.1cqw_rgba(26,34,83,0.12),0_1.2cqw_2.4cqw_-1.2cqw_rgba(26,34,83,0.3)]"
+              />
+              <span className="flex items-center gap-[0.6cqw] text-[1.15cqw] text-[var(--gray-700)]">
+                <span className="flex h-[1.6cqw] w-[1.6cqw] shrink-0 items-center justify-center rounded-full bg-[var(--c)] text-[0.9cqw] font-bold text-white">{i + 1}</span>
+                {label}
+              </span>
+            </li>
+          ))}
+        </ol>
+        {/* Flow arrows, drawn at a 40-unit phone height (18.41 wide, 2.857 gaps) and scaled to the 42cqw phones / 3cqw gaps.
+            Edit chart metrics (1) → the sheet it opens (2); Metric definitions (2) → All Metrics (3). */}
+        <svg
+          viewBox="0 0 60.944 40"
+          className="pointer-events-none absolute left-0 top-0 h-[42cqw] w-[63.99cqw] overflow-visible"
+          fill="none"
+          stroke="var(--c)"
+          strokeWidth="0.22"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="18.2" cy="38.5" r="0.4" fill="var(--c)" />
+          <path d="M18.2 38.5H19.34a0.5 0.5 0 0 0 .5-.5V8.1a0.5 0.5 0 0 1 .5-.5H21.77M21.07 6.9l.7.7-.7.7" />
+          <circle cx="39.41" cy="19.8" r="0.4" fill="var(--c)" />
+          <path d="M39.41 19.8H40.6a0.5 0.5 0 0 0 .5-.5V2.4a0.5 0.5 0 0 1 .5-.5H43.03M42.33 1.2l.7.7-.7.7" />
+        </svg>
+        </div>
+      </div>
+    </div>
+    </>
+  );
+}
+
+// Focus slide: the iteration board blurred behind, one version enlarged on top.
+function IterationFocus({ v, label, src = "", ratio = "", alt = "", bare = false, children }: { v: string; label: string; src?: string; ratio?: string; alt?: string; bare?: boolean; children?: React.ReactNode }) {
+  return (
+    <Slide theme="vg" className="flex flex-col items-center justify-center !py-[1.6cqw]">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 flex flex-col px-[6.75cqw] pb-[3.4cqw] pt-[4.2cqw] opacity-50 blur-[0.5cqw]">
+        <IterationBoard />
+      </div>
+      <div aria-hidden="true" className="absolute inset-0 bg-[color-mix(in_oklab,var(--white-100)_55%,transparent)]" />
+      <figure className="relative flex flex-col items-center">
+        {children ?? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={`/deck/${src}`}
+          alt={alt}
+          className={
+            bare
+              ? "h-[46cqw] w-auto max-w-[86cqw] shrink-0 object-contain drop-shadow-[0_1.4cqw_2cqw_rgba(26,34,83,0.25)]"
+              : "h-[38cqw] w-auto max-w-[80cqw] rounded-[1.2cqw] bg-white object-contain shadow-[0_0_0_0.1cqw_rgba(26,34,83,0.1),0_2cqw_4cqw_-2cqw_rgba(26,34,83,0.35)]"
+          }
+          style={{ aspectRatio: ratio }}
+        />
+        )}
+        <figcaption>
+          <h2 className={`${bare ? "mt-[1cqw]" : "mt-[1.6cqw]"} text-center text-[1.8cqw] font-bold text-black`}>
+            <span className="mr-[0.6cqw] text-[var(--c)]">{v}</span>
+            {label}
+          </h2>
+        </figcaption>
+      </figure>
+    </Slide>
+  );
+}
+
 export default function Deck() {
   return (
-    <main className="deck" data-show="vg">
+    <main className="deck" data-show="vg" data-mode="present">
       <DeckTabs />
       {/* ---------------- Intro ---------------- */}
+      {/* intro (cover, agenda, about me) opens the ValueGlance deck only */}
+      <div data-part="vg" className="contents">
       <Slide theme="intro" className="grid grid-cols-[1fr_auto] items-center">
         <div className="flex h-full flex-col">
-          <p className="s-body !text-black">June 2026</p>
+          <p className="s-body !text-black">October 2026</p>
           <div className="my-auto">
             <span className="text-[var(--c)]">
               <Logo size={88} />
@@ -255,6 +371,7 @@ export default function Deck() {
         </div>
       </Slide>
 
+      </div>
       <div data-part="vg" className="contents">
       {/* ---------------- 01 · ValueGlance ---------------- */}
       {/* Product intro (Centered): name + one-line problem, then the desktop
@@ -262,7 +379,7 @@ export default function Deck() {
       <Slide theme="vg" className="flex flex-col items-center !p-0 text-center">
         <div className="pt-[4.4cqw]">
           <p className="s-eyebrow">
-            01<span className="s-dot">·</span>UX Design Intern<span className="s-dot">·</span>Oct 2025 – Jan 2026
+            01<span className="s-dot">·</span>Product Design/Engineering Intern<span className="s-dot">·</span>Oct 2025 – Jan 2026, Jun – Sep 2026
           </p>
           <h2 className="s-display mt-[0.8cqw] !text-[4.4cqw]">ValueGlance</h2>
           <p className="s-sub !mt-[0.4cqw]">Fintech Webapp ｜ Figma, Claude Code, Linear</p>
@@ -285,7 +402,7 @@ export default function Deck() {
 
       {/* Features: the demo fills the slide */}
       {[
-        ["Feature 1", "Mobile watchlist data visualization tooltip redesign", "flow"],
+        ["Feature 1", "Mobile watchlist data visualization redesign", "flow"],
         ["Feature 2", "Screener filter redesign", "laptop"],
         ["Feature 3", "Design system revamp & migration", "tokens"],
       ].map(([n, t, src]) => (
@@ -532,7 +649,7 @@ export default function Deck() {
             <div className="flex items-start justify-between gap-[1.4cqw]">
               <p className="s-body !text-black">
                 <span className="mr-[0.6cqw] font-bold text-[var(--c)]">Feature 1</span>
-                Mobile watchlist data visualization tooltip redesign
+                Mobile watchlist data visualization redesign
               </p>
               <span className="shrink-0 rounded-full bg-[var(--c)] px-[1cqw] py-[0.35cqw] text-[0.95cqw] font-bold text-white">
                 Deep dive
@@ -774,32 +891,6 @@ export default function Deck() {
           </blockquote>
         </div>
       </Slide>
-      {/* Dig into the concern: what she said → what she meant, row by row */}
-      <Slide theme="vg" className="flex flex-col !pt-[4cqw]">
-        <h2 className="s-title">Dig into the concern</h2>
-        <div className="my-auto grid grid-cols-[minmax(0,1fr)_4cqw_minmax(0,1.25fr)] items-center gap-x-[1.6cqw] gap-y-[1.8cqw] pb-[2cqw]">
-          <p className="s-eyebrow">What she said</p>
-          <span />
-          <p className="s-eyebrow">What she meant</p>
-          {(
-            [
-              ["“The picker is still way down the page.”", <>Reading and changing metrics are <b>one task</b>, split across two places.</>],
-              ["“Swapping one metric is a lot of steps.”", <>Adjusting should cost about as little as <b>reading</b>.</>],
-              ["“The chart is clean, but it’s inconvenient.”", <>The problem isn’t <b>where the readout sits</b>. It’s the <b>distance</b> between seeing and acting.</>],
-            ] as [string, React.ReactNode][]
-          ).map(([said, meant]) => (
-            <div key={said} className="contents">
-              <blockquote className="rounded-[1.2cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] px-[2cqw] py-[2cqw] font-serif text-[2.3cqw] leading-snug text-[var(--gray-700)]">
-                {said}
-              </blockquote>
-              <svg viewBox="0 0 40 12" className="w-full" fill="none" stroke="var(--c)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M2 6h34M31 1.5 36 6l-5 4.5" />
-              </svg>
-              <p className="text-[2cqw] leading-snug text-black [&_b]:text-[var(--c)]">{meant}</p>
-            </div>
-          ))}
-        </div>
-      </Slide>
       {/* Validate the concern: the round trip to swap one metric, walked through as a 4-frame storyboard.
           Frames outline the area each step happens in; regions are % of each screenshot. */}
       <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
@@ -951,82 +1042,17 @@ export default function Deck() {
           </div>
         </div>
       </Slide>
-      {/* The final solution: V1 (Edit → metric sheet) and V2 (concept: pick metrics on the chart) stacked small on the left,
-          the final three screens large on the right. */}
+      {/* The iteration: V1 and V2 small on the left, the final three screens large on the right;
+          then V1 and V2 each enlarged over the blurred board */}
       <Slide theme="vg" className="flex flex-col !pb-[3.4cqw] !pt-[4.2cqw]">
-        <h2 className="s-title">The Final Solution</h2>
-        <div className="mt-[2cqw] flex min-h-0 flex-1 items-center justify-center gap-[2.6cqw]">
-          <div className="flex w-[30cqw] flex-col gap-[1.4cqw]">
-            <figure className="flex flex-col gap-[0.6cqw]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/deck/vg-v1-white.jpg"
-                alt="V1: the chart with an Edit button, linked to the metric picker sheet it opens"
-                className="aspect-[1793/1725] w-full rounded-[0.8cqw] bg-white object-contain shadow-[0_0_0_0.1cqw_rgba(26,34,83,0.1)]"
-              />
-              <figcaption className="text-[1.1cqw] text-[var(--gray-700)]">
-                <b className="text-[var(--c)]">V1</b> · Edit opens a metric sheet
-              </figcaption>
-            </figure>
-            <figure className="flex items-end gap-[1cqw]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/deck/vg-v2.jpg"
-                alt="V2 concept sketch: metric chips above the chart, values shown for the scrubbed date"
-                className="aspect-[816/752] w-[13cqw] rounded-[0.6cqw] object-contain shadow-[0_0_0_0.1cqw_rgba(26,34,83,0.1)]"
-              />
-              <figcaption className="text-[1.1cqw] leading-snug text-[var(--gray-700)]">
-                <b className="text-[var(--c)]">V2</b> · Concept:
-                <br />
-                pick metrics on the chart
-              </figcaption>
-            </figure>
-          </div>
-          <span className="w-[0.1cqw] self-stretch bg-[color-mix(in_oklch,var(--c)_15%,transparent)]" aria-hidden="true" />
-          <div className="flex flex-col gap-[1cqw]">
-            <p className="text-[1.2cqw] font-bold uppercase tracking-[0.08em] text-[var(--c)]">Final</p>
-            <div className="relative">
-            <ol className="flex gap-[3cqw]">
-              {[
-                ["vg-final-1", "Metrics above the chart", "Final chart: a metric strip above the chart shows values for the scrubbed date, with an Edit chart metrics drawer below"],
-                ["vg-final-2", "Edit chart metrics", "Edit chart metrics sheet: save a custom view and toggle metrics by Quality, Value and Growth"],
-                ["vg-final-3", "All Metrics reference", "All Metrics page: each metric expands to its formula, definition and an example"],
-              ].map(([src, label, alt], i) => (
-                <li key={src} className="flex flex-col gap-[0.8cqw]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/deck/${src}.jpg`}
-                    alt={alt}
-                    className="aspect-[590/1282] h-[42cqw] max-w-none shrink-0 rounded-[1.2cqw] object-cover object-top shadow-[0_0_0_0.1cqw_rgba(26,34,83,0.12),0_1.2cqw_2.4cqw_-1.2cqw_rgba(26,34,83,0.3)]"
-                  />
-                  <span className="flex items-center gap-[0.6cqw] text-[1.15cqw] text-[var(--gray-700)]">
-                    <span className="flex h-[1.6cqw] w-[1.6cqw] shrink-0 items-center justify-center rounded-full bg-[var(--c)] text-[0.9cqw] font-bold text-white">{i + 1}</span>
-                    {label}
-                  </span>
-                </li>
-              ))}
-            </ol>
-            {/* Flow arrows, drawn at a 40-unit phone height (18.41 wide, 2.857 gaps) and scaled to the 42cqw phones / 3cqw gaps.
-                Edit chart metrics (1) → the sheet it opens (2); Metric definitions (2) → All Metrics (3). */}
-            <svg
-              viewBox="0 0 60.944 40"
-              className="pointer-events-none absolute left-0 top-0 h-[42cqw] w-[63.99cqw] overflow-visible"
-              fill="none"
-              stroke="var(--c)"
-              strokeWidth="0.22"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="18.2" cy="38.5" r="0.4" fill="var(--c)" />
-              <path d="M18.2 38.5H19.34a0.5 0.5 0 0 0 .5-.5V8.1a0.5 0.5 0 0 1 .5-.5H21.77M21.07 6.9l.7.7-.7.7" />
-              <circle cx="39.41" cy="19.8" r="0.4" fill="var(--c)" />
-              <path d="M39.41 19.8H40.6a0.5 0.5 0 0 0 .5-.5V2.4a0.5 0.5 0 0 1 .5-.5H43.03M42.33 1.2l.7.7-.7.7" />
-            </svg>
-            </div>
-          </div>
-        </div>
+        <IterationBoard />
       </Slide>
+      <IterationFocus v="V1" label="Edit opens a metric sheet" src="vg-v1-screens.png" ratio="1526/1462" bare alt="V1: the chart with an Edit button, linked to the metric picker sheet it opens" />
+      <IterationFocus v="V2" label="Concept: pick metrics on the chart" src="vg-v2.jpg" ratio="816/752" alt="V2 concept sketch: metric chips above the chart, values shown for the scrubbed date" />
+      {/* Final version: the shipped flow (tap → arrow → next screen) over the blurred board */}
+      <IterationFocus v="Final" label="Metrics above the chart → Edit chart metrics → All Metrics">
+        <FeatureFlow className="w-[74cqw]" />
+      </IterationFocus>
       {/* Rebuild the components: the whole library board as one artifact, stats as the headline */}
       <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
         <div className="flex items-end justify-between">
@@ -1034,18 +1060,6 @@ export default function Deck() {
             <p className="s-eyebrow">Design system</p>
             <h2 className="s-title mt-[0.8cqw]">Rebuild the components</h2>
           </div>
-          <dl className="flex gap-[2.4cqw]">
-            {[
-              ["8", "components"],
-              ["20", "states"],
-              ["390px", "mobile"],
-            ].map(([n, l]) => (
-              <div key={l}>
-                <dt className="text-[2.6cqw] font-bold leading-none tracking-tight text-[var(--c)] tabular-nums">{n}</dt>
-                <dd className="mt-[0.4cqw] text-[1.1cqw] font-semibold uppercase tracking-[0.1em] text-gray-500">{l}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
         <div className="mt-[2cqw] flex min-h-0 flex-1 items-center justify-center rounded-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] p-[1.6cqw]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1110,6 +1124,32 @@ export default function Deck() {
         </div>
       </Slide>
 
+      {/* Reflection: the takeaway as a serif statement, the two lessons as a numbered column */}
+      <Slide theme="vg" className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-[5cqw]">
+        <div className="relative flex flex-col justify-center">
+          <svg viewBox="0 0 400 400" className="pointer-events-none absolute -left-[4cqw] top-1/2 w-[34cqw] -translate-y-1/2" aria-hidden="true">
+            {[190, 150, 110, 70].map((r, i) => (
+              <circle key={r} cx="200" cy="200" r={r} fill="none" stroke="var(--c)" strokeOpacity={0.06 + i * 0.05} strokeWidth="1.5" />
+            ))}
+          </svg>
+          <p className="s-eyebrow relative">Reflection</p>
+          <h2 className="relative mt-[1.4cqw] font-serif text-[4.6cqw] italic leading-[1.05] text-[var(--c)]">Ownership means looking beyond the initial request.</h2>
+        </div>
+        <ol className="flex flex-col justify-center gap-[2.4cqw]">
+          {(
+            [
+              ["Look beyond the component", "A tooltip problem revealed a disconnected workflow."],
+              ["Understand the concern behind feedback", "Walking through the interaction turned feedback into a clearer design direction."],
+            ] as const
+          ).map(([t, d], i) => (
+            <li key={t} className="border-t-[0.15cqw] pt-[1.6cqw]" style={{ borderColor: "color-mix(in oklab, var(--c) 25%, var(--white-100))" }}>
+              <p className="text-[1.2cqw] font-bold tabular-nums text-[var(--c)]">0{i + 1}</p>
+              <p className="mt-[0.5cqw] text-[2cqw] font-bold leading-tight text-black">{t}</p>
+              <p className="mt-[0.7cqw] text-[1.4cqw] leading-snug text-gray-600">{d}</p>
+            </li>
+          ))}
+        </ol>
+      </Slide>
       </div>
       <div data-part="cm" className="contents">
       {/* ---------------- 02 · Canmarket.ai ---------------- */}

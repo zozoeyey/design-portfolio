@@ -109,12 +109,91 @@ body:has(.deck) > footer {
   display: none;
 }
 /* floats bottom-centre so it never covers a slide title */
-.deck-tabs {
+/* Present view: one slide fills the window, everything else hidden. Before hydration only the
+   cover shows, so there's no flash of the whole deck. */
+.deck[data-mode="present"] {
+  width: min(100vw - 48px, (100dvh - 120px) * 16 / 9);
+  min-height: 100dvh;
+  justify-content: center;
+  gap: 0;
+  padding-block: 24px 96px;
+}
+.deck[data-mode="present"][data-ready] section.slide:not([data-current]),
+.deck[data-mode="present"]:not([data-ready]) section.slide:not(.deck > section.slide:first-of-type) {
+  display: none;
+}
+.deck[data-mode="present"][data-ready] .slide-no::before { content: attr(data-n); }
+
+/* control bar: prev / count / next · tabs · fullscreen / view */
+.deck-bar {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+/* Idle: the mouse has been still for 2s. pointer-events go with it so the
+   slide underneath stays clickable. */
+.deck-bar[data-idle] {
+  opacity: 0;
+  pointer-events: none;
+}
+/* Keyboard users never move a mouse, so focus has to override idle. Same
+   specificity, declared later — wins without !important. */
+.deck-bar[data-idle]:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* No pointer to move on a touch screen, so there is nothing to wake the bar
+   and the deck tabs would be unreachable. */
+@media (hover: none) {
+  .deck-bar[data-idle] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+.deck-bar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--white-100) 80%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 0 1px rgba(26, 34, 83, 0.08), 0 6px 20px -8px rgba(26, 34, 83, 0.3);
+}
+.deck-count {
+  min-width: 64px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: rgb(26, 34, 83);
+}
+.deck-icon-btn {
+  display: flex;
+  height: 40px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: rgb(26, 34, 83);
+  transition: background-color 150ms ease;
+}
+.deck-icon-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.deck-icon-btn:disabled { color: var(--gray-300); }
+.deck-icon-btn:focus-visible { outline: 2px solid rgb(26, 34, 83); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .deck-icon-btn:not(:disabled):hover { background: rgba(26, 34, 83, 0.08); }
+}
+.deck-icon-btn:not(:disabled):active { transform: scale(0.96); }
+.deck-tabs {
+  position: relative;
   display: flex;
   padding: 4px;
   border-radius: 999px;
@@ -156,5 +235,21 @@ body:has(.deck) > footer {
   .deck-tabs-pill { transition: none; }
 }
 @media print {
-  .deck-tabs { display: none; }
+  .deck-bar { display: none; }
+}
+
+/* Print / PDF: one 16:9 slide per page, no chrome. Use the scroll view (?view=scroll). */
+@page { size: 13.333in 7.5in; margin: 0; }
+@media print {
+  html, body { background: #fff !important; }
+  .deck { width: 13.333in !important; padding: 0 !important; gap: 0 !important; margin: 0 !important; }
+  .deck section.slide {
+    width: 13.333in;
+    border-radius: 0;
+    box-shadow: none !important;
+    break-after: page;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  nextjs-portal { display: none !important; }
 }
