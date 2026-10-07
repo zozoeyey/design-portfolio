@@ -19,6 +19,7 @@ export default function PlateCard({
   color,
   image,
   video,
+  motion,
 }: {
   href: string;
   external?: boolean;
@@ -29,8 +30,13 @@ export default function PlateCard({
   color: string; // e.g. "rgb(44, 131, 127)"
   image?: string | null;
   video?: string | null;
+  /** A coded animation that replaces the video/image (e.g. CanmarketCardMotion). */
+  motion?: React.ReactNode;
 }) {
-  const media = video ? (
+  const media = motion ? (
+    // No hover zoom here: scaling a live 3D scene re-rasterizes it every frame.
+    <div className="h-full w-full">{motion}</div>
+  ) : video ? (
     <AutoVideo
       className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.03]"
       src={video}

@@ -2,7 +2,9 @@
 // excluded from search. One long page, one 16:9 card per slide.
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
-import { DensityIcon, DecisionIcon, SystemIcon } from "./icons";
+import { DensityIcon, DecisionIcon, SystemIcon, FocusIcon, SpeedIcon, TrustIcon } from "./icons";
+import FeatureFlow from "./FeatureFlow";
+import DeckTabs from "./DeckTabs";
 import "./deck.css";
 
 export const metadata: Metadata = {
@@ -12,10 +14,10 @@ export const metadata: Metadata = {
 
 type Theme = "intro" | "vg" | "cm";
 
-const VG_F1 = "/media/t4wUnIveqy01Kg9APLetPug7AE.mp4";
 const VG_F2 = "/media/iGL6q5kOpeqTG45TWIQSa4tc.mp4";
-const CM_F1 = "/media/zx73D9l4IsZyHitMvZZHkhTOcs.mp4";
-const CM_F2 = "/media/YQ93hSvVIr4OcYes8o7KmqEpY.mp4";
+// deck copies cropped to the app window (no baked blue gradient), shown on the warm panel
+const CM_F1 = "/deck/cm-f1.mp4";
+const CM_F2 = "/deck/cm-f2.mp4";
 
 function Slide({
   theme,
@@ -91,77 +93,59 @@ function Visual({
           <Dots items={sub} />
         </p>
       )}
-      <div className="mt-[3cqw] flex min-h-0 flex-1 items-center justify-center gap-[3cqw]">{children}</div>
+      <div className={`mt-[3cqw] flex min-h-0 flex-1 items-center justify-center gap-[3cqw] ${theme === "cm" ? "cm-panel" : ""}`}>{children}</div>
     </Slide>
   );
 }
 
-function ProjectIntro({
+// Three tinted cards (same as the VG "strategic pillars" slide); optional line icon per card.
+function Cards({
   theme,
-  n,
-  name,
-  meta,
-  img,
+  title,
+  items,
 }: {
   theme: Theme;
-  n: string;
-  name: string;
-  meta: [string, string][];
-  img: string;
+  title: string;
+  items: [string, string, ((p: { className?: string }) => React.ReactNode)?][];
 }) {
-  return (
-    <Slide theme={theme} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] gap-[4cqw]">
-      <div className="flex flex-col">
-        <p className="s-title !text-gray-300">{n}</p>
-        <h2 className="s-display mt-[0.6cqw]">{name}</h2>
-        <dl className="mt-auto grid grid-cols-[auto_1fr] gap-x-[3cqw] gap-y-[1.6cqw]">
-          {meta.map(([k, v]) => (
-            <div key={k} className="contents">
-              <dt className="s-eyebrow self-center">{k}</dt>
-              <dd className="s-body !text-[1.55cqw] !text-black">{v}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-      <div className="flex items-end">
-        <Img src={img} alt={`${name} product screens`} />
-      </div>
-    </Slide>
-  );
-}
-
-function Three({ theme, title, items }: { theme: Theme; title: string; items: [string, string][] }) {
   return (
     <Slide theme={theme} className="flex flex-col">
       <h2 className="s-title">{title}</h2>
-      <div className="my-auto grid grid-cols-3 gap-[3cqw]">
-        {items.map(([icon, label]) => (
-          <div key={label}>
-            <div className="text-[2.6cqw] font-bold leading-none" style={{ color: "var(--c)" }}>
-              {icon}
-            </div>
-            <p className="s-h mt-[1cqw]">{label}</p>
-          </div>
+      <ol className="mt-[3cqw] grid flex-1 grid-cols-3 gap-[1.8cqw]">
+        {items.map(([kicker, name, Icon]) => (
+          <li key={name} className="flex flex-col rounded-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] p-[2.6cqw]">
+            {Icon && (
+              <span className="flex h-[9cqw] w-[9cqw] items-center justify-center rounded-full bg-white text-[var(--c)] shadow-[0_0_0_1px_rgba(0,0,0,0.04)]">
+                <Icon className="h-[4.8cqw] w-[4.8cqw]" />
+              </span>
+            )}
+            <p className="mt-auto text-[1cqw] font-bold uppercase tabular-nums tracking-[0.14em] text-gray-500">{kicker}</p>
+            <p className="mt-[0.6cqw] text-[2.2cqw] font-bold leading-tight tracking-tight text-black">{name}</p>
+          </li>
         ))}
-      </div>
+      </ol>
     </Slide>
   );
 }
 
+// "Going deep": the feature I present on a filled tint with a Deep dive pill, the other dimmed (VG deep-dive style).
 function Pick({ theme, title, a, b, va, vb }: { theme: Theme; title: string; a: string; b: string; va: string; vb: string }) {
   return (
     <Slide theme={theme} className="flex flex-col">
       <h2 className="s-title">{title}</h2>
-      <div className="my-auto grid grid-cols-2 gap-[3cqw]">
-        <div className="s-pick">
-          <p className="s-body !text-black">{a}</p>
-          <div className="mt-[1.4cqw]">
+      <div className="mt-[2.4cqw] grid min-h-0 flex-1 grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-[2cqw]">
+        <div className="flex min-h-0 flex-col rounded-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))] p-[2cqw]">
+          <div className="flex items-start justify-between gap-[1.4cqw]">
+            <p className="s-body !text-black">{a}</p>
+            <span className="shrink-0 rounded-full bg-[var(--c)] px-[1cqw] py-[0.35cqw] text-[0.95cqw] font-bold text-white">Deep dive</span>
+          </div>
+          <div className="mt-[1.4cqw] flex min-h-0 flex-1 items-center justify-center">
             <Video src={va} />
           </div>
         </div>
-        <div className="p-[2cqw] opacity-60">
-          <p className="s-body">{b}</p>
-          <div className="mt-[1.4cqw]">
+        <div className="flex min-h-0 flex-col p-[0.6cqw] opacity-60">
+          <p className="s-cap !text-gray-700">{b}</p>
+          <div className="mt-[0.8cqw] flex min-h-0 flex-1 items-center justify-center">
             <Video src={vb} />
           </div>
         </div>
@@ -172,7 +156,8 @@ function Pick({ theme, title, a, b, va, vb }: { theme: Theme; title: string; a: 
 
 export default function Deck() {
   return (
-    <main className="deck">
+    <main className="deck" data-show="vg">
+      <DeckTabs />
       {/* ---------------- Intro ---------------- */}
       <Slide theme="intro" className="grid grid-cols-[1fr_auto] items-center">
         <div className="flex h-full flex-col">
@@ -269,6 +254,7 @@ export default function Deck() {
         </div>
       </Slide>
 
+      <div data-part="vg" className="contents">
       {/* ---------------- 01 · ValueGlance ---------------- */}
       {/* Product intro (Centered): name + one-line problem, then the desktop
           and phone screens at the same height on a tinted band */}
@@ -278,7 +264,7 @@ export default function Deck() {
             01<span className="s-dot">·</span>UX Design Intern<span className="s-dot">·</span>Oct 2025 – Jan 2026
           </p>
           <h2 className="s-display mt-[0.8cqw] !text-[4.4cqw]">ValueGlance</h2>
-          <p className="s-sub !mt-[0.4cqw]">Dense financial data, readable on a phone.</p>
+          <p className="s-sub !mt-[0.4cqw]">Fintech Webapp ｜ Figma, Claude Code, Linear</p>
         </div>
         <div className="mt-[3cqw] flex w-full flex-1 items-center justify-center gap-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -298,8 +284,8 @@ export default function Deck() {
 
       {/* Features: the demo fills the slide */}
       {[
-        ["Feature 1", "Mobile watchlist data visualization tooltip redesign", VG_F1],
-        ["Feature 2", "Screener filter redesign", ""],
+        ["Feature 1", "Mobile watchlist data visualization tooltip redesign", "flow"],
+        ["Feature 2", "Screener filter redesign", "laptop"],
         ["Feature 3", "Design system revamp & migration", VG_F2],
       ].map(([n, t, src]) => (
         <Slide key={n} theme="vg" className="flex flex-col !px-[5cqw] !py-[3cqw]">
@@ -308,13 +294,30 @@ export default function Deck() {
             {t}
           </p>
           <div className="mt-[1.6cqw] flex min-h-0 flex-1 justify-center">
-            {src ? (
-              <video className="s-video h-full !w-auto" src={src} autoPlay muted loop playsInline preload="metadata" />
-            ) : (
-              // TODO: screener filter demo video not added yet
-              <div className="flex aspect-video h-full items-center justify-center rounded-[1.2cqw] border-[0.15cqw] border-dashed border-[color-mix(in_oklab,var(--c)_30%,transparent)] bg-[color-mix(in_oklab,var(--c)_5%,var(--white-100))]">
-                <p className="s-cap">Demo video goes here</p>
+            {src === "flow" ? (
+              // the shipped flow, coded: tap → arrow → next screen
+              <FeatureFlow className="w-[78cqw] self-center" />
+            ) : src === "laptop" ? (
+              // Screener click-through: the product recording (browser chrome cropped, 1.4× speed) on a static laptop
+              <div className="w-[79.8cqw] self-center">
+                <div className="rounded-t-[1.6cqw] bg-[#1d1e22] p-[0.9cqw] pb-[1.1cqw] shadow-[0_0_0_0.12cqw_#3a3b40_inset]">
+                  <video
+                    className="block aspect-[1600/804] w-full rounded-[0.7cqw] bg-white"
+                    src="/media/valueglance/screener-flow.mp4"
+                    poster="/media/valueglance/screener-flow-poster.jpg"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                  />
+                </div>
+                <div className="relative -mx-[4cqw] h-[1.6cqw] rounded-b-[1.4cqw] bg-gradient-to-b from-[#e4e6ea] to-[#a9adb6] shadow-[0_2cqw_4cqw_-1.2cqw_rgba(26,34,83,0.35)]">
+                  <span className="absolute left-1/2 top-0 h-[0.6cqw] w-[11cqw] -translate-x-1/2 rounded-b-[0.6cqw] bg-[#9a9ea8]" />
+                </div>
               </div>
+            ) : (
+              <video className="s-video h-full !w-auto" src={src} autoPlay muted loop playsInline preload="metadata" />
             )}
           </div>
         </Slide>
@@ -420,10 +423,7 @@ export default function Deck() {
         </div>
         <h2 className="sr-only">Discovery: from execution to ownership</h2>
       </Slide>
-      <Visual theme="vg" title="Avoid the execution trap" sub={["“Clean up the charts”", "Why / for whom / feasible? — unknown"]}>
-        <Img src="s12" alt="Original mobile chart: tooltip covering the chart, 8px text too small" />
-      </Visual>
-      {/* Pages 12–14: the three discovery questions, one image each (Side caption layout) */}
+      {/* Pages 11–13: the three discovery questions, one image each (Side caption layout) */}
       {[
         {
           q: "Why?",
@@ -443,7 +443,7 @@ export default function Deck() {
                 <img
                   src="/media/valueglance/mobile-chart-issues.png"
                   alt="ValueGlance mobile chart before the redesign, with three problems pinned"
-                  className="h-full w-auto rounded-[2cqw] border-[0.5cqw] border-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_2cqw_4cqw_-2cqw_rgba(20,30,60,0.35)]"
+                  className="h-full w-auto rounded-[2cqw] border-[0.5cqw] border-white"
                 />
                 {[
                   ["39%", "78%"],
@@ -537,8 +537,7 @@ export default function Deck() {
               </span>
             </div>
             <div className="mt-[1.4cqw] flex min-h-0 flex-1 items-center justify-center">
-              {/* gray studio bg recolored to this card's tint, so the phones sit directly on it */}
-              <video className="block max-h-full w-auto max-w-full" src="/media/valueglance/feature1-tooltip.mp4" autoPlay muted loop playsInline preload="metadata" />
+              <FeatureFlow className="w-full" />
             </div>
           </div>
           <div className="grid min-h-0 grid-rows-2 gap-[2cqw] opacity-60">
@@ -738,9 +737,9 @@ export default function Deck() {
         <div className="flex min-h-0 items-center justify-center rounded-[1.4cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] p-[2.4cqw]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/deck/offchart-proto.jpg"
+            src="/deck/offchart-proto-clean.jpg"
             alt="Off-chart tooltip prototype: the chart above, every metric for the scrubbed date listed below it"
-            className="max-h-full w-auto rounded-[1cqw] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_2cqw_4cqw_-2cqw_rgba(20,30,60,0.35)]"
+            className="max-h-full w-auto rounded-[1cqw] bg-white"
           />
         </div>
       </Slide>
@@ -769,7 +768,32 @@ export default function Deck() {
           </blockquote>
         </div>
       </Slide>
-      <Statement theme="vg" title="Dig into the concern" />
+      {/* Dig into the concern: what she said → what she meant, row by row */}
+      <Slide theme="vg" className="flex flex-col !pt-[4cqw]">
+        <h2 className="s-title">Dig into the concern</h2>
+        <div className="my-auto grid grid-cols-[minmax(0,1fr)_4cqw_minmax(0,1.25fr)] items-center gap-x-[1.6cqw] gap-y-[1.8cqw] pb-[2cqw]">
+          <p className="s-eyebrow">What she said</p>
+          <span />
+          <p className="s-eyebrow">What she meant</p>
+          {(
+            [
+              ["“The picker is still way down the page.”", <>Reading and changing metrics are <b>one task</b>, split across two places.</>],
+              ["“Swapping one metric is a lot of steps.”", <>Adjusting should cost about as little as <b>reading</b>.</>],
+              ["“The chart is clean, but it’s inconvenient.”", <>The problem isn’t <b>where the readout sits</b>. It’s the <b>distance</b> between seeing and acting.</>],
+            ] as [string, React.ReactNode][]
+          ).map(([said, meant]) => (
+            <div key={said} className="contents">
+              <blockquote className="rounded-[1.2cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] px-[2cqw] py-[2cqw] font-serif text-[2.3cqw] leading-snug text-[var(--gray-700)]">
+                {said}
+              </blockquote>
+              <svg viewBox="0 0 40 12" className="w-full" fill="none" stroke="var(--c)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M2 6h34M31 1.5 36 6l-5 4.5" />
+              </svg>
+              <p className="text-[2cqw] leading-snug text-black [&_b]:text-[var(--c)]">{meant}</p>
+            </div>
+          ))}
+        </div>
+      </Slide>
       {/* Validate the concern: the round trip to swap one metric, walked through as a 4-frame storyboard.
           Frames outline the area each step happens in; regions are % of each screenshot. */}
       <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
@@ -997,9 +1021,35 @@ export default function Deck() {
           </div>
         </div>
       </Slide>
-      <Visual theme="vg" title="Rebuild the components" sub={["Tags", "Tooltip/readout", "Scrolling bar", "Sizes + states + tokens"]}>
-        <Img src="s32" alt="Component library: tags, tooltips, readouts and chart sizes" />
-      </Visual>
+      {/* Rebuild the components: the whole library board as one artifact, stats as the headline */}
+      <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="s-eyebrow">Design system</p>
+            <h2 className="s-title mt-[0.8cqw]">Rebuild the components</h2>
+          </div>
+          <dl className="flex gap-[2.4cqw]">
+            {[
+              ["8", "components"],
+              ["20", "states"],
+              ["390px", "mobile"],
+            ].map(([n, l]) => (
+              <div key={l}>
+                <dt className="text-[2.6cqw] font-bold leading-none tracking-tight text-[var(--c)] tabular-nums">{n}</dt>
+                <dd className="mt-[0.4cqw] text-[1.1cqw] font-semibold uppercase tracking-[0.1em] text-gray-500">{l}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div className="mt-[2cqw] flex min-h-0 flex-1 items-center justify-center rounded-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] p-[1.6cqw]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/deck/vg-components.jpg"
+            alt="Mobile data visualization component library: foundations and 8 components with their states"
+            className="max-h-full max-w-full rounded-[0.8cqw] bg-white shadow-[0_0_0_1px_rgba(26,34,83,0.08)]"
+          />
+        </div>
+      </Slide>
       {/* Handoff = the PR. Close-up: #1334 (title, before/after, changes; thread: handed off → review → approved & merged).
           Mid shot: the count — 25 merged PRs authored by zoeyyanvg in fpp-admin/financial-tool. */}
       <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
@@ -1054,38 +1104,49 @@ export default function Deck() {
         </div>
       </Slide>
 
+      </div>
+      <div data-part="cm" className="contents">
       {/* ---------------- 02 · Canmarket.ai ---------------- */}
-      <ProjectIntro
-        theme="cm"
-        n="02"
-        name="Canmarket.ai"
-        img="s34"
-        meta={[
-          ["Role", "Founding Product Designer & CPO"],
-          ["Timeline", "June 2025 – Feb 2026 (7 months)"],
-          ["Type", "B2B Web app"],
-          ["Tools", "Figma (MCP), Claude Code"],
-        ]}
-      />
-      <Three
+      {/* Product intro (Centered), same template as ValueGlance */}
+      <Slide theme="cm" className="flex flex-col items-center !p-0 text-center">
+        <div className="pt-[4.4cqw]">
+          <p className="s-eyebrow">
+            02<span className="s-dot">·</span>Founding Product Designer &amp; CPO<span className="s-dot">·</span>Jun 2025 – Feb 2026
+          </p>
+          <h2 className="s-display mt-[0.8cqw] !text-[4.4cqw]">Canmarket.ai</h2>
+          <p className="s-sub !mt-[0.4cqw]">B2B AI Marketing Webapp ｜ Figma (MCP), Claude Code</p>
+        </div>
+        <div className="mt-[3cqw] flex w-full flex-1 items-center justify-center gap-[1.6cqw] overflow-hidden bg-[var(--cm-tint)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/deck/cm-screen-campaigns.jpg" alt="Canmarket.ai campaign overview" className="h-[30cqw] w-auto rounded-[0.8cqw] shadow-[0_0_0_1px_rgb(40_30_20/0.08)]" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/deck/cm-screen-onboarding.jpg" alt="Canmarket.ai onboarding: company business model" className="h-[30cqw] w-auto rounded-[0.8cqw] shadow-[0_0_0_1px_rgb(40_30_20/0.08)]" />
+        </div>
+      </Slide>
+      <Cards
         theme="cm"
         title="Context"
         items={[
-          ["🏢", "B2B web app"],
-          ["🕴️", "Resource-limited small businesses"],
-          ["💹", "End-to-end campaign automation"],
+          ["Product", "B2B web app"],
+          ["For", "Resource-limited small businesses"],
+          ["Goal", "End-to-end campaign automation"],
         ]}
       />
-      <Visual theme="cm" title="Feature #1: Onboarding Experience">
-        <div className="w-[70cqw]">
-          <Video src={CM_F1} />
-        </div>
-      </Visual>
-      <Visual theme="cm" title="Feature #2: Campaign Generation Workflow">
-        <div className="w-[70cqw]">
-          <Video src={CM_F2} />
-        </div>
-      </Visual>
+      {/* Features: same header + demo layout as the VG feature slides */}
+      {[
+        ["Feature 1", "Onboarding experience", CM_F1],
+        ["Feature 2", "Campaign generation workflow", CM_F2],
+      ].map(([n, t, src]) => (
+        <Slide key={n} theme="cm" className="flex flex-col !px-[5cqw] !py-[3cqw]">
+          <p className="s-h">
+            <span className="mr-[0.8cqw] text-[var(--c)]">{n}</span>
+            {t}
+          </p>
+          <div className="cm-panel mt-[1.6cqw] flex min-h-0 flex-1 justify-center">
+            <video className="s-video h-full !w-auto" src={src} autoPlay muted loop playsInline preload="metadata" />
+          </div>
+        </Slide>
+      ))}
       <Slide theme="cm" className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] gap-[4cqw]">
         <div>
           <h2 className="s-title">Founding Designer & CPO</h2>
@@ -1111,7 +1172,28 @@ export default function Deck() {
         </figure>
         <Img src="s39b" alt="Message from the CEO confirming funding and paying users" className="h-full" />
       </Visual>
-      <Statement theme="cm" title="Start from ambiguity" sub={["Fast MVP, no PRD", "no marketing background"]} />
+      {/* Discovery opener (same as VG): a vague brief (blurred) → a clear problem (in focus) */}
+      <Slide theme="cm">
+        <div className="absolute left-[6.75cqw] top-[5cqw]">
+          <p className="s-eyebrow">Discovery</p>
+          <h2 className="s-title mt-[0.8cqw]">Start from ambiguity</h2>
+          <p className="s-sub">
+            <Dots items={["Fast MVP, no PRD", "no marketing background"]} />
+          </p>
+        </div>
+        <div className="absolute inset-x-0 bottom-[6cqw] flex items-center justify-center gap-[6cqw]">
+          <div className="relative flex aspect-square w-[22cqw] items-center justify-center">
+            <span aria-hidden="true" className="absolute inset-0 rounded-full border-[0.8cqw] border-[color-mix(in_oklab,var(--c)_22%,transparent)] blur-[0.6cqw]" />
+            <span className="text-[2.4cqw] font-bold uppercase tracking-[0.06em] text-[color-mix(in_oklab,var(--c)_45%,white)]">Ambiguity</span>
+          </div>
+          <svg viewBox="0 0 40 12" className="w-[5cqw] text-[var(--c)]" aria-hidden="true">
+            <path d="M0 6 H36 M30 1 L36 6 L30 11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <div className="flex aspect-square w-[22cqw] items-center justify-center rounded-full border-[0.25cqw] border-[var(--c)]">
+            <span className="text-[2.4cqw] font-bold uppercase tracking-[0.06em] text-[var(--c)]">Clarity</span>
+          </div>
+        </div>
+      </Slide>
       <Slide theme="cm" className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-[4cqw]">
         <div>
           <h2 className="s-title">Build alignment</h2>
@@ -1127,40 +1209,114 @@ export default function Deck() {
       <Visual theme="cm" title="Find the root problem" sub={["Clients wanted different features", "interviewed SMB owners"]}>
         <Img src="s42" alt="Three client requests converging on one core feature" />
       </Visual>
-      <Visual theme="cm" title="Study the market" sub={["Competitive analysis", "opportunity: affordable, end-to-end"]}>
-        <Img src="s43" alt="Current solutions and their problems" />
-      </Visual>
-      <Three
+      {/* Study the market: current solution → its problem (same row language as "Dig into the concern") */}
+      <Slide theme="cm" className="flex flex-col !pt-[4cqw]">
+        <h2 className="s-title">Study the market</h2>
+        <p className="s-sub">
+          <Dots items={["Competitive analysis", "opportunity: affordable, end-to-end"]} />
+        </p>
+        <div className="my-auto grid grid-cols-[minmax(0,0.85fr)_4cqw_minmax(0,1.3fr)] items-center gap-x-[1.6cqw] gap-y-[1.3cqw] pb-[1cqw]">
+          <p className="s-eyebrow">Current solution</p>
+          <span />
+          <p className="s-eyebrow">Problem</p>
+          {[
+            ["Expensive agencies", "Slow, costly, don’t understand performance"],
+            ["AI content tools", "Fast but random, no memory"],
+            ["In-house team", "Can’t do both brand + performance well"],
+            ["Founder doing it all", "No time, no system, inconsistent"],
+          ].map(([who, problem]) => (
+            <div key={who} className="contents">
+              <p className="rounded-[1.2cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] px-[2cqw] py-[1.4cqw] text-[1.9cqw] font-bold text-black">{who}</p>
+              <svg viewBox="0 0 40 12" className="w-full" fill="none" stroke="var(--c)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M2 6h34M31 1.5 36 6l-5 4.5" />
+              </svg>
+              <p className="font-serif text-[2.1cqw] leading-snug text-[var(--gray-700)]">{problem}</p>
+            </div>
+          ))}
+        </div>
+      </Slide>
+      <Cards
         theme="cm"
         title="Turn ambiguity into 3 pillars"
         items={[
-          ["1", "Focused Scope"],
-          ["2", "Fast Time-to-Value"],
-          ["3", "Trustworthy AI Output"],
+          ["01", "Focused scope", FocusIcon],
+          ["02", "Fast time-to-value", SpeedIcon],
+          ["03", "Trustworthy AI output", TrustIcon],
         ]}
       />
       <Pick
         theme="cm"
         title="Going deep: onboarding"
-        a="Feature #1: Onboarding Experience"
-        b="Feature #2: Campaign Generation Workflow"
+        a="Feature 1  Onboarding experience"
+        b="Feature 2  Campaign generation workflow"
         va={CM_F1}
         vb={CM_F2}
       />
-      <Statement theme="cm" title="Explore the onboarding shape" sub={["Goal: fewest questions → first AI result"]} />
       <Visual theme="cm" title="Research similar tools" sub={["Goal: fewest questions → first AI result"]}>
         <Img src="s47" alt="Onboarding from an AI business builder, HubSpot Website Grader and Looka" />
       </Visual>
-      <Visual theme="cm" title="Map the flow" sub={["Goal: fewest questions → first AI result"]}>
-        <Img src="s48" alt="Sign up, assessment, AI report (first value), dashboard, campaigns" />
-      </Visual>
+      {/* Map the flow: rebuilt in the deck palette — the stretch before first value is the part to keep short */}
+      <Slide theme="cm" className="flex flex-col">
+        <p className="s-eyebrow">Explore the onboarding shape</p>
+        <h2 className="s-title mt-[0.8cqw]">Map the flow</h2>
+        <p className="s-sub">Goal: fewest questions → first AI result</p>
+        <div className="cm-panel mt-[3cqw] flex flex-1 flex-col justify-center">
+          <ol className="flex items-center justify-center gap-[1.2cqw]">
+            {[
+              ["Sign up", ""],
+              ["Assessment", "URL + 8 Qs"],
+              ["AI report", "first value"],
+              ["Dashboard", ""],
+              ["Campaigns", ""],
+            ].map(([t, sub], i, all) => (
+              <li key={t} className="flex items-center gap-[1.2cqw]">
+                <span
+                  className={`flex h-[7cqw] w-[11cqw] flex-col items-center justify-center rounded-[1cqw] text-center text-[1.5cqw] font-bold ${
+                    i === 2 ? "bg-[var(--c)] text-white" : i < 2 ? "bg-white text-[var(--ink)] shadow-[0_0_0_1px_rgb(40_30_20/0.1)]" : "bg-white/60 text-gray-500 shadow-[0_0_0_1px_rgb(40_30_20/0.06)]"
+                  }`}
+                >
+                  {t}
+                  {sub && <span className={`mt-[0.3cqw] text-[1.05cqw] font-medium ${i === 2 ? "text-white/85" : "text-gray-500"}`}>{sub}</span>}
+                </span>
+                {i < all.length - 1 && (
+                  <svg viewBox="0 0 24 12" className="w-[1.8cqw]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: "var(--c)" }}>
+                    <path d="M1 6h20M16 1.5 21 6l-5 4.5" />
+                  </svg>
+                )}
+              </li>
+            ))}
+          </ol>
+          <div className="mx-auto mt-[1.6cqw] grid w-[63.4cqw] grid-cols-[38.4cqw_1fr] gap-[3cqw] text-[1.25cqw]">
+            <p className="border-t-[0.2cqw] border-[var(--c)] pt-[0.8cqw] text-center font-bold text-[var(--c)]">The gap to first value — keep it short</p>
+            <p className="border-t-[0.2cqw] border-gray-300 pt-[0.8cqw] text-center text-gray-500">Core product</p>
+          </div>
+        </div>
+      </Slide>
       <Visual theme="cm" title="Explore two directions">
         <Img src="s49" alt="Direction 1: inline analysis. Direction 2: deferred report" />
       </Visual>
       <Visual theme="cm" title="Choose inline analysis" sub={["Show the work → trust", "live feedback", "users can edit"]}>
         <Img src="s50" alt="Campaign builder with editable core selling points" />
       </Visual>
-      <Statement theme="cm" title="Hit real pushback" sub={["CEO: “just give them a result”"]} />
+      {/* Pushback: the CEO (abstract avatar) and their words in a speech bubble (same as VG "The first pushback") */}
+      <Slide theme="cm" className="flex flex-col">
+        <p className="s-eyebrow">Design review</p>
+        <h2 className="s-title mt-[0.8cqw]">Hit real pushback</h2>
+        <div className="my-auto flex items-end gap-[3cqw] pl-[2cqw]">
+          <figure className="flex shrink-0 flex-col items-center">
+            <svg viewBox="0 0 120 120" className="h-[12cqw] w-[12cqw]" role="img" aria-label="The CEO">
+              <circle cx="60" cy="60" r="60" fill="color-mix(in oklab, var(--c) 8%, white)" />
+              <circle cx="60" cy="46" r="20" fill="var(--c)" />
+              <path d="M22 112 C 24 84, 42 72, 60 72 C 78 72, 96 84, 98 112 Z" fill="var(--c)" />
+            </svg>
+            <figcaption className="mt-[1cqw] text-[1.3cqw] font-bold text-black">CEO</figcaption>
+          </figure>
+          <blockquote className="relative mb-[4cqw] rounded-[2cqw] rounded-bl-[0.4cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))] px-[3cqw] py-[2.6cqw] font-serif text-[2.8cqw] italic leading-snug text-black">
+            <span aria-hidden="true" className="absolute -left-[1.4cqw] bottom-0 h-[1.6cqw] w-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))]" style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }} />
+            “Just give them a result.”
+          </blockquote>
+        </div>
+      </Slide>
       <Statement theme="cm" title="Dig into the concern" />
       <Statement theme="cm" title="Validate with users" />
       <Statement theme="cm" title="Reframe the problem" />
@@ -1171,8 +1327,31 @@ export default function Deck() {
         <Img src="s56a" alt="Campaign pressure test report" />
         <Img src="s56b" alt="Key selling points and key competitors cards" />
       </Visual>
-      <Statement theme="cm" title="It became the front door" sub={["CTO: “buildable, right signal”", "user: “I’d actually use it”"]} />
-      <Statement theme="cm" title="Balancing tradeoffs" sub={["Model needs vs. user effort", "find the smallest thing serving both"]} />
+      {/* It became the front door: the two reactions, as quote cards */}
+      <Slide theme="cm" className="flex flex-col">
+        <p className="s-eyebrow">Result</p>
+        <h2 className="s-title mt-[0.8cqw]">It became the front door</h2>
+        <div className="my-auto grid grid-cols-2 gap-[2.4cqw]">
+          {[
+            ["CTO", "“Buildable, right signal.”"],
+            ["User", "“I’d actually use it.”"],
+          ].map(([who, q]) => (
+            <figure key={who} className="cm-panel !p-[3cqw]">
+              <blockquote className="font-serif text-[3.2cqw] italic leading-tight text-[var(--ink)]">{q}</blockquote>
+              <figcaption className="mt-[1.6cqw] text-[1.2cqw] font-bold uppercase tracking-[0.12em] text-[var(--c)]">{who}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </Slide>
+      {/* Balancing tradeoffs: two forces, one overlap */}
+      <Slide theme="cm" className="flex flex-col">
+        <h2 className="s-title">Balancing tradeoffs</h2>
+        <div className="relative my-auto flex items-center justify-center">
+          <div className="flex h-[24cqw] w-[24cqw] items-center justify-center rounded-full bg-[var(--cm-tint)] pr-[7cqw] text-center text-[1.7cqw] font-bold text-[var(--ink)]">Model<br />needs</div>
+          <div className="-ml-[9cqw] flex h-[24cqw] w-[24cqw] items-center justify-center rounded-full border-[0.2cqw] border-[var(--c)] pl-[7cqw] text-center text-[1.7cqw] font-bold text-[var(--ink)]">User<br />effort</div>
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--c)] px-[1.2cqw] py-[0.5cqw] text-[1.15cqw] font-bold text-white">Smallest thing serving both</span>
+        </div>
+      </Slide>
       <Visual theme="cm" title="Own the design system" sub={["design.md", "style guide → Claude Code", "hi-fi → component library → reviewed"]}>
         <Img src="s59" alt="Color system schema, CSS variables and component folders" />
       </Visual>
@@ -1180,6 +1359,7 @@ export default function Deck() {
         <Img src="s60" alt="Building the onboarding in VS Code while on a call with the CTO" />
       </Visual>
 
+      </div>
       {/* ---------------- Close ---------------- */}
       {["Q & A", "Thank you!"].map((t) => (
         <Slide key={t} theme="intro" className="flex flex-col justify-center">

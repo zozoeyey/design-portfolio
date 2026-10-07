@@ -162,6 +162,8 @@ export type Project = {
   problem?: string | null;
   outcome?: string | null;
   mainVideo?: string | null;
+  /** Coded card animation shown instead of mainVideo on the work card. */
+  cardMotion?: "canmarket" | "screener";
   role: string;
   duration: string;
   tools: string;
@@ -245,6 +247,28 @@ export const projects: Project[] = [
       "Design Handoff & Documentation", "Handoff Meeting", "UX Metrics",
     ],
   },
+  // Case-study content to be filled in; the work card is live (ScreenerCardMotion).
+  {
+    slug: "valueglance-screener",
+    name: "ValueGlance Stock Screener",
+    tag: "Fintech SaaS",
+    summary: "Screener filter redesign — case study in progress.",
+    claim: "Screener filter redesign — case study in progress.",
+    year: "2026",
+    color: "rgb(67, 79, 160)",
+    headerImage: null,
+    mainVideo: null,
+    cardMotion: "screener",
+    role: "",
+    duration: "",
+    tools: "",
+    team: "",
+    overview: "",
+    features: [],
+    storyHeading: "",
+    stories: [],
+    tags: [],
+  },
   {
     slug: "canmarketai",
     name: "Canmarket.ai",
@@ -257,6 +281,7 @@ export const projects: Project[] = [
     liveUrl: "https://canlah.ai/",
     headerImage: "/media/dNbNIiljAfxGz8cuplGeSZVUs.png",
     mainVideo: "/media/BxGLNi8Iw5kls0gZ4FAeaPiPJjw.mp4",
+    cardMotion: "canmarket",
     role: "Founding Designer/CPO",
     duration: "June 2025 - Feb 2026",
     tools: "Figma, V0, Claude, Figma MCP",

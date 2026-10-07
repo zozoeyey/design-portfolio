@@ -42,3 +42,33 @@ export function SystemIcon({ className }: P) {
     </svg>
   );
 }
+
+/** Focused scope — a frame narrowing onto one point. */
+export function FocusIcon({ className }: P) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16" opacity="0.45" />
+      <circle cx="12" cy="12" r="3.5" />
+    </svg>
+  );
+}
+
+/** Fast time-to-value — a clock face with a forward bolt. */
+export function SpeedIcon({ className }: P) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="12" cy="12" r="8.5" opacity="0.45" />
+      <path d="M13 6.5 9 12.5h3.5L11 17.5l4-6h-3.5z" />
+    </svg>
+  );
+}
+
+/** Trustworthy AI output — a shield with a check. */
+export function TrustIcon({ className }: P) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3.5 5 6v5.5c0 4.2 3 7.4 7 9 4-1.6 7-4.8 7-9V6z" />
+      <path d="M9.4 12.2l1.8 1.8 3.4-3.6" opacity="0.7" />
+    </svg>
+  );
+}

@@ -23,6 +23,12 @@ export default function AutoVideo({
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
+    // Reduced motion: keep the poster, don't autoplay.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      v.autoplay = false;
+      v.pause();
+      return;
+    }
 
     const tryPlay = () => {
       v.muted = true;
