@@ -5,6 +5,8 @@ import Logo from "@/components/Logo";
 import { DensityIcon, DecisionIcon, SystemIcon, FocusIcon, SpeedIcon, TrustIcon } from "./icons";
 import FeatureFlow from "./FeatureFlow";
 import DeckTabs from "./DeckTabs";
+import AmbiguityConverge from "./AmbiguityConverge";
+import RootOverlap from "./RootOverlap";
 import "./deck.css";
 
 export const metadata: Metadata = {
@@ -14,7 +16,6 @@ export const metadata: Metadata = {
 
 type Theme = "intro" | "vg" | "cm";
 
-const VG_F2 = "/media/iGL6q5kOpeqTG45TWIQSa4tc.mp4";
 // deck copies cropped to the app window (no baked blue gradient), shown on the warm panel
 const CM_F1 = "/deck/cm-f1.mp4";
 const CM_F2 = "/deck/cm-f2.mp4";
@@ -286,7 +287,7 @@ export default function Deck() {
       {[
         ["Feature 1", "Mobile watchlist data visualization tooltip redesign", "flow"],
         ["Feature 2", "Screener filter redesign", "laptop"],
-        ["Feature 3", "Design system revamp & migration", VG_F2],
+        ["Feature 3", "Design system revamp & migration", "tokens"],
       ].map(([n, t, src]) => (
         <Slide key={n} theme="vg" className="flex flex-col !px-[5cqw] !py-[3cqw]">
           <p className="s-h">
@@ -297,14 +298,15 @@ export default function Deck() {
             {src === "flow" ? (
               // the shipped flow, coded: tap → arrow → next screen
               <FeatureFlow className="w-[78cqw] self-center" />
-            ) : src === "laptop" ? (
-              // Screener click-through: the product recording (browser chrome cropped, 1.4× speed) on a static laptop
-              <div className="w-[79.8cqw] self-center">
+            ) : src === "laptop" || src === "tokens" ? (
+              // Product recordings on a static laptop. Screener: click-through (browser chrome cropped).
+              // Tokens: six design-tokens page walkthroughs joined with fades through white, each with a chapter pill.
+              <div className={`${src === "tokens" ? "w-[68cqw]" : "w-[79.8cqw]"} self-center`}>
                 <div className="rounded-t-[1.6cqw] bg-[#1d1e22] p-[0.9cqw] pb-[1.1cqw] shadow-[0_0_0_0.12cqw_#3a3b40_inset]">
                   <video
-                    className="block aspect-[1600/804] w-full rounded-[0.7cqw] bg-white"
-                    src="/media/valueglance/screener-flow.mp4"
-                    poster="/media/valueglance/screener-flow-poster.jpg"
+                    className={`block w-full rounded-[0.7cqw] bg-white ${src === "tokens" ? "aspect-[1600/1004]" : "aspect-[1600/804]"}`}
+                    src={src === "tokens" ? "/media/valueglance/design-tokens.mp4" : "/media/valueglance/screener-flow.mp4"}
+                    poster={src === "tokens" ? "/media/valueglance/design-tokens-poster.jpg" : "/media/valueglance/screener-flow-poster.jpg"}
                     autoPlay
                     muted
                     loop
@@ -542,11 +544,15 @@ export default function Deck() {
           </div>
           <div className="grid min-h-0 grid-rows-2 gap-[2cqw] opacity-60">
             {[
-              ["Feature 2", "Screener filter redesign", <Img key="s" src="vg-ship-1" alt="Stock screener on valueglance.com" className="max-h-full" />],
+              [
+                "Feature 2",
+                "Screener filter redesign",
+                <video key="s" className="s-video max-h-full !w-auto max-w-full" src="/media/valueglance/screener-flow.mp4" poster="/media/valueglance/screener-flow-poster.jpg" autoPlay muted loop playsInline preload="metadata" />,
+              ],
               [
                 "Feature 3",
                 "Design system revamp & migration",
-                <video key="v" className="s-video max-h-full !w-auto max-w-full" src={VG_F2} autoPlay muted loop playsInline preload="metadata" />,
+                <video key="v" className="s-video max-h-full !w-auto max-w-full" src="/media/valueglance/design-tokens.mp4" poster="/media/valueglance/design-tokens-poster.jpg" autoPlay muted loop playsInline preload="metadata" />,
               ],
             ].map(([n, t, media]) => (
               <div key={n as string} className="flex min-h-0 flex-col p-[0.6cqw]">
@@ -1123,15 +1129,6 @@ export default function Deck() {
           <img src="/deck/cm-screen-onboarding.jpg" alt="Canmarket.ai onboarding: company business model" className="h-[30cqw] w-auto rounded-[0.8cqw] shadow-[0_0_0_1px_rgb(40_30_20/0.08)]" />
         </div>
       </Slide>
-      <Cards
-        theme="cm"
-        title="Context"
-        items={[
-          ["Product", "B2B web app"],
-          ["For", "Resource-limited small businesses"],
-          ["Goal", "End-to-end campaign automation"],
-        ]}
-      />
       {/* Features: same header + demo layout as the VG feature slides */}
       {[
         ["Feature 1", "Onboarding experience", CM_F1],
@@ -1147,68 +1144,162 @@ export default function Deck() {
           </div>
         </Slide>
       ))}
-      <Slide theme="cm" className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] gap-[4cqw]">
-        <div>
-          <h2 className="s-title">Founding Designer & CPO</h2>
-          <ul className="s-sub mt-[2.4cqw] flex list-disc flex-col gap-[0.5cqw] pl-[1.6cqw] marker:text-[var(--c)]">
-            <li>0→1, research → frontend</li>
-            <li>stakeholder interviews</li>
-            <li>competitive analysis</li>
-            <li>information architecture</li>
-            <li>user flows</li>
-            <li>hi-fi</li>
-            <li>eng QA</li>
-            <li>w/ CTO & CEO</li>
-          </ul>
-        </div>
-        <div className="flex items-end">
-          <Img src="s38" alt="Zoey with the Canmarket CTO and CEO" />
-        </div>
-      </Slide>
-      <Visual theme="cm" title="Launched & validated" sub={["Jan 2026 launch", "$200K seed", "20+ paying users (US/China/SG)"]}>
-        <figure className="flex min-w-0 flex-1 flex-col items-center">
-          <Img src="s39a" alt="Shoppable videos generated for oricultural.com" />
-          <figcaption className="s-cap mt-[0.8cqw]">oricultural.com</figcaption>
-        </figure>
-        <Img src="s39b" alt="Message from the CEO confirming funding and paying users" className="h-full" />
-      </Visual>
-      {/* Discovery opener (same as VG): a vague brief (blurred) → a clear problem (in focus) */}
-      <Slide theme="cm">
-        <div className="absolute left-[6.75cqw] top-[5cqw]">
-          <p className="s-eyebrow">Discovery</p>
-          <h2 className="s-title mt-[0.8cqw]">Start from ambiguity</h2>
-          <p className="s-sub">
-            <Dots items={["Fast MVP, no PRD", "no marketing background"]} />
-          </p>
-        </div>
-        <div className="absolute inset-x-0 bottom-[6cqw] flex items-center justify-center gap-[6cqw]">
-          <div className="relative flex aspect-square w-[22cqw] items-center justify-center">
-            <span aria-hidden="true" className="absolute inset-0 rounded-full border-[0.8cqw] border-[color-mix(in_oklab,var(--c)_22%,transparent)] blur-[0.6cqw]" />
-            <span className="text-[2.4cqw] font-bold uppercase tracking-[0.06em] text-[color-mix(in_oklab,var(--c)_45%,white)]">Ambiguity</span>
+      {/* Role & scope (Bento): the strongest proof big, the rest as smaller tiles; hats without a photo on the accent tile */}
+      <Slide theme="cm" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="s-eyebrow">Role &amp; scope</p>
+            <h2 className="s-title mt-[0.8cqw]">Founding Designer &amp; CPO</h2>
           </div>
-          <svg viewBox="0 0 40 12" className="w-[5cqw] text-[var(--c)]" aria-hidden="true">
-            <path d="M0 6 H36 M30 1 L36 6 L30 11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <div className="flex aspect-square w-[22cqw] items-center justify-center rounded-full border-[0.25cqw] border-[var(--c)]">
-            <span className="text-[2.4cqw] font-bold uppercase tracking-[0.06em] text-[var(--c)]">Clarity</span>
+          <p className="text-[1.4cqw] font-semibold text-[var(--ink)]">0 → 1 · research → frontend</p>
+        </div>
+        <div className="mt-[2cqw] grid min-h-0 flex-1 grid-cols-4 grid-rows-2 gap-[1.2cqw]">
+          {(
+            [
+              ["cm-ia-blur", "AI CMO workflow (blurred)", "IA", "+ user flows", "col-span-2", "bg-white object-contain p-[1cqw]"],
+              ["cm-whiteboard", "Whiteboarding the agent's functions", "Planning", "w/ CEO + CTO", "", "object-cover"],
+              ["cm-team", "Working session with the CEO and CTO", "Team", "CEO · CTO · me", "row-span-2", "object-cover object-[50%_30%]"],
+              ["cm-wireframes", "Wireframes board", "Wireframes", "→ hi-fi", "", "object-cover object-left-top"],
+              ["s60", "Building the frontend in VS Code", "Frontend", "+ eng QA", "", "object-cover object-left-top"],
+            ] as const
+          ).map(([src, alt, k, t, span, fit]) => (
+            <figure key={src} className={`relative min-h-0 overflow-hidden rounded-[1.2cqw] bg-[var(--cm-tint)] shadow-[0_0_0_1px_rgb(40_30_20/0.08)] ${span}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/deck/${src}.jpg`} alt={alt} className={`h-full w-full ${fit}`} />
+              <figcaption className="absolute bottom-[0.8cqw] left-[0.8cqw] rounded-full bg-white/90 px-[0.9cqw] py-[0.3cqw] text-[1.05cqw] font-semibold text-[var(--ink)] shadow-[0_0_0_1px_rgb(40_30_20/0.06)] backdrop-blur">
+                <span className="text-[var(--c)]">{k}</span> {t}
+              </figcaption>
+            </figure>
+          ))}
+          <div className="flex flex-col justify-center gap-[0.8cqw] rounded-[1.2cqw] bg-[var(--c)] p-[1.8cqw] text-white">
+            {["Stakeholder interviews", "Competitive analysis", "Information architecture"].map((t) => (
+              <p key={t} className="flex items-center gap-[0.6cqw] text-[1.3cqw] font-semibold">
+                <span className="h-[0.5cqw] w-[0.5cqw] shrink-0 rounded-full bg-white/80" />
+                {t}
+              </p>
+            ))}
           </div>
         </div>
       </Slide>
-      <Slide theme="cm" className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-[4cqw]">
-        <div>
-          <h2 className="s-title">Build alignment</h2>
-          <p className="s-sub">
-            <Dots items={["1-on-1s: CEO + CTO", "reviewed notes + decks"]} />
-          </p>
-        </div>
-        <div className="flex h-full min-h-0 flex-col justify-between gap-[2cqw]">
-          <Img src="s41a" alt="AI-CMO positioning notes" className="min-h-0" />
-          <Img src="s41b" alt="Market pain slide from the pitch deck" className="min-h-0" />
+      {/* Impact (Showcase): the live product leads, numbers under it; the CTO's WeChat confirmation as the receipt —
+          original screenshot behind, an English translation in front (same messages, no names or photos) */}
+      <Slide theme="cm" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
+        <p className="s-eyebrow">Impact</p>
+        <h2 className="s-title mt-[0.8cqw]">Launched &amp; validated</h2>
+        <div className="mt-[2cqw] grid min-h-0 flex-1 grid-cols-[minmax(0,1.6fr)_minmax(0,0.7fr)] gap-[2cqw]">
+          <figure className="flex min-h-0 flex-col justify-center rounded-[1.6cqw] bg-[var(--cm-tint)] p-[2cqw]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/deck/s39a.jpg" alt="AI-generated shoppable product videos live on oricultural.com" className="w-full rounded-[1cqw] bg-white shadow-[0_0_0_1px_rgb(40_30_20/0.08)]" />
+            <figcaption className="mt-[1cqw] text-[1.2cqw] text-gray-500">
+              <b className="text-[var(--ink)]">Live on oricultural.com</b> · AI-generated shoppable videos
+            </figcaption>
+            <dl className="mt-[1.8cqw] grid grid-cols-4 gap-[1.2cqw]">
+              {[
+                ["Jan 2026", "Launched"],
+                ["$200K", "Seed raised"],
+                ["21", "Paying customers"],
+                ["3", "Markets · US, China, SG"],
+              ].map(([n, l]) => (
+                <div key={l}>
+                  <dt className="text-[2.4cqw] font-bold leading-none text-[var(--ink)] tabular-nums">{n}</dt>
+                  <dd className="mt-[0.5cqw] text-[1cqw] font-semibold text-gray-500">{l}</dd>
+                </div>
+              ))}
+            </dl>
+          </figure>
+          <div className="relative min-h-0">
+            {/* original */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/deck/s39b.jpg"
+              alt="Original WeChat thread with the CTO, in Chinese"
+              className="absolute left-0 top-0 w-[62%] -rotate-3 rounded-[1cqw] shadow-[0_0_0_1px_rgb(40_30_20/0.1),0_1cqw_2cqw_-1cqw_rgb(40_30_20/0.35)]"
+            />
+            <span className="absolute left-[2%] top-[1%] z-10 rounded-full bg-white/90 px-[0.7cqw] py-[0.2cqw] text-[0.85cqw] font-semibold text-gray-600">Original</span>
+            {/* English translation */}
+            <figure
+              className="absolute bottom-0 right-0 w-[78%] overflow-hidden rounded-[1.2cqw] bg-[#ededed] shadow-[0_0_0_1px_rgb(40_30_20/0.08),0_1.2cqw_2.4cqw_-1cqw_rgb(40_30_20/0.4)]"
+              style={{ fontSize: "0.92cqw" }}
+            >
+              <div className="flex items-center justify-between border-b border-black/[0.06] bg-[#f7f7f7] px-[1.2em] py-[0.7em] text-[#191919]">
+                <span>‹</span>
+                <span className="font-semibold">Chat with CTO</span>
+                <span>···</span>
+              </div>
+              <div className="flex flex-col gap-[0.6em] px-[1em] py-[0.9em]">
+                {(
+                  [
+                    ["time", "Mar 23, 12:04 PM"],
+                    ["me", "Quick metrics question: roughly how much funding and how many users do we have now?"],
+                    ["time", "Mar 23, 8:50 PM"],
+                    ["cto", "200K"],
+                    ["cto", "21"],
+                    ["cto", "customers: China, US, Singapore"],
+                    ["time", "Mar 25, 6:03 PM"],
+                    ["me", "Paying users?"],
+                    ["cto", "Yep"],
+                  ] as const
+                ).map(([who, text], i) =>
+                  who === "time" ? (
+                    <p key={i} className="text-center text-[0.8em] text-[#b2b2b2]">{text}</p>
+                  ) : (
+                    <div key={i} className={`flex items-start gap-[0.5em] ${who === "me" ? "flex-row-reverse" : ""}`}>
+                      <span className={`flex h-[2.2em] w-[2.2em] shrink-0 items-center justify-center rounded-[0.5em] text-[0.75em] font-bold text-white ${who === "me" ? "bg-[var(--c)]" : "bg-[var(--ink)]"}`}>
+                        {who === "me" ? "Me" : "CTO"}
+                      </span>
+                      <p className={`max-w-[78%] rounded-[0.4em] px-[0.75em] py-[0.5em] leading-snug text-[#191919] ${who === "me" ? "bg-[#95ec69]" : "bg-white"}`}>{text}</p>
+                    </div>
+                  ),
+                )}
+              </div>
+              <figcaption className="border-t border-black/[0.06] bg-[#f7f7f7] px-[1.2em] py-[0.5em] text-[0.75em] text-[#8a8a8a]">
+                WeChat with the CTO, Mar 2026 · translated
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </Slide>
-      <Visual theme="cm" title="Find the root problem" sub={["Clients wanted different features", "interviewed SMB owners"]}>
-        <Img src="s42" alt="Three client requests converging on one core feature" />
-      </Visual>
+      {/* Discovery opener: tangled threads of ambiguity, each analysed, converging into one clear direction */}
+      <Slide theme="cm" className="flex flex-col">
+        <p className="s-eyebrow">Discovery</p>
+        <h2 className="s-title mt-[0.8cqw]">Start from ambiguity</h2>
+        <p className="s-sub">Fast MVP, no PRD · no marketing background</p>
+        <AmbiguityConverge />
+      </Slide>
+      {/* Build alignment: the CEO's vision notes and the pitch deck feed one shared definition */}
+      <Slide theme="cm" className="flex flex-col">
+        <p className="s-eyebrow">Discovery</p>
+        <h2 className="s-title mt-[0.8cqw]">Build alignment</h2>
+      <div className="mt-[2.4cqw] grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_5cqw_minmax(0,0.8fr)] items-center">
+        <div className="flex min-h-0 flex-col gap-[1.4cqw]">
+          {[
+            ["s41a", "CEO's vision notes", "AI-CMO positioning notes"],
+            ["s41b", "Pitch deck", "Market pain slide from the pitch deck"],
+          ].map(([src, label, alt]) => (
+            <figure key={src} className="flex items-center gap-[1.4cqw] rounded-[1.4cqw] bg-[var(--cm-tint)] p-[1.2cqw]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/deck/${src}.jpg`} alt={alt} className="h-[11cqw] w-auto rounded-[0.6cqw] bg-white shadow-[0_0_0_1px_rgb(40_30_20/0.08)]" />
+              <figcaption className="text-[1.3cqw] font-bold text-[var(--ink)]">{label}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <svg viewBox="0 0 50 100" className="h-[60%] w-full" fill="none" stroke="var(--c)" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true" preserveAspectRatio="none">
+          <path d="M0 25 C 30 25, 25 50, 48 50" vectorEffect="non-scaling-stroke" />
+          <path d="M0 75 C 30 75, 25 50, 48 50" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <div className="rounded-[1.6cqw] bg-[var(--c)] p-[2.6cqw] text-white">
+          <p className="text-[1.1cqw] font-bold uppercase tracking-[0.12em] text-white/75">Shared definition</p>
+          <p className="mt-[1cqw] text-[2.6cqw] font-bold leading-tight">An AI CMO that does the work, end to end</p>
+          <p className="mt-[1.2cqw] text-[1.35cqw] leading-snug text-white/85">Not more tools: one agent that plans, creates, runs and measures campaigns.</p>
+        </div>
+      </div>
+      </Slide>
+      {/* Find the root problem: the three clients' asks overlap in one need */}
+      <Slide theme="cm" className="flex flex-col">
+        <p className="s-eyebrow">Discovery</p>
+        <h2 className="s-title mt-[0.8cqw]">Find the root problem</h2>
+        <RootOverlap />
+      </Slide>
       {/* Study the market: current solution → its problem (same row language as "Dig into the concern") */}
       <Slide theme="cm" className="flex flex-col !pt-[4cqw]">
         <h2 className="s-title">Study the market</h2>
