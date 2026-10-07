@@ -15,6 +15,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       color={project.color}
       image={project.cardImage ?? project.headerImage}
       video={project.mainVideo}
+      comingSoon={project.comingSoon}
       motion={
         project.cardMotion === "canmarket" ? <CanmarketCardMotion />
         : project.cardMotion === "screener" ? <ScreenerCardMotion />

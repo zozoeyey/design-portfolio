@@ -162,6 +162,8 @@ export type Project = {
   problem?: string | null;
   outcome?: string | null;
   mainVideo?: string | null;
+  /** Case study not published yet: the work card shows "Coming soon" and doesn't link; no /work page is built. */
+  comingSoon?: boolean;
   /** Coded card animation shown instead of mainVideo on the work card. */
   cardMotion?: "canmarket" | "screener";
   role: string;
@@ -179,7 +181,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "valueglance",
-    name: "ValueGlance",
+    name: "ValueGlance Mobile Watchlist",
     tag: "Fintech SaaS",
     summary:
       "A B2C fintech tool that helps individual investors identify quality stocks for long-term investing.",
@@ -250,6 +252,7 @@ export const projects: Project[] = [
   // Case-study content to be filled in; the work card is live (ScreenerCardMotion).
   {
     slug: "valueglance-screener",
+    comingSoon: true,
     name: "ValueGlance Stock Screener",
     tag: "Fintech SaaS",
     summary: "Screener filter redesign — case study in progress.",

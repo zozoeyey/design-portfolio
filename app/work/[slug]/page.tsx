@@ -10,7 +10,7 @@ import { container, sectionGap } from "@/lib/ui";
 import CaseStudy from "@/components/CaseStudy";
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return projects.filter((p) => !p.comingSoon).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -34,14 +34,14 @@ export default async function ProjectPage({
 }) {
   const { slug } = await params;
   const project = getProject(slug);
-  if (!project) notFound();
+  if (!project || project.comingSoon) notFound();
 
   const idx = projects.findIndex((p) => p.slug === slug);
   // Playground pieces suggest other playground pieces; work projects suggest work.
   const moreFromPlayground = project.playgroundOnly
     ? playground.filter((i) => i.slug !== slug).slice(0, 2)
     : null;
-  const others = projects.filter((p) => p.slug !== slug && !p.playgroundOnly);
+  const others = projects.filter((p) => p.slug !== slug && !p.playgroundOnly && !p.comingSoon);
   const more = [0, 1].map((k) => others[(idx + k) % others.length]);
 
   // Sections for the floating Contents pill; each id is set on the matching heading below.

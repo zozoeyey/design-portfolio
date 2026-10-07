@@ -20,6 +20,7 @@ export default function PlateCard({
   image,
   video,
   motion,
+  comingSoon = false,
 }: {
   href: string;
   external?: boolean;
@@ -32,6 +33,8 @@ export default function PlateCard({
   video?: string | null;
   /** A coded animation that replaces the video/image (e.g. CanmarketCardMotion). */
   motion?: React.ReactNode;
+  /** Not linkable yet: show a "Coming soon" chip instead of "View ↗", render without a link. */
+  comingSoon?: boolean;
 }) {
   const media = motion ? (
     // No hover zoom here: scaling a live 3D scene re-rasterizes it every frame.
@@ -71,6 +74,12 @@ export default function PlateCard({
         />
         <div className="absolute inset-0">{media}</div>
 
+        {comingSoon ? (
+          <span className="glass absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold text-black">
+            Coming soon
+          </span>
+        ) : (
+          <>
         {/* liquid-glass hover: sweeping sheen + frosted chip */}
         <span aria-hidden="true" className="plate-sheen" />
         <span
@@ -79,6 +88,8 @@ export default function PlateCard({
           View
           <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
         </span>
+          </>
+        )}
       </div>
 
       {/* Metadata strip */}
@@ -99,6 +110,8 @@ export default function PlateCard({
       </div>
     </>
   );
+
+  if (comingSoon) return <div className="block">{body}</div>;
 
   return external ? (
     <a href={href} target="_blank" rel="noopener noreferrer" className="group block">
