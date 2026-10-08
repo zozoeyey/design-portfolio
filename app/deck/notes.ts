@@ -62,7 +62,7 @@ Third, Metric definitions opens the All Metrics reference. Someone unfamiliar wi
 The tradeoff is that the full metric list and explanations take an extra action to open. In return, the default screen has less competing information, with a direct path to customization and learning.`,
   "vg:Rebuild the components": `To make this reusable, I also took ownership and rebuilt the component foundation behind the mobile experience. I documented sizing, selected states, and how the components handled different amounts of content. This ended up being useful beyond just this project — these components got picked up by other teams building on the same design system.`,
   "vg:Drive the handoff": `I worked on the implementation, using Linear tickets and Github pull-request reviews to communicate the intended behavior and work through issues. This example shows this redesign work moving from handoff to review, approval, and merge. The next step I would prioritize is measuring the user experience: can people locate a value, interpret it, and change a metric without losing their place? Those are more direct measures of this design’s success than the amount of work completed.`,
-  "vg:Reflection": `Looking back, this project taught me two things.
+  "vg:Ownership means looking beyond the initial request.": `Looking back, this project taught me two things.
 
 First, a small component request can reveal a larger workflow problem. What started as fixing a tooltip became a question about how investors read and adjust financial data.
 

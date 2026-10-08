@@ -45,7 +45,6 @@ export default async function ProjectPage({
   const more = [0, 1].map((k) => others[(idx + k) % others.length]);
 
   // Sections for the floating Contents pill; each id is set on the matching heading below.
-  const firstSentence = (t: string) => t.split(/(?<=[.!?])\s+/)[0];
   const sections: ContentsSection[] = [
     { id: "overview", label: "Overview", level: 1 },
     ...(project.features.length
@@ -53,7 +52,8 @@ export default async function ProjectPage({
           { id: "solution", label: project.featuresHeading ?? "Solution", level: 1 as const },
           ...project.features.map((f, i) => ({
             id: `feature-${i + 1}`,
-            label: f.title.match(/^([A-Za-z]+ #\d+)/i)?.[1] ?? f.title,
+            // full title: "Feature #1 · Mobile watchlist …"
+            label: f.title.replace(/^([A-Za-z]+ #\d+)\s*[:—-]\s*/i, "$1 · "),
             level: 2 as const,
           })),
         ]
@@ -62,7 +62,7 @@ export default async function ProjectPage({
     ...(project.stories.length
       ? [
           { id: "story", label: "The story", level: 1 as const },
-          ...project.stories.map((s, i) => ({ id: `chapter-${i + 1}`, label: firstSentence(s.subheading), level: 2 as const })),
+          ...project.stories.map((s, i) => ({ id: `chapter-${i + 1}`, label: s.subheading, level: 2 as const })),
         ]
       : []),
     { id: "more-projects", label: "More projects", level: 1 },

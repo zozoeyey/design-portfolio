@@ -16,7 +16,7 @@ const intro = (
     <SectionLabel as="h1">Playground</SectionLabel>
     <p className="mt-4 max-w-xl text-base leading-relaxed text-gray-500">
       Experiments and side projects — where I explore hardware, generative tools, data, and graphic
-      design outside client work.
+      design outside work.
     </p>
   </>
 );

@@ -12,6 +12,7 @@ const TABS = [
   ["cm", "Canmarket.ai"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
+const SHOW_TABS = false;
 type View = "present" | "scroll";
 
 function slidesFor(tab: Tab): HTMLElement[] {
@@ -176,6 +177,8 @@ export default function DeckTabs() {
           </button>
         </div>
       )}
+      {/* Deck switch hidden for now; ?deck=cm still opens the Canmarket deck. Flip SHOW_TABS to bring it back. */}
+      {SHOW_TABS && (
       <nav aria-label="Choose deck" className="deck-tabs">
         <span ref={pill} aria-hidden="true" className="deck-tabs-pill" />
         {TABS.map(([k, label], i) => (
@@ -194,6 +197,7 @@ export default function DeckTabs() {
           </button>
         ))}
       </nav>
+      )}
       <div className="deck-bar-group">
         {view === "present" && (
           <button type="button" className="deck-icon-btn" aria-label="Fullscreen (F)" title="Fullscreen (F)" onClick={toggleFullscreen}>
@@ -221,7 +225,8 @@ export default function DeckTabs() {
 // Slide identity for notes: deck + the slide's own heading (stable even when slides are reordered).
 export function slideTitle(el?: HTMLElement) {
   if (!el) return "";
-  const h = el.querySelector("h2, .s-h, .s-display");
+  // skip decorative copies (e.g. the blurred board behind the V1/V2/Final focus slides)
+  const h = [...el.querySelectorAll("h2, .s-h, .s-display")].find((n) => !n.closest('[aria-hidden="true"]'));
   // join child nodes with spaces so "<span>Feature 1</span>Title" reads "Feature 1 Title"
   return Array.from(h?.childNodes ?? []).map((n) => n.textContent).join(" ").replace(/\s+/g, " ").trim();
 }

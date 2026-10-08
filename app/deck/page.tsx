@@ -3,7 +3,7 @@
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
 import { DensityIcon, DecisionIcon, SystemIcon, FocusIcon, SpeedIcon, TrustIcon } from "./icons";
-import FeatureFlow from "./FeatureFlow";
+import FeatureFlow from "@/components/FeatureFlow";
 import DeckTabs from "./DeckTabs";
 import AmbiguityConverge from "./AmbiguityConverge";
 import RootOverlap from "./RootOverlap";
@@ -294,12 +294,11 @@ export default function Deck() {
       {/* Agenda: one picture per chapter, no descriptions */}
       <Slide theme="intro" className="flex flex-col">
         <h2 className="s-title">Agenda</h2>
-        <ol className="mt-auto grid grid-cols-4 gap-[2cqw]">
+        <ol className="mx-auto mt-auto grid w-[75%] grid-cols-3 gap-[2cqw]">
           {[
             ["01", "About me", "/deck/portrait.jpg", ""],
             ["02", "ValueGlance", "/deck/mark-valueglance.png", "rgb(26, 34, 83)"],
-            ["03", "Canmarket.ai", "/deck/mark-canmarket.png", "rgb(21, 93, 252)"],
-            ["04", "Q & A", "", ""],
+            ["03", "Q & A", "", ""],
           ].map(([n, t, src, bg]) => (
             <li key={n} className="flex flex-col">
               <div

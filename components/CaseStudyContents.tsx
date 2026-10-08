@@ -73,7 +73,7 @@ export default function CaseStudyContents({ sections }: { sections: ContentsSect
         <div
           ref={panel}
           id="case-study-contents"
-          className="contents-panel glass absolute bottom-14 right-0 max-h-[60vh] w-72 origin-bottom-right overflow-y-auto rounded-3xl p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)]"
+          className="contents-panel glass absolute bottom-14 right-0 max-h-[70vh] w-80 origin-bottom-right overflow-y-auto rounded-3xl p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)]"
         >
           <p className="px-3 pb-1 pt-2 text-xs font-bold uppercase tracking-[0.14em] text-gray-500">On this page</p>
           <ol>
@@ -85,16 +85,16 @@ export default function CaseStudyContents({ sections }: { sections: ContentsSect
                     type="button"
                     onClick={() => go(i)}
                     aria-current={on ? "location" : undefined}
-                    className={`flex w-full items-center gap-2.5 rounded-xl py-2 pr-3 text-left transition-colors duration-150 hover:bg-white/80 ${
+                    className={`flex w-full items-start gap-2.5 rounded-xl py-2 pr-3 text-left transition-colors duration-150 hover:bg-white/80 ${
                       s.level === 2 ? "pl-7 text-sm text-gray-500" : "pl-3 text-base text-gray-700"
                     } ${on ? "bg-white font-bold text-black" : ""}`}
                   >
                     <span
                       aria-hidden="true"
-                      className="h-1.5 w-1.5 shrink-0 rounded-full"
+                      className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full"
                       style={{ backgroundColor: on ? "var(--accent-strong)" : "transparent" }}
                     />
-                    <span className="truncate">{s.label}</span>
+                    <span className="leading-snug text-pretty">{s.label}</span>
                   </button>
                 </li>
               );
@@ -117,7 +117,7 @@ export default function CaseStudyContents({ sections }: { sections: ContentsSect
         <span className="tabular-nums text-gray-500">
           {active + 1} / {sections.length}
         </span>
-        <span className="max-w-[12rem] truncate font-medium">{sections[active]?.label}</span>
+        <span className="max-w-[16rem] truncate font-medium">{sections[active]?.label}</span>
       </button>
     </div>
   );

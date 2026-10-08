@@ -6,6 +6,12 @@ import MindsetShift from "@/components/MindsetShift";
 import BeforeAfter from "@/components/BeforeAfter";
 import RequestsOverlap from "@/components/RequestsOverlap";
 import BeforeAfterWipe from "@/components/BeforeAfterWipe";
+import CompetitorConverge from "@/components/CompetitorConverge";
+import NavBeforeAfter from "@/components/NavBeforeAfter";
+import ReframeBoard from "@/components/ReframeBoard";
+import VgHero from "@/components/VgHero";
+import FeatureFlow from "@/components/FeatureFlow";
+import LaptopVideo from "@/components/LaptopVideo";
 import { container, eyebrow, sectionGap, tagColors } from "@/lib/ui";
 
 /**
@@ -44,8 +50,12 @@ export default function CaseStudy({
       {/* Hero banner, same width as the navbar */}
       {project.headerImage && (
         <div className={`${c} ${embedded ? "pt-8" : "pt-28 sm:pt-32"}`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={project.headerImage} alt="" className="w-full overflow-hidden rounded-3xl" />
+          {project.hero === "vg-devices" ? (
+            <VgHero />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={project.headerImage} alt="" className="w-full overflow-hidden rounded-3xl" />
+          )}
         </div>
       )}
 
@@ -141,7 +151,15 @@ export default function CaseStudy({
                       </p>
                     )}
                   </div>
-                  {f.video && (
+                  {f.demo === "flow" && (
+                    <div className="mx-auto mt-12 max-w-5xl rounded-3xl bg-[color-mix(in_oklab,var(--c,#1a2253)_6%,var(--white-100))] px-[6%] py-[5%]">
+                      <FeatureFlow className="w-full" />
+                    </div>
+                  )}
+                  {f.demo === "laptop" && f.video && (
+                    <LaptopVideo src={f.video} poster={f.poster} ratio={f.ratio ?? "16/10"} className="mx-auto mt-12 max-w-5xl" />
+                  )}
+                  {f.video && !f.demo && (
                     <div className="mt-12 overflow-hidden rounded-3xl border border-black/5 bg-white-50">
                       <video className="h-full w-full object-cover" src={f.video} autoPlay muted loop playsInline />
                     </div>
@@ -257,6 +275,18 @@ export default function CaseStudy({
                       ) : s.graphic === "requests-overlap" ? (
                         <div className="mt-12">
                           <RequestsOverlap color={project.color} />
+                        </div>
+                      ) : s.graphic === "competitor-converge" ? (
+                        <div className="mt-12">
+                          <CompetitorConverge color={project.color} />
+                        </div>
+                      ) : s.graphic === "nav-before-after" ? (
+                        <div className="mt-12">
+                          <NavBeforeAfter />
+                        </div>
+                      ) : s.graphic === "reframe-board" ? (
+                        <div className="mt-12">
+                          <ReframeBoard color={project.color} />
                         </div>
                       ) : s.graphic === "onboarding-wipe" ? (
                         <div className="mt-12">

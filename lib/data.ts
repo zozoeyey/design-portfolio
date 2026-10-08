@@ -34,7 +34,7 @@ export const approach = [
     n: "01",
     title: "From Figma to live. Solo.",
     desc: "I don't hand off designs. I ship them.",
-    link: { label: "More About Me", href: "/about" },
+    link: { label: "See what I shipped", href: "/work/canmarketai" },
     // Drop your two screenshots into /public/approach/ with these names.
     images: ["/approach/01-a.jpg", "/approach/01-b.jpg"],
   },
@@ -42,14 +42,14 @@ export const approach = [
     n: "02",
     title: "Think in Prototypes.",
     desc: "I think with my hands. The faster I can make it real, the faster we learn.",
-    link: { label: "More About Me", href: "/about" },
+    link: { label: "Browse my prototypes", href: "/playground" },
     images: ["/approach/02-canvas-b.png"],
   },
   {
     n: "03",
     title: "Design How People Learn",
     desc: "I design for how people think, not just how they click.",
-    link: { label: "More About Me", href: "/about" },
+    link: { label: "More about how I work", href: "/about" },
     images: ["/approach/03-a.jpg"], // LDT Expo
   },
 ];
@@ -139,8 +139,13 @@ export type Feature = {
   images?: string[];
   /** Full-bleed band background behind this feature (banner layout only). */
   band?: "dark" | null;
+  /** Coded demo instead of a plain video: "flow" = the tap → arrow → next-screen mobile flow;
+   *  "laptop" = `video` shown inside a laptop frame (needs `ratio`). */
+  demo?: "flow" | "laptop";
+  ratio?: string;
+  poster?: string;
 };
-export type Story = { subheading: string; body: string; image?: string | null; tags?: string[]; graphic?: "observation-map" | "mindset-shift" | "before-after" | "requests-overlap" | "onboarding-wipe" | null };
+export type Story = { subheading: string; body: string; image?: string | null; tags?: string[]; graphic?: "observation-map" | "mindset-shift" | "before-after" | "requests-overlap" | "onboarding-wipe" | "competitor-converge" | "nav-before-after" | "reframe-board" | null };
 
 export type Project = {
   slug: string;
@@ -164,6 +169,8 @@ export type Project = {
   mainVideo?: string | null;
   /** Case study not published yet: the work card shows "Coming soon" and doesn't link; no /work page is built. */
   comingSoon?: boolean;
+  /** Coded hero shown instead of headerImage at the top of the case study. */
+  hero?: "vg-devices";
   /** Coded card animation shown instead of mainVideo on the work card. */
   cardMotion?: "canmarket" | "screener";
   role: string;
@@ -189,7 +196,8 @@ export const projects: Project[] = [
     year: "2026",
     color: "rgb(44, 131, 127)",
     liveUrl: "https://valueglance.com/",
-    headerImage: "/media/valueglance-header.webp",
+    headerImage: "/media/valueglance/header.webp", // fallback; the page renders the coded hero below
+    hero: "vg-devices",
     mainVideo: "/media/valueglance/card.mp4",
     cardImage: "/media/valueglance/card-poster.jpg",
     role: "UX Designer",
@@ -204,14 +212,25 @@ export const projects: Project[] = [
       "<p>At the time I came on board, ValueGlance had no coherent mobile experience, and data visualizations were so cluttered that info boxes routinely ran off-screen. Collaborating alongside the CTO and a frontend engineer, I ran a product audit paired with user feedback synthesis to surface the core tension: investors needed dense financial data on a small screen, but the product had no shared component foundation to make that possible. By the end of the project, what began as a fragmented collection of off-screen charts and broken tooltips became a structured design system foundation, two other designers adopted directly to drive a product-wide visual revamp.</p>",
     features: [
       {
-        title: "Feature #1: Designing a new mobile watchlist data visualization tooltip experience",
-        desc: "Watchlist tooltips routinely ran off-screen on mobile. I redesigned the interaction so dense financial data stays readable — and tappable — on a small screen.",
-        video: "/media/t4wUnIveqy01Kg9APLetPug7AE.mp4",
+        title: "Feature #1: Mobile watchlist data visualization redesign",
+        desc: "The readout moved off the chart into a metric strip above it. Tapping Edit chart metrics opens a sheet to swap metrics in place, and Metric definitions explains each one.",
+        demo: "flow",
       },
       {
-        title: "Feature #2: Revamping data visualization chart components",
-        desc: "I rebuilt the chart components on a shared foundation, standardizing tags, tooltips, and scrolling bars so every chart renders consistently across the product.",
-        video: "/media/iGL6q5kOpeqTG45TWIQSa4tc.mp4",
+        title: "Feature #2: Screener filter redesign",
+        desc: "Add a filter, adjust one metric, and the results and filter chips update together. A Today toggle switches to current values, and the screen saves in one step.",
+        demo: "laptop",
+        video: "/media/valueglance/screener-flow.mp4",
+        poster: "/media/valueglance/screener-flow-poster.jpg",
+        ratio: "1600/804",
+      },
+      {
+        title: "Feature #3: Design system revamp & migration",
+        desc: "A design-tokens page documents every color, state and component — text fields, tags, tooltips, tabs and popups — as the product migrated onto one shared system.",
+        demo: "laptop",
+        video: "/media/valueglance/design-tokens.mp4",
+        poster: "/media/valueglance/design-tokens-poster.jpg",
+        ratio: "1600/1004",
       },
     ],
     memorable: {
@@ -229,11 +248,11 @@ export const projects: Project[] = [
         graphic: "observation-map",
       },
       {
-        subheading: "Less assumption. More iteration.",
+        subheading: "Listen closely. Reframe thoughtfully.",
         tags: ["Iterations", "Pushback", "Cross-functional Collaboration"],
         body:
-          "<p>As discovery progressed into design, I made a call I later had to undo. I started building cross-platform components from the desktop layout first, it felt like the natural starting point, then brought those designs to mobile, where I quickly realized the desktop structure simply had no room to breathe on a smaller screen. I had to rebuild significant parts from scratch with a mobile-first approach, which cost real time. The rework was frustrating, but it sharpened something I hadn't fully internalized: the starting point of a design decision is not neutral, it quietly sets the constraints everything else has to work within.</p>",
-        graphic: "before-after",
+          "<p>Moving the tooltip outside the chart solved the most visible problem: it no longer covered the data. But in a design review, the CTO pointed out that changing a metric still meant scrolling away from the chart and back again. Walking through that interaction helped me see what I had missed. Reading and adjusting metrics were one connected task, but I had designed them as separate flows.</p><p>I reframed the question from “How do we stop the tooltip from covering the chart?” to “How do we help investors read and adjust metrics smoothly?” That changed the next iteration—and taught me to understand the concern behind feedback before deciding how to respond.</p>",
+        graphic: "reframe-board",
       },
       {
         subheading: "I don't measure launches. I measure leverage.",
@@ -256,7 +275,7 @@ export const projects: Project[] = [
     name: "ValueGlance Stock Screener",
     tag: "Fintech SaaS",
     summary: "Screener filter redesign — case study in progress.",
-    claim: "Screener filter redesign — case study in progress.",
+    claim: "Redesigned the screener’s filters so investors can build and save a screen in fewer steps.",
     year: "2026",
     color: "rgb(67, 79, 160)",
     headerImage: null,
@@ -399,7 +418,8 @@ export const projects: Project[] = [
     color: "rgb(0, 74, 173)",
     liveUrl: null,
     headerImage: "/media/gyr7Hz1NJ4MIILMBR6x3EAjEZw.png",
-    mainVideo: "/media/Tp3l4GMTsqlIqrnf7JKh1gWU7Y.mp4",
+    mainVideo: "/media/connectlink/card.mp4", // square recording fitted into the 16:11 card, sides filled with its blue
+    cardImage: "/media/connectlink/card-poster.jpg",
     role: "UX Design Intern",
     duration: "Feb 2024 - June 2024",
     tools: "Figma, Discord",
@@ -421,14 +441,14 @@ export const projects: Project[] = [
         tags: ["Persona", "Problem Identification", "Opportunity Mapping", "Design Direction"],
         body:
           "<p>When this project started, there was no clear direction on how to approach the design, no one told me which platform to reference, or whether to create something entirely new for our users. I ran a competitor analysis across Reddit, Quora, and Product Hunt, drew my own conclusions about what patterns would fit, and built a self-imposed weekly schedule since the PM had no specific timeline requirements. That gave me a working foundation, a direction I could explain and a structure I could be accountable to. What I learned is that when no one hands you a map, building your own is not extra work. It's the actual job.</p>",
-        image: "/media/6C2yVGiOuQNS6nIrCMUKKsk13c.png",
+        graphic: "competitor-converge",
       },
       {
         subheading: "Soft voice. Firm logic.",
         tags: ["Architecture", "Brainstorm", "Lo-fi Sketch", "Design Critiques"],
         body:
           "<p>As discovery progressed, I inherited a wireframe for the Discussion Board and felt something was structurally off, even as the most junior person on the team, I knew I had to say something. I mapped the information architecture, named a specific problem: three tabs at the top forced users to think about sections irrelevant to their current task, and I proposed replacing them with breadcrumb navigation instead. I was nervous the team wouldn't take it seriously, but the Design Lead supported the direction, and it made it into the final design. What I realized is that a quiet voice backed by clear reasoning carries more weight than I expected.</p>",
-        image: "/media/pT07E6Paej302lZXmJ99sEFGVx8.png",
+        graphic: "nav-before-after",
       },
       {
         subheading: "From first-timer to accountable owner.",
@@ -580,11 +600,23 @@ export type PlaygroundItem = {
 
 export const playground: PlaygroundItem[] = [
   {
+    slug: "double-rise",
+    category: "coding",
+    name: "Double Rise",
+    tag: "Interactive Learning",
+    year: "2026",
+    summary: "An interactive site that teaches 双升 (“Double Rise”), a Chinese trick-taking card game for four players in two teams.",
+    color: "rgb(0, 0, 0)",
+    link: "https://educ-432-final-project.vercel.app/",
+    image: "/media/shuangsheng/cover.jpg",
+    embed: "https://educ-432-final-project.vercel.app/",
+  },
+  {
     slug: "pebbles",
     category: "product-design",
     name: "Pebbles",
     tag: "Mobile App",
-    year: "2025",
+    year: "2026",
     summary:
       "A mobile app that helps parents of kids 3–11 respond to big emotions, with strategies, reflection, and peer support.",
     color: "rgb(253, 209, 92)",

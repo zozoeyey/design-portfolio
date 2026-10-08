@@ -53,34 +53,32 @@ export default function Home() {
         <Reveal>
           <SectionLabel>My approach</SectionLabel>
         </Reveal>
+        {/* Gallery: same-size 16:10 image on top of every card, quiet text below, one link for the section */}
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {approach.map((a, i) => (
-            <Reveal key={a.n} delay={i * 80}>
-              <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl glass-card bg-background bg-none p-4 transition-colors duration-500 after:hidden hover:border-accent/40">
-                <Carousel images={a.images} alt={a.title} className="relative z-10" />
-                {/* big halftone numeral, bottom-right */}
-                <span
-                  aria-hidden="true"
-                  className="halftone-text pointer-events-none absolute -bottom-8 -right-2 select-none text-[9rem] font-bold leading-none tracking-tighter transition-transform duration-700 ease-out group-hover:-translate-y-1 group-hover:-translate-x-1"
-                >
-                  {a.n}
-                </span>
-                <div className="relative z-10 flex flex-1 flex-col px-3 pb-3 pt-5">
-                  <h3 className="text-xl font-bold tracking-tight text-black">
-                    {a.title}
-                  </h3>
-                  <p className="mt-2 max-w-[85%] text-base leading-relaxed text-gray-500">
-                    {a.desc}
-                  </p>
+            <Reveal key={a.n} delay={i * 80} className="h-full">
+              <article className="glass-card flex h-full flex-col overflow-hidden rounded-3xl bg-background bg-none after:hidden">
+                <div className="aspect-[16/10] overflow-hidden bg-[#f3f1fb]">
+                  {a.images.length > 1 ? (
+                    <Carousel images={a.images} alt={a.title} className="!rounded-none" />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={a.images[0]} alt={a.title} loading="lazy" className="h-full w-full object-cover object-top" />
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="text-xs font-bold tabular-nums tracking-[0.14em] text-gray-400">{a.n}</p>
+                  <h3 className="mt-2 text-xl font-bold tracking-tight text-black text-balance">{a.title}</h3>
+                  <p className="mt-2 text-base leading-relaxed text-gray-500 text-pretty">{a.desc}</p>
                   <Link
                     href={a.link.href}
-                    className="group/link mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-bold text-black underline-offset-4 hover:text-accent-strong"
+                    className="group/link mt-auto inline-flex min-h-11 items-center gap-1.5 pt-4 text-sm font-bold text-black hover:text-accent-strong"
                   >
                     {a.link.label}
                     <span className="transition-transform group-hover/link:translate-x-0.5">→</span>
                   </Link>
                 </div>
-              </div>
+              </article>
             </Reveal>
           ))}
         </div>
