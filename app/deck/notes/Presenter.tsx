@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { NOTES } from "../notes";
+import { loadComments, timeAgo, type DeckComment } from "@/lib/deckComments";
 
-type State = { tab: "vg" | "cm"; i: number; count: number; key: string; title: string; next: string };
+type State = { tab: "vg" | "cm" | "redesign"; i: number; count: number; key: string; title: string; next: string };
 
 // Private presenter view. Talks to the deck window over a same-origin BroadcastChannel:
 // it shows the current slide's notes and the next slide, and ←/→ here drive the deck.
@@ -12,6 +13,7 @@ export default function Presenter() {
   const [t0, setT0] = useState<number | null>(null);
   const [now, setNow] = useState(0);
   const ch = useRef<BroadcastChannel | null>(null);
+  const [comments, setComments] = useState<DeckComment[]>([]);
 
   useEffect(() => {
     const c = new BroadcastChannel("zy-deck");
@@ -27,6 +29,20 @@ export default function Presenter() {
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
+
+  // reviewers' comments for this deck, refreshed every 30s while presenting
+  const tab = s?.tab;
+  useEffect(() => {
+    if (!tab) return;
+    let live = true;
+    const load = () => loadComments(tab).then((r) => live && setComments(r.comments));
+    load();
+    const id = window.setInterval(load, 30000);
+    return () => {
+      live = false;
+      clearInterval(id);
+    };
+  }, [tab]);
 
   const go = (d: number) => ch.current?.postMessage({ type: "go", d });
 
@@ -50,7 +66,7 @@ export default function Presenter() {
     <main className="deck-notes mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-6 py-6 text-black">
       <header className="flex items-center justify-between gap-4 text-sm text-gray-500">
         <span className="font-semibold uppercase tracking-[0.12em]">
-          Speaker notes · {s ? (s.tab === "vg" ? "ValueGlance" : "Canmarket.ai") : "waiting for the deck…"}
+          Speaker notes · {s ? ({ vg: "ValueGlance", cm: "Canmarket.ai", redesign: "Redesign" }[s.tab]) : "waiting for the deck…"}
         </span>
         <span className="flex items-center gap-3 tabular-nums">
           <span className="text-base font-semibold text-black">{mm}:{ss}</span>
@@ -93,6 +109,23 @@ export default function Presenter() {
               </p>
             )}
           </section>
+
+          {comments.some((c) => c.slide === s.key) && (
+            <section className="rounded-3xl p-6 ring-1 ring-black/10">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-gray-500">Comments</p>
+              <ul className="mt-3 flex flex-col gap-3">
+                {comments
+                  .filter((c) => c.slide === s.key)
+                  .map((c) => (
+                    <li key={c.id} className="text-base leading-relaxed">
+                      <span className="font-semibold">{c.name}</span>{" "}
+                      <span className="text-sm text-gray-500">{timeAgo(c.at, now || undefined)}</span>
+                      <p className="whitespace-pre-wrap text-gray-800 [overflow-wrap:anywhere]">{c.text}</p>
+                    </li>
+                  ))}
+              </ul>
+            </section>
+          )}
 
           <footer className="flex items-center justify-between gap-4">
             <p className="min-w-0 truncate text-base text-gray-500">

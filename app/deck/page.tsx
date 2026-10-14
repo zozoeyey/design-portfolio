@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Logo from "@/components/Logo";
 import { DensityIcon, DecisionIcon, SystemIcon, FocusIcon, SpeedIcon, TrustIcon } from "./icons";
 import FeatureFlow from "@/components/FeatureFlow";
+import CanmarketCardMotion from "@/components/CanmarketCardMotion";
 import DeckTabs from "./DeckTabs";
 import AmbiguityConverge from "./AmbiguityConverge";
 import RootOverlap from "./RootOverlap";
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type Theme = "intro" | "vg" | "cm";
+type Theme = "intro" | "vg" | "cm" | "mm";
 
 // deck copies cropped to the app window (no baked blue gradient), shown on the warm panel
 const CM_F1 = "/deck/cm-f1.mp4";
@@ -1178,9 +1179,18 @@ export default function Deck() {
             <span className="mr-[0.8cqw] text-[var(--c)]">{n}</span>
             {t}
           </p>
-          <div className="cm-panel mt-[1.6cqw] flex min-h-0 flex-1 justify-center">
-            <video className="s-video h-full !w-auto" src={src} autoPlay muted loop playsInline preload="metadata" />
-          </div>
+          {n === "Feature 2" ? (
+            // the homepage work card's coded replay of the flow, on the same tinted panel as Feature 1
+            <div className="cm-panel mt-[1.6cqw] flex min-h-0 flex-1 justify-center overflow-hidden !pb-0">
+              <div className="relative aspect-[16/10] h-full">
+                <CanmarketCardMotion background="transparent" />
+              </div>
+            </div>
+          ) : (
+            <div className="cm-panel mt-[1.6cqw] flex min-h-0 flex-1 justify-center">
+              <video className="s-video h-full !w-auto" src={src} autoPlay muted loop playsInline preload="metadata" />
+            </div>
+          )}
         </Slide>
       ))}
       {/* Role & scope (Bento): the strongest proof big, the rest as smaller tiles; hats without a photo on the accent tile */}
@@ -1489,6 +1499,57 @@ export default function Deck() {
         <Img src="s60" alt="Building the onboarding in VS Code while on a call with the CTO" />
       </Visual>
 
+      </div>
+      <div data-part="redesign" className="contents">
+      {/* ---------------- Design exercise · Movemint Insights ---------------- */}
+      <Slide theme="mm" className="flex flex-col justify-center">
+        <p className="s-eyebrow">Design exercise · Movemint organizer dashboard</p>
+        <h2 className="s-display mt-[1.2cqw]">Insights, redesigned</h2>
+        <p className="s-sub max-w-[52cqw]">
+          A visual pass on the first screen organizers see after creating an event. Same data, same features.
+        </p>
+      </Slide>
+      <Slide theme="mm" className="flex flex-col">
+        <p className="s-eyebrow">Where I started</p>
+        <h2 className="s-title mt-[0.8cqw]">The current Insights page</h2>
+        <div className="mt-[2.4cqw] flex min-h-0 flex-1 justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/deck/mm-insights-current.jpg"
+            alt="Movemint Insights page for a draft event: a green Ready to publish banner, three grey stat cards, and the event checklist"
+            className="s-img h-full w-auto"
+          />
+        </div>
+      </Slide>
+      <Slide theme="mm" className="flex flex-col">
+        <p className="s-eyebrow">What I noticed</p>
+        <h2 className="s-title mt-[0.8cqw]">Everything has the same volume</h2>
+        <div className="mt-[2.4cqw] grid min-h-0 flex-1 grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] gap-[3cqw]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/deck/mm-insights-checklist.jpg"
+            alt="The checklist: every task is a bordered card at the same weight, completed ones struck through"
+            className="s-img self-center"
+          />
+          <ol className="flex flex-col justify-center gap-[1.4cqw]">
+            {[
+              ["One status, said three times", "Draft pill, green banner and Status card all say the same thing, while Publish sits small inside the banner."],
+              ["Red means everything", "Create Event, the active nav, the progress bar, Publish and the AI button all share the brand red."],
+              ["Numbers don’t lead", "Stat values are barely bigger than their labels; 0 participants has no context."],
+              ["Done looks like to-do", "23 identical bordered rows; finished tasks keep full weight with strikethrough."],
+              ["Unclear words", "“Not applicable” on every optional task; an Insights tab inside the Insights tab."],
+            ].map(([t, d], i) => (
+              <li key={t} className="flex gap-[1.2cqw]">
+                <span className="text-[1.4cqw] font-bold tabular-nums text-[var(--c)]">{i + 1}</span>
+                <span>
+                  <span className="block text-[1.45cqw] font-bold text-[var(--ink)]">{t}</span>
+                  <span className="s-body mt-[0.2cqw] block">{d}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Slide>
       </div>
       {/* ---------------- Close ---------------- */}
       {["Q & A", "Thank you!"].map((t) => (

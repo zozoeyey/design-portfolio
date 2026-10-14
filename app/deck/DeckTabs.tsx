@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import DeckComments from "./DeckComments";
+import { loadComments, type DeckComment } from "@/lib/deckComments";
 
 // Deck controls. Two decks in one page (ValueGlance / Canmarket) and two views:
 //  - Present (default): one slide fills the window; ←/→, Space, PageUp/Down, Home/End, swipe; F = fullscreen.
@@ -10,9 +12,9 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 const TABS = [
   ["vg", "ValueGlance"],
   ["cm", "Canmarket.ai"],
+  ["redesign", "Redesign"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
-const SHOW_TABS = false;
 type View = "present" | "scroll";
 
 function slidesFor(tab: Tab): HTMLElement[] {
@@ -28,6 +30,10 @@ export default function DeckTabs() {
   const [idx, setIdx] = useState(0);
   const [count, setCount] = useState(0);
   const [idle, setIdle] = useState(false);
+  const [cur, setCur] = useState({ key: "", title: "" });
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [comments, setComments] = useState<DeckComment[]>([]);
+  const [configured, setConfigured] = useState(true);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const pill = useRef<HTMLSpanElement>(null);
   const bc = useRef<BroadcastChannel | null>(null);
@@ -38,7 +44,7 @@ export default function DeckTabs() {
     const q = new URLSearchParams(location.search);
     const n = parseInt(location.hash.slice(1), 10);
     /* eslint-disable react-hooks/set-state-in-effect */
-    setTab(q.get("deck") === "cm" ? "cm" : "vg");
+    setTab(TABS.find(([k]) => k === q.get("deck"))?.[0] ?? "vg");
     setView(q.get("view") === "scroll" ? "scroll" : "present");
     if (n > 0) setIdx(n - 1);
     /* eslint-enable react-hooks/set-state-in-effect */
@@ -65,7 +71,10 @@ export default function DeckTabs() {
     else url.searchParams.delete("view");
     url.hash = view === "present" ? String(i + 1) : "";
     history.replaceState(null, "", url);
-    last.current = { type: "state", tab, i, count: list.length, key: slideKey(list[i], tab), title: slideTitle(list[i]), next: slideTitle(list[i + 1]) };
+    const key = slideKey(list[i], tab);
+    const title = slideTitle(list[i]);
+    setCur({ key, title });
+    last.current = { type: "state", tab, i, count: list.length, key, title, next: slideTitle(list[i + 1]) };
     bc.current?.postMessage(last.current);
     const el = refs.current[TABS.findIndex(([k]) => k === tab)];
     if (el && pill.current) {
@@ -73,6 +82,21 @@ export default function DeckTabs() {
       pill.current.style.transform = `translateX(${el.offsetLeft}px)`;
     }
   }, [tab, view, idx]);
+
+  // comments for the whole deck; the panel and the count filter to the current slide
+  useEffect(() => {
+    if (!tab) return;
+    let live = true;
+    loadComments(tab).then((r) => {
+      if (!live) return;
+      setComments(r.comments);
+      setConfigured(r.configured);
+    });
+    return () => {
+      live = false;
+    };
+  }, [tab]);
+  const here = comments.filter((c) => c.slide === cur.key);
 
   const go = useCallback((d: number | "first" | "last") => {
     setIdx((i) => {
@@ -132,6 +156,7 @@ export default function DeckTabs() {
       else if (e.key === "End") { e.preventDefault(); go("last"); }
       else if (e.key === "f" || e.key === "F") toggleFullscreen();
       else if (e.key === "n" || e.key === "N") openNotes();
+      else if (e.key === "c" || e.key === "C") setCommentsOpen((o) => !o);
     };
     let x0: number | null = null;
     const down = (e: PointerEvent) => { if (e.pointerType !== "mouse") x0 = e.clientX; };
@@ -163,6 +188,18 @@ export default function DeckTabs() {
   };
 
   return (
+    <>
+    {commentsOpen && view === "present" && (
+      <DeckComments
+        deck={tab ?? "vg"}
+        slide={cur.key}
+        title={cur.title}
+        comments={here}
+        configured={configured}
+        onPosted={(c) => setComments((cs) => [...cs, c])}
+        onClose={() => setCommentsOpen(false)}
+      />
+    )}
     <div className="deck-bar" data-view={view} data-idle={idle ? "" : undefined}>
       {view === "present" && (
         <div className="deck-bar-group">
@@ -177,8 +214,6 @@ export default function DeckTabs() {
           </button>
         </div>
       )}
-      {/* Deck switch hidden for now; ?deck=cm still opens the Canmarket deck. Flip SHOW_TABS to bring it back. */}
-      {SHOW_TABS && (
       <nav aria-label="Choose deck" className="deck-tabs">
         <span ref={pill} aria-hidden="true" className="deck-tabs-pill" />
         {TABS.map(([k, label], i) => (
@@ -197,8 +232,20 @@ export default function DeckTabs() {
           </button>
         ))}
       </nav>
-      )}
       <div className="deck-bar-group">
+        {view === "present" && (
+          <button
+            type="button"
+            className="deck-icon-btn relative"
+            aria-label={`Comments (C)${here.length ? `, ${here.length} on this slide` : ""}`}
+            aria-pressed={commentsOpen}
+            title="Comments (C)"
+            onClick={() => setCommentsOpen((o) => !o)}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z" /></svg>
+            {here.length > 0 && <span className="deck-badge">{here.length}</span>}
+          </button>
+        )}
         {view === "present" && (
           <button type="button" className="deck-icon-btn" aria-label="Fullscreen (F)" title="Fullscreen (F)" onClick={toggleFullscreen}>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg>
@@ -219,6 +266,7 @@ export default function DeckTabs() {
         </button>
       </div>
     </div>
+    </>
   );
 }
 

@@ -37,6 +37,14 @@ body:has(.deck) > footer {
   --ink: oklch(0.25 0.02 260);    /* titles */
   --cm-tint: oklch(0.97 0.012 70); /* warm light panel */
 }
+/* Movemint design exercise: their brand red as the accent, near-black titles */
+.slide[data-theme="mm"] {
+  --c: rgb(239, 68, 90);
+  --ink: #111;
+}
+.slide[data-theme="mm"] .s-title,
+.slide[data-theme="mm"] .s-display { color: var(--ink); }
+.slide[data-theme="mm"] .s-img { background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08); border-radius: 1cqw; }
 .slide[data-theme="cm"] .s-title,
 .slide[data-theme="cm"] .s-display { color: var(--ink); }
 /* one screenshot treatment: white, thin outline, no shadow, on a warm panel */
@@ -105,7 +113,11 @@ body:has(.deck) > footer {
 
 /* Project tabs: show one project's slides at a time (shared intro + close stay in both). */
 .deck[data-show="vg"] [data-part="cm"],
-.deck[data-show="cm"] [data-part="vg"] {
+.deck[data-show="vg"] [data-part="redesign"],
+.deck[data-show="cm"] [data-part="vg"],
+.deck[data-show="cm"] [data-part="redesign"],
+.deck[data-show="redesign"] [data-part="vg"],
+.deck[data-show="redesign"] [data-part="cm"] {
   display: none;
 }
 /* floats bottom-centre so it never covers a slide title */
@@ -252,4 +264,66 @@ body:has(.deck) > footer {
     print-color-adjust: exact;
   }
   nextjs-portal { display: none !important; }
+}
+
+/* comments: count badge on the bar button + the per-slide panel */
+.deck-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: oklch(0.62 0.17 48);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.deck-comments {
+  position: fixed;
+  z-index: 30;
+  top: 20px;
+  right: 20px;
+  bottom: 88px;
+  width: min(360px, calc(100vw - 40px));
+  display: flex;
+  flex-direction: column;
+  border-radius: 24px;
+  background: var(--white-100);
+  box-shadow: 0 0 0 1px rgba(26, 34, 83, 0.08), 0 2px 4px rgba(26, 34, 83, 0.04), 0 16px 40px -12px rgba(26, 34, 83, 0.28);
+  transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1), transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@starting-style {
+  .deck-comments { opacity: 0; transform: translateX(12px); }
+}
+@media (max-width: 640px) {
+  .deck-comments { top: auto; left: 12px; right: 12px; bottom: 84px; width: auto; height: min(70dvh, 560px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .deck-comments { transition: none; }
+}
+.deck-field {
+  width: 100%;
+  border-radius: 12px;
+  padding-inline: 12px;
+  font-size: 16px;
+  color: #000;
+  background: var(--white-100);
+  box-shadow: inset 0 0 0 1px rgba(26, 34, 83, 0.14);
+  transition: box-shadow 150ms ease;
+}
+.deck-field:focus { outline: none; box-shadow: inset 0 0 0 2px rgb(26, 34, 83); }
+@media (min-width: 641px) { .deck-field { font-size: 14px; } }
+@media print {
+  .deck-comments { display: none; }
+}
+/* Narrow screens: the bar doesn't fit on one line with the deck switch, so the switch takes its own row on top. */
+@media (max-width: 640px) {
+  .deck-bar { width: calc(100vw - 24px); flex-wrap: wrap; justify-content: center; row-gap: 8px; }
+  .deck-tabs { order: -1; }
+  .deck-comments { bottom: 136px; height: min(64dvh, 520px); }
 }

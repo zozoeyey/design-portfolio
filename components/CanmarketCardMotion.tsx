@@ -67,7 +67,7 @@ const PRESS = [3, 6, 9, 11, 14];
 const EASE = "cubic-bezier(0.23, 1, 0.32, 1)";
 const BLUE = "#155dfc";
 
-export default function CanmarketCardMotion() {
+export default function CanmarketCardMotion({ background = "radial-gradient(120% 90% at 100% 0%, #3b82f6 0%, #9cc3ff 38%, #e6f0ff 75%)" }: { background?: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState(0);
   const [still, setStill] = useState(false);
@@ -148,7 +148,7 @@ export default function CanmarketCardMotion() {
       ref={rootRef}
       aria-hidden="true"
       className="absolute inset-0 overflow-hidden [container-type:inline-size]"
-      style={{ background: "radial-gradient(120% 90% at 100% 0%, #3b82f6 0%, #9cc3ff 38%, #e6f0ff 75%)" }}
+      style={{ background }}
     >
       <div
         className="absolute inset-0"
