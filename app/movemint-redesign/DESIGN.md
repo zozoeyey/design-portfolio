@@ -46,8 +46,8 @@ Is it the one action that moves this screen forward (Publish, Set up)?
  ├── Yes → bg accentStrong, text white
  └── No
       ├── Is the event live? → success on successBg
-      ├── Is a step / task done? → muted check, no fill (done should recede, not shout)
-      ├── Is it a brand moment (poster card, progress fill, AI button border, finish flag)? → gradient
+      ├── Is a step / task done? → grey filled checkbox, muted struck-through title (done recedes, never green)
+      ├── Is it a brand moment (event card, AI button border)? → gradient
       ├── Is it text? → ink (primary) · muted (secondary) · faint (disabled)
       └── Everything else (borders, fills) → line / surface
 ```
@@ -56,14 +56,14 @@ Gradient rule: at most two gradient elements on screen. It marks brand moments; 
 
 ## Typography
 
-Inter for everything, including the event name. Instrument Serif appears in one place only — the poster card — so the brand moment stays special and the working UI stays uniform. Never serif below 26px, never for labels, buttons, body or data.
+Inter for everything, including the page title. Instrument Serif appears in one place only — the event name on the event card — so the brand moment stays special and the working UI stays uniform. Never serif below 26px, never for labels, buttons, body or data.
 
 | Role | Size / weight | Use |
 | --- | --- | --- |
 | `page-title` | Inter 30 / 700, −0.015em (24 on phones) | Event name at the top of the page |
-| `display-poster` | Instrument Serif 38 / 0.98 | Event name on the poster card only |
-| `display-number` | Instrument Serif 32 | Numbers on the poster card only (countdown) |
-| `stat` | Inter 24 / 600, tabular, −0.01em | Dashboard figures (Participants, Required setup, Registration). One voice for numbers and words like "Closed" |
+| `display-event` | Instrument Serif 30 / 1.02, two lines max | Event name on the event card only |
+| `stat` | Inter 28 / 600, tabular, −0.015em | Overview figures (Participants, Required setup, Registration). One voice for numbers and words like "Closed" |
+| `countdown` | Inter 13 / 600 in a `white/20` chip | "23 days to go" on the event card — emphasis by weight and fill, not size |
 | `title` | 18 / 600 | Section headings |
 | `body` | 14 / 400–500 | Default UI text, rows, buttons |
 | `small` | 13 / 400–500 | Descriptions, meta, URL |
@@ -72,13 +72,14 @@ Inter for everything, including the event name. Instrument Serif appears in one 
 
 Weights: 400, 500, 600, 700 (700 for the page title only). Numbers that change use `tabular-nums`.
 
-**Wordmark:** Movemint's original logo image (`/deck/movemint-logo.png`, from their site) — never retyped in a font. White on the poster via `brightness(0) invert(1)`.
+**Wordmark:** Movemint's original logo image (`/deck/movemint-logo.png`, from their site) — never retyped in a font. It lives in the header only; the event card doesn't repeat it (or the status), so the card has room to breathe.
 
 ## Shape, spacing, elevation
 
 - Radius: `lg` (8px) for controls, `xl` (12px) for lists and cards, `2xl` (16px) for page-level cards, `full` for avatars and status dots. Inner radius = outer − padding.
 - Control heights: 36px desktop / 40px touch. Primary hero action 44px.
-- Borders over shadows. Shadows only on things that float: menus, toasts, the mobile nav drawer.
+- White canvas; components separate with `line` hairlines. Borders over shadows. Shadows only on things that float: menus, toasts, the mobile nav drawer, the sticky context bar.
+- Overview: event card + three facts side by side when the content area is ≥ 1024px (a container query, so it holds inside narrow frames too); stacked below that.
 
 ## Components
 
@@ -98,13 +99,19 @@ Weights: 400, 500, 600, 700 (700 for the page title only). Numbers that change u
 
 **Inline editing, no modals** — edit where the thing lives. In this mockup "Set up" completes its step directly; a real build would expand the form inside the checklist row (never a modal). "Edit URL" turns the URL line under the title into an input (Enter saves, Esc cancels, live format check). No dialogs or side sheets: they hide the page the user is deciding about. Menus, tooltips and toasts are allowed.
 
-**Checklist rows** — done rows are quiet (thin muted check, muted text, no strikethrough, no green). Once every required step is done they collapse behind one summary row: open while finishing, auto-closed after Publish. The pending required row leads: `accentTint` background, `accent` ring, `accentStrong` "Set up" button. Optional rows have no status text — "Not applicable" is banned.
+**Overview** — one row: the event card, then Participants · Required setup · Registration in one white card with hairline dividers. Each fact is label (12 uppercase) → value (`stat`) → one supporting line; Required setup puts its 4px `accent` bar between value and line. The event card is a button that opens Preview (it's what attendees see): event name in `display-event`, date and place in 13px, the countdown chip. No wordmark or status on it.
+
+**Timeline** — the checklist as stages on a rail: solid up to Publish (required), dashed after (optional, any order). Dates sit in a 112px right-aligned gutter on wide screens. Markers are one family, 28px, 1.5px stroke, only the color changes: done = solid grey with a white check · now = `accent` ring with the pulse · gate (Publish, locked) = `ink` outline with a lock · optional = `faint` outline. Stage tags are quiet text after the title ("· Required", "· Optional, any order").
+
+**Checklist rows** — the pending required row leads: `accentTint` background, `accent` ring, `accentStrong` "Set up" button. Done rows (required and ticked optional) use Movemint's own completed style: grey filled checkbox with a grey check, muted struck-through title, description kept. Once every required step is done they collapse behind one summary row: open while finishing, auto-closed after Publish. Optional tasks are white hairline-divided lists (title, one-line description, chevron) with a 16px checkbox in front; ticking one moves it to the end of its list. No status text — "Not applicable" is banned.
+
+**Sticky context bar** — appears once the overview scrolls away: gradient dot · event name (truncates) · status chip · date · "23 days to go". It shows the next action (Set up / Publish / Copy link) only while that task's own line is off screen — a persistent action earns its place only when the real one can't be seen.
 
 **Toast** — confirms a change the user just made ("Your event is live"). Not for errors that need action.
 
 ## Motion
 
-Enter `cubic-bezier(0.23, 1, 0.32, 1)`; mobile nav drawer `cubic-bezier(0.32, 0.72, 0, 1)`. Menus/tooltips 120–150ms, inline editors 200ms, drawer 260ms. Overshoot (`0.34, 1.4, 0.64, 1`) only for celebrations: a step completing, the LIVE stamp. Ambient loops (AI border, current-step pulse) stay slow (≥1.8s). Every animation has a `prefers-reduced-motion` off switch.
+Enter `cubic-bezier(0.23, 1, 0.32, 1)`; mobile nav drawer `cubic-bezier(0.32, 0.72, 0, 1)`. Menus/tooltips 120–150ms, inline editors 200ms, drawer 260ms. Overshoot (`0.34, 1.4, 0.64, 1`) only for celebrations: a step completing, the LIVE stamp. Ambient loops (AI border, current-step pulse) stay slow (≥1.8s). Ticked tasks glide to the end of their list (FLIP, 260ms, enter curve); the sticky bar fades and drops 6px in 200ms; checks pop in with the celebrate curve. Every animation has a `prefers-reduced-motion` off switch (the bar only fades).
 
 ## Accessibility floors
 

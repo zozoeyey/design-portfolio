@@ -127,15 +127,23 @@ const STRONG: { name: string; v: string; note: string; ink?: boolean; current?: 
 
 /* ── type ── */
 const TYPE: { role: string; spec: string; cls: string; sample: string; serif?: boolean }[] = [
-  { role: "display-poster", spec: "Instrument Serif 38 / 0.98 · poster card only", cls: "font-serif text-[38px] leading-[0.98]", sample: "Startup Founders Bouldering Meetup", serif: true },
+  { role: "display-event", spec: "Instrument Serif 30 / 1.02 · event card only · 2 lines max", cls: "font-serif text-[30px] leading-[1.02]", sample: "Startup Founders Bouldering Meetup", serif: true },
   { role: "page-title", spec: "Inter 30 / 700 · −0.015em · 24 on phones", cls: "text-[30px] font-bold leading-tight tracking-[-0.015em]", sample: "Startup Founders Bouldering Meetup" },
-  { role: "display-number", spec: "Instrument Serif 32 / 1 · poster only", cls: "font-serif text-[32px] leading-none tabular-nums", sample: "23 days", serif: true },
-  { role: "stat", spec: "Inter 24 / 600 · tabular · −0.01em", cls: "text-[24px] font-semibold tracking-[-0.01em] tabular-nums", sample: "0 · 4/5 · Closed" },
+  { role: "stat", spec: "Inter 28 / 600 · tabular · −0.015em", cls: "text-[28px] font-semibold tracking-[-0.015em] tabular-nums", sample: "0 · 4/5 · Closed" },
+  { role: "countdown", spec: "Inter 13 / 600 · white/20 chip on the event card", cls: "text-[13px] font-semibold tabular-nums", sample: "23 days to go" },
   { role: "title", spec: "Inter 18 / 600", cls: "text-[18px] font-semibold", sample: "Event checklist" },
   { role: "body", spec: "Inter 14 / 400–500 · 1.45", cls: "text-[14px]", sample: "Pick the date and time participants can start signing up." },
   { role: "small", spec: "Inter 13 / 400–500", cls: "text-[13px]", sample: "Registration isn’t open yet" },
   { role: "label", spec: "Inter 12 / 500 · uppercase · +0.08em", cls: "text-[12px] font-medium uppercase tracking-[0.08em]", sample: "Recommended" },
   { role: "input", spec: "Inter 16 — stops iOS zoom", cls: "text-[16px] font-mono tracking-tight", sample: "sf-founders-bouldering" },
+];
+
+// only icons the Final page actually renders, grouped by where they appear
+const ICON_SETS: [string, string[]][] = [
+  ["Navigation", ["home", "user", "calendar", "users", "layers", "briefcase", "message", "dollar", "settings", "code", "collapse"]],
+  ["Header tools", ["search", "users", "dollar", "qr", "copy", "eye", "link", "pencil", "chevronDown"]],
+  ["Status", ["circleDashed", "checkCircle", "eyeOff", "mail", "trophy"]],
+  ["Timeline & actions", ["check", "lock", "rocket", "megaphone", "flag", "image", "chevron", "sparkle"]],
 ];
 
 export function DesignSystem() {
@@ -185,7 +193,7 @@ export function DesignSystem() {
               <div className="mt-2 flex justify-between font-mono text-[12px]" style={{ color: B.muted }}>
                 <span>35° coral</span><span>320° pink</span><span>285° violet</span><span>235° blue</span>
               </div>
-              <p className="mt-3 text-[13px]" style={{ color: B.muted }}>Max two per screen: poster card, progress fill, AI button border, finish flag. Never on text or regular buttons.</p>
+              <p className="mt-3 text-[13px]" style={{ color: B.muted }}>Max two per screen: the event card and the AI button border. Never on text, buttons or progress.</p>
             </div>
           </div>
         </Frame>
@@ -232,7 +240,7 @@ export function DesignSystem() {
           </div>
         </Frame>
 
-        <Frame title="02 Typography" note="Inter for everything · Instrument Serif on the poster card only · weights 400 / 500 / 600 / 700">
+        <Frame title="02 Typography" note="Inter for everything · Instrument Serif on the event card title only · weights 400 / 500 / 600 / 700">
           <div className="divide-y" style={{ borderColor: B.line }}>
             {TYPE.map((t) => (
               <div key={t.role} className="grid gap-2 py-4 first:pt-0 last:pb-0 md:grid-cols-[180px_minmax(0,1fr)] md:items-baseline md:gap-6" style={{ borderColor: B.line }}>
@@ -307,22 +315,67 @@ export function DesignSystem() {
               <p className="mt-3 text-[12px]" style={{ color: B.muted }}>Status icons are a family: dashed circle = not live, checked circle = live. The pencil is only ever “edit”.</p>
             </div>
             <div className="lg:col-span-2">
+              <H>Overview</H>
+              <div className="grid gap-3 md:grid-cols-[minmax(0,1.45fr)_minmax(0,3fr)]">
+                <div className="flex flex-col justify-between gap-5 rounded-xl px-6 py-5 text-white" style={{ backgroundImage: B.gradientDiag }}>
+                  <span className="font-serif text-[30px] leading-[1.02]">Startup Founders Bouldering Meetup</span>
+                  <span className="flex items-end justify-between gap-3">
+                    <span className="text-[13px] leading-snug text-white/85"><span className="block">Friday, Nov 6, 2026</span><span className="block">San Francisco, CA</span></span>
+                    <span className="shrink-0 rounded-full bg-white/20 px-2.5 py-1 text-[13px] font-semibold leading-none">23 days to go</span>
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 rounded-xl bg-white" style={{ boxShadow: `inset 0 0 0 1px ${B.line}` }}>
+                  {[["Participants", "0", "No registrations yet", false], ["Required setup", "4/5", "1 step before publishing", true], ["Registration", "Closed", "Window not set", false]].map(([l, v, d, bar], i) => (
+                    <div key={l as string} className="px-5 py-5" style={i ? { borderLeft: `1px solid ${B.line}` } : undefined}>
+                      <p className="text-[12px] font-medium uppercase tracking-[0.08em]" style={{ color: B.muted }}>{l}</p>
+                      <p className="mt-3 text-[28px] font-semibold leading-7 tracking-[-0.015em] tabular-nums">{v}</p>
+                      {bar && <div className="mt-3 h-1 overflow-hidden rounded-full" style={{ backgroundColor: "oklch(0.2 0.015 285 / 0.07)" }}><div className="h-full w-4/5 rounded-full" style={{ backgroundColor: B.accent }} /></div>}
+                      <p className="mt-2.5 text-[13px]" style={{ color: B.muted }}>{d}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <p className="mt-3 text-[12px]" style={{ color: B.muted }}>The event card opens Preview. Label → value → one line in every fact; the setup bar is the only progress bar on the page.</p>
+            </div>
+            <div className="lg:col-span-2">
               <H>Checklist rows</H>
-              <div className="overflow-hidden rounded-xl" style={{ boxShadow: `inset 0 0 0 1px ${B.line}` }}>
+              <div className="overflow-hidden rounded-xl bg-white" style={{ boxShadow: `inset 0 0 0 1px ${B.line}` }}>
                 <div className="flex items-center gap-3 px-4 py-3.5" style={{ backgroundColor: B.accentTint }}>
                   <span className="size-5 shrink-0 rounded-full border-2" style={{ borderColor: B.accent }} />
-                  <span className="flex-1"><span className="block text-[14px] font-semibold">Pending required step</span><span className="block text-[13px]" style={{ color: B.muted }}>Leads with its action</span></span>
+                  <span className="flex-1"><span className="block text-[14px] font-semibold">Pending required step</span><span className="block text-[13px]" style={{ color: B.muted }}>The one tinted row; leads with its action</span></span>
                   <span className="inline-flex h-9 items-center rounded-lg px-3.5 text-[14px] font-semibold text-white" style={{ backgroundColor: B.accentStrong }}>Set up</span>
                 </div>
-                <div className="flex items-center gap-3 px-4 py-2.5 text-[14px]" style={{ borderTop: `1px solid ${B.line}` }}>
-                  <span style={{ color: B.muted }}><Icon n="check" /></span><span className="flex-1" style={{ color: B.muted }}>Done step — quiet: thin check, no fill, no green</span><span className="text-[13px]" style={{ color: B.faint }}>Done</span>
+                <div className="flex items-center gap-3 px-4 py-3" style={{ borderTop: `1px solid ${B.line}` }}>
+                  <span className="flex size-4 shrink-0 items-center justify-center rounded-[4px]" style={{ backgroundColor: "oklch(0.95 0.004 285)", boxShadow: "inset 0 0 0 1.5px oklch(0.86 0.006 285)", color: "oklch(0.55 0.012 285)" }}><Icon n="check" className="size-3" /></span>
+                  <span className="flex-1"><span className="block text-[14px] line-through" style={{ color: B.muted }}>Done step</span><span className="block text-[13px]" style={{ color: B.muted }}>Movemint’s completed style: grey box, struck title, description kept</span></span>
                 </div>
                 <div className="flex items-center gap-3 px-4 py-3" style={{ borderTop: `1px solid ${B.line}` }}>
-                  <span className="flex size-8 items-center justify-center rounded-lg" style={{ backgroundColor: B.surface, color: B.muted }}><Icon n="camera" /></span>
-                  <span className="flex-1"><span className="block text-[14px] font-medium">Optional task</span><span className="block text-[13px]" style={{ color: B.muted }}>No status text — “Not applicable” is banned</span></span>
+                  <span className="size-4 shrink-0 rounded-[4px] bg-white" style={{ boxShadow: "inset 0 0 0 1.5px oklch(0.83 0.008 285)" }} />
+                  <span className="flex-1"><span className="block text-[14px] font-medium">Optional task</span><span className="block truncate text-[13px]" style={{ color: B.muted }}>Tick it yourself; a ticked task glides to the end of its list</span></span>
                   <span style={{ color: B.faint }}><Icon n="chevron" /></span>
                 </div>
               </div>
+            </div>
+            <div>
+              <H>Timeline markers</H>
+              <div className="flex flex-wrap items-center gap-5">
+                {([["done", "check", { backgroundColor: "oklch(0.62 0.01 285)", color: "white" }], ["now", "circleDashed", { backgroundColor: "white", color: B.accentStrong, boxShadow: `inset 0 0 0 1.5px ${B.accent}` }], ["gate", "lock", { backgroundColor: "white", color: B.ink, boxShadow: `inset 0 0 0 1.5px ${B.ink}` }], ["optional", "megaphone", { backgroundColor: "white", color: B.muted, boxShadow: `inset 0 0 0 1.5px ${B.faint}` }]] as const).map(([k, ic, st]) => (
+                  <span key={k} className="flex flex-col items-center gap-1.5 text-[12px]" style={{ color: B.muted }}>
+                    <span className="flex size-7 items-center justify-center rounded-full" style={st}><Icon n={ic} className="size-3.5" /></span>{k}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-[12px]" style={{ color: B.muted }}>One family: 28px, 1.5px stroke; only the color changes. Solid rail to Publish, dashed after.</p>
+            </div>
+            <div>
+              <H>Sticky context bar</H>
+              <div className="flex h-12 items-center gap-3 rounded-xl bg-white px-4" style={{ boxShadow: `0 0 0 1px ${B.line}, 0 8px 20px -12px oklch(0.2 0.015 285 / 0.3)` }}>
+                <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundImage: B.gradientDiag }} />
+                <span className="min-w-0 truncate text-[14px] font-medium">Startup Founders Bouldering Meetup</span>
+                <span className="shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-medium" style={{ backgroundColor: B.surface, boxShadow: `inset 0 0 0 1px ${B.line}` }}>Draft</span>
+                <span className="ml-auto shrink-0 text-[14px] font-medium">23 days to go</span>
+              </div>
+              <p className="mt-3 text-[12px]" style={{ color: B.muted }}>Appears once the overview scrolls away. The action (Set up / Publish / Copy link) joins only while its own line is off screen.</p>
             </div>
           </div>
         </Frame>
@@ -333,7 +386,9 @@ export function DesignSystem() {
               {[
                 ["Enter / UI", "cubic-bezier(0.23, 1, 0.32, 1)", "menus, tooltips 120–150ms · inline editors 200ms"],
                 ["Mobile nav drawer", "cubic-bezier(0.32, 0.72, 0, 1)", "260ms"],
-                ["Celebrate", "cubic-bezier(0.34, 1.4, 0.64, 1)", "step done, LIVE stamp only"],
+                ["Celebrate", "cubic-bezier(0.34, 1.4, 0.64, 1)", "a check landing, LIVE stamp only"],
+                ["Reorder", "cubic-bezier(0.23, 1, 0.32, 1)", "ticked task glides to the end · 260ms (FLIP)"],
+                ["Sticky bar", "cubic-bezier(0.23, 1, 0.32, 1)", "fade + 6px drop · 200ms · fade only when reduced"],
                 ["Ambient", "linear / ease-out loops", "AI border 6s, current-step pulse 1.8s"],
               ].map(([k, v, u]) => (
                 <div key={k} className="grid gap-0.5 sm:grid-cols-[130px_minmax(0,1fr)]">
@@ -343,12 +398,19 @@ export function DesignSystem() {
               ))}
             </dl>
           </Frame>
-          <Frame title="07 Icons" note="1.75 stroke · 16px in UI · 24px grid">
-            <div className="grid grid-cols-6 gap-2 sm:grid-cols-8">
-              {["search", "users", "dollar", "qr", "copy", "eye", "link", "pencil", "checkCircle", "circleDashed", "eyeOff", "mail", "trophy", "rocket", "flag", "calendar", "pin", "camera", "megaphone", "map", "ticket", "tag", "sparkle", "check"].map((n) => (
-                <Tip key={n} label={n}>
-                  <span tabIndex={0} className="flex aspect-square w-full items-center justify-center rounded-lg" style={{ backgroundColor: B.surface, color: B.ink }}><Icon n={n} className="size-5" /></span>
-                </Tip>
+          <Frame title="07 Icons" note="every icon on the Final page · 1.75 stroke · 16px in UI · 24px grid">
+            <div className="grid gap-4">
+              {ICON_SETS.map(([group, names]) => (
+                <div key={group}>
+                  <p className="mb-1.5 text-[12px]" style={{ color: B.muted }}>{group}</p>
+                  <div className="grid grid-cols-6 gap-2 sm:grid-cols-8">
+                    {names.map((n) => (
+                      <Tip key={n} label={n}>
+                        <span tabIndex={0} className="flex aspect-square w-full items-center justify-center rounded-lg" style={{ backgroundColor: B.surface, color: B.ink }}><Icon n={n} className="size-5" /></span>
+                      </Tip>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </Frame>

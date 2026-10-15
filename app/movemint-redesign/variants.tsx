@@ -44,7 +44,7 @@ export function RequiredList({ flow, quiet = false }: { flow: Flow; quiet?: bool
   const open = !allDone || (override ?? flow.stage !== "live");
   const rows = REQUIRED.map((r) => ({ ...r, done: r.done || allDone }));
   return (
-    <div className={`overflow-hidden rounded-xl ${quiet ? "bg-white" : ""}`} style={quiet ? undefined : { boxShadow: `inset 0 0 0 1px ${B.line}` }}>
+    <div className="overflow-hidden rounded-xl bg-white" style={{ boxShadow: `inset 0 0 0 1px ${B.line}` }}>
       {allDone && (
         <button
           type="button"

@@ -4,9 +4,6 @@ import { cloneElement, useEffect, useId, useRef, useState } from "react";
 // Movemint organizer chrome (brand tokens) + real data, pre-publish state: 4 of 5 required steps done.
 
 // Brand tokens: Movemint red for shapes, raspberry for anything with text, cool neutrals tinted toward the logo gradient's violet.
-// Final: a soft grey canvas so white cards separate by surface, not by outline (Luma)
-export const CANVAS = "oklch(0.968 0.003 285)";
-
 export const B = {
   accent: "oklch(0.66 0.19 5)", // light raspberry #ec5482 — shapes without text (rings, pulse, progress); 3.43:1 vs white
   accentStrong: "oklch(0.54 0.18 5)", // raspberry #bd3061: anything carrying text — filled buttons (white text 5.59:1) and red-role text
@@ -215,7 +212,7 @@ function Nav({ compact = false }: { compact?: boolean }) {
 }
 
 // Desktop: full sidebar. Tablet (md–lg): icon rail. Phone: ☰ opens a drawer.
-export function Shell({ children, pill, url, title = EVENT.name, canvas = false }: { children: React.ReactNode; pill: React.ReactNode; url: React.ReactNode; title?: string; canvas?: boolean }) {
+export function Shell({ children, pill, url, title = EVENT.name }: { children: React.ReactNode; pill: React.ReactNode; url: React.ReactNode; title?: string }) {
   const [menu, setMenu] = useState(false);
   // desktop sidebar can be condensed to the icon rail, like Movemint's own ←|→ toggle
   const [rail, setRail] = useState(false);
@@ -279,14 +276,15 @@ export function Shell({ children, pill, url, title = EVENT.name, canvas = false 
             </div>
           </div>
         )}
-        <main className="min-w-0 flex-1 px-4 pb-32 pt-5 sm:px-6 lg:px-10 lg:pt-6" style={canvas ? { backgroundColor: CANVAS } : undefined}>
+        <main className="min-w-0 flex-1 px-4 pb-32 pt-5 sm:px-6 lg:px-10 lg:pt-6">
           <p className="flex items-center gap-1 text-[13px]" style={{ color: B.muted }}><Icon n="back" className="size-3.5" /> All events</p>
           {/* title + status + URL on the left, quick actions on the right (where the original kept its icons); they wrap under it when narrow */}
           <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
             <div className="min-w-0 lg:flex-1">
-              <div className="flex items-start gap-3">
-                <h1 className="line-clamp-2 min-w-0 text-[24px] font-bold leading-tight tracking-[-0.015em] [text-wrap:balance] sm:text-[30px]" title={title}>{title}</h1>
-                <div className="shrink-0 pt-0.5 sm:pt-1">{pill}</div>
+              {/* the status follows the last word of the title, however many lines it wraps to */}
+              <div>
+                <h1 className="inline text-[24px] font-bold leading-tight tracking-[-0.015em] sm:text-[30px]">{title}</h1>
+                <span className="ml-3 inline-block align-[0.3em] sm:align-[0.4em]">{pill}</span>
               </div>
               {url}
             </div>

@@ -8,9 +8,9 @@ import { Shell } from "./shell";
 import { Combined, StartLine, Poster, Timeline } from "./variants";
 import { StatusMenu, EventUrl } from "./flow";
 import { DesignSystem } from "./ds";
-import { Scenarios } from "./scenarios";
+import { Scenarios, LivePage } from "./scenarios";
 import { Process } from "./process";
-import { Banner, Stages, Board } from "./layouts";
+import { Stages, Board } from "./layouts";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -72,27 +72,29 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ [
   const allowed = process.env.NODE_ENV === "development" || (!!secret && key === secret);
   if (!allowed) notFound();
 
-  const wrap = (el: React.ReactNode, k: string, canvas = false) => (
+  const wrap = (el: React.ReactNode, k: string) => (
     <div key={k} className={`mm-proto ${inter.variable}`}>
-      <Shell pill={<StatusMenu />} url={<EventUrl />} canvas={canvas}>{el}</Shell>
+      <Shell pill={<StatusMenu />} url={<EventUrl />}>{el}</Shell>
     </div>
   );
   return (
     <>
       <style>{CSS}</style>
       <Harness
-        names={["Final", "Combined", "Start line", "Poster", "Timeline", "Stages", "Board", "Design system", "Scenarios", "Design process"]}
+        names={["Final Design", "Design system", "Scenarios", "Design process", "Combined", "Start line", "Poster", "Timeline", "Stages", "Board"]}
+        visible={4}
         variants={[
-          wrap(<Banner />, "0", true),
-          wrap(<Combined />, "1"),
-          wrap(<StartLine />, "2"),
-          wrap(<Poster />, "3"),
-          wrap(<Timeline />, "4"),
-          wrap(<Stages />, "5"),
-          wrap(<Board />, "6"),
-          <div key="7" className={inter.variable}><DesignSystem /></div>,
-          <div key="8" className={inter.variable}><Scenarios /></div>,
-          <div key="9" className={inter.variable}><Process /></div>,
+          <div key="0" className={`mm-proto ${inter.variable}`}><LivePage /></div>,
+          <div key="1" className={inter.variable}><DesignSystem /></div>,
+          <div key="2" className={inter.variable}><Scenarios /></div>,
+          <div key="3" className={inter.variable}><Process /></div>,
+          // iterations: off the bar, reached from the Design process page (?v=5…10)
+          wrap(<Combined />, "4"),
+          wrap(<StartLine />, "5"),
+          wrap(<Poster />, "6"),
+          wrap(<Timeline />, "7"),
+          wrap(<Stages />, "8"),
+          wrap(<Board />, "9"),
         ]}
       />
     </>

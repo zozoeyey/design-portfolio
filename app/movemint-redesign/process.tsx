@@ -63,8 +63,8 @@ function Stamp({ n }: { n: number }) {
 // marker that ties a finding to its spot on the screenshot
 function Marker({ n, className = "" }: { n: number; className?: string }) {
   return (
-    <span className={`grid size-6 shrink-0 place-items-center rounded-full text-[12px] font-semibold tabular-nums text-white ${className}`} style={{ backgroundColor: RED }}>
-      {n}
+    <span className={`inline-flex h-5 shrink-0 items-center rounded-[5px] px-1.5 text-[11px] font-semibold tabular-nums text-white ${className}`} style={{ backgroundColor: RED }}>
+      {String(n).padStart(2, "0")}
     </span>
   );
 }
@@ -79,11 +79,11 @@ const FINDINGS = [
     box: { left: 19.5, top: 60.5, width: 79, height: 12.5 },
   },
   {
-    title: "Low visibility of preparation progress",
-    body: "The checklist completion count, “6 of 23 tasks complete,” appears as small secondary text at the far right of the section heading. The existing progress information lacks visual emphasis and is not immediately connected to the list of tasks.",
-    opp: "Make the existing completion count more visible through stronger grouping and a visual progress indicator.",
-    img: { src: "/deck/mm-audit-2.jpg", w: 1900, h: 180, alt: "Current Event Checklist heading with “6 of 23 tasks complete” in small grey text at the far right" },
-    box: { left: 87.5, top: 74, width: 11, height: 4 },
+    title: "The checklist is one long list with no hierarchy",
+    body: "All 23 tasks sit in a single flat list. Required setup and optional recommendations look the same, nothing says which task to do next, and progress is a small “6 of 23 tasks complete” at the far right of the heading. Organizers have to read every row to find what matters now.",
+    opp: "Group tasks by when they matter, separate required from optional, and make the next required step the one thing that stands out.",
+    img: { src: "/deck/mm-audit-2.jpg", w: 1900, h: 420, alt: "Current Event Checklist: a flat list under Required and Recommended labels, with “6 of 23 tasks complete” in small grey text at the far right" },
+    box: { left: 19.5, top: 72.5, width: 79, height: 27 },
   },
   {
     title: "Dense navigation and inconsistent visual emphasis",
@@ -102,10 +102,9 @@ const COMPETITORS = [
     body: "Luma uses a clean, restrained interface with clearly separated event details and prominent management actions. Its approach to spacing, card groupings, and typography makes event information easy to scan without overwhelming the user.",
     take: "Use whitespace and visual grouping to create clarity.",
     sources: [["Luma Help Center", "https://help.luma.com/p/event-insights"]],
-    layout: "pb-10 pr-10 sm:pb-16 sm:pr-16",
+    layout: "",
     shots: [
       { src: "/deck/mm-comp-luma-0.jpg", w: 1400, h: 1299, alt: "Luma's manage-event Overview: three action cards, then the event preview card beside When & Where, with a Location Missing warning", cls: "pc-pin" },
-      { src: "/deck/mm-comp-luma-1.jpg", w: 1200, h: 1127, alt: "Luma's Insights tab: page views chart and grouped stats with large numbers", cls: "pc-pin absolute bottom-0 right-0 w-[36%]" },
     ],
   },
   {
@@ -115,13 +114,11 @@ const COMPETITORS = [
     take: "Establish a clear visual distinction between summary metrics and actionable tasks.",
     sources: [
       ["Eventbrite official product page", "https://www.eventbrite.com/features/analytics/"],
-      ["Eventbrite Organizer app screenshots", "https://play.google.com/store/apps/details?id=com.eventbrite.organizer"],
       ["organizer dashboard (own test event)", "https://www.eventbrite.com/organizations/home"],
     ],
-    layout: "pb-10 pr-10 sm:pb-16 sm:pr-16",
+    layout: "",
     shots: [
       { src: "/deck/mm-comp-eb-0.jpg", w: 1400, h: 739, alt: "Eventbrite's event dashboard: a compact event card (name, date, Draft status, Preview) pinned in the left column above a Steps list — Build event page, Add tickets, Publish", cls: "pc-pin" },
-      { src: "/deck/mm-comp-eb-1.jpg", w: 820, h: 1188, alt: "Eventbrite Organizer app: Gross Sold $73,650 as a large headline number above sales by ticket type", cls: "pc-pin absolute bottom-0 right-0 w-[26%]" },
     ],
   },
 ];
@@ -202,16 +199,16 @@ const ROUND1: [string, string, string, number][] = [
   ["V4 · Compact table", "Dense, scannable", "/deck/mm-iter1-v4.jpg", 1250],
 ];
 const ROUND3: [string, string, string, number, number, boolean][] = [
-  ["Combined", "Poster column + timeline (round 2)", "/deck/mm-iter3-combined.jpg", 1250, 2, false],
+  ["Combined", "Poster column + timeline (round 2)", "/deck/mm-iter3-combined.jpg", 1250, 5, false],
   ["Banner", "Compact event strip, full-width timeline", "/deck/mm-iter3-banner.jpg", 1250, 1, true],
-  ["Stages", "One stage of tasks at a time", "/deck/mm-iter3-stages.jpg", 1250, 6, false],
-  ["Board", "The lifecycle as columns", "/deck/mm-iter3-board.jpg", 1250, 7, false],
+  ["Stages", "One stage of tasks at a time", "/deck/mm-iter3-stages.jpg", 1250, 9, false],
+  ["Board", "The lifecycle as columns", "/deck/mm-iter3-board.jpg", 1250, 10, false],
 ];
 const ROUND2 = [
-  { name: "Start Line", lead: "Progress as a journey", body: "Used a race-inspired progress visualization to connect event preparation with Movemint’s athletic identity.", src: "/deck/mm-iter2-startline.jpg", h: 1110, v: 3, final: false },
-  { name: "Poster", lead: "Event identity & action", body: "Introduced an editorial, poster-inspired layout to strengthen event context and emphasize the next required action.", src: "/deck/mm-iter2-poster.jpg", h: 1250, v: 4, final: false },
-  { name: "Timeline", lead: "Structured preparation", body: "Reorganized existing checklist tasks around the event lifecycle to improve hierarchy and scannability.", src: "/deck/mm-iter2-timeline.jpg", h: 1250, v: 5, final: false },
-  { name: "Combined", lead: "Expression meets clarity", body: "Integrated the poster’s visual identity with the timeline’s structured task organization, supported by a concise operational overview.", src: "/deck/mm-iter2-combined.jpg", h: 1250, v: 2, final: true },
+  { name: "Start Line", lead: "Progress as a journey", body: "Used a race-inspired progress visualization to connect event preparation with Movemint’s athletic identity.", src: "/deck/mm-iter2-startline.jpg", h: 1110, v: 6, final: false },
+  { name: "Poster", lead: "Event identity & action", body: "Introduced an editorial, poster-inspired layout to strengthen event context and emphasize the next required action.", src: "/deck/mm-iter2-poster.jpg", h: 1250, v: 7, final: false },
+  { name: "Timeline", lead: "Structured preparation", body: "Reorganized existing checklist tasks around the event lifecycle to improve hierarchy and scannability.", src: "/deck/mm-iter2-timeline.jpg", h: 1250, v: 8, final: false },
+  { name: "Combined", lead: "Expression meets clarity", body: "Integrated the poster’s visual identity with the timeline’s structured task organization, supported by a concise operational overview.", src: "/deck/mm-iter2-combined.jpg", h: 1250, v: 5, final: true },
 ];
 
 const CONTENTS: ContentsSection[] = [
@@ -262,8 +259,8 @@ export function Process() {
       <div className="mx-auto grid max-w-[1360px] gap-14">
         {/* ── title + brief ── */}
         <header id="brief" className="scroll-mt-24">
-          <p className="text-[13px] font-medium" style={{ color: MUTED }}>Visual Design Challenge · Organizer Dashboard · October 2026</p>
-          <h1 className="mt-2 text-[34px] font-bold leading-[1.1] tracking-[-0.02em] [text-wrap:balance] sm:text-[44px]">Movemint — Event Insights Redesign</h1>
+          <p className="text-[12px] font-medium uppercase tracking-[0.08em]" style={{ color: MUTED }}>Visual Design Challenge · Organizer Dashboard · October 2026</p>
+          <h1 className="mt-1 font-serif text-[38px] leading-none [text-wrap:balance]">Movemint — Event Insights Redesign</h1>
           <div className="mt-8 grid max-w-[760px] gap-5 sm:grid-cols-2">
             <Sticky tone="yellow" title="Project goal" className="lg:col-span-1">
               Improve the visual clarity, hierarchy, and consistency of Movemint’s Event Insights page while preserving its existing functionality.
@@ -351,12 +348,12 @@ export function Process() {
                 {FINDINGS.map((f, i) => (
                   <li key={f.title} id={`finding-${i + 1}`} className="scroll-mt-24" onMouseEnter={() => setHot(i)} onMouseLeave={() => setHot(null)}>
                     <p className="mb-3 flex items-center gap-3 text-[15px] font-semibold">
-                      <Marker n={i + 1} /> Finding {String(i + 1).padStart(2, "0")}
+                      <Marker n={i + 1} /> {f.title}
                     </p>
                     <Shot src={f.img.src} alt={f.img.alt} w={f.img.w} h={f.img.h} />
                     {/* stickies pinned under the screenshot */}
                     <div className="relative mt-5 grid gap-4 px-2 sm:px-6 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-start">
-                      <Sticky tone="orange" title={f.title}>{f.body}</Sticky>
+                      <Sticky tone="orange">{f.body}</Sticky>
                       <Sticky tone="green" className="md:mt-8">
                         <b className="font-semibold" style={{ color: INK }}>Design opportunity: </b>
                         {f.opp}
@@ -413,14 +410,6 @@ export function Process() {
                   </p>
                 </article>
               ))}
-            </div>
-            <div className="mt-12">
-              <Sticky tone="yellow" className="mx-auto max-w-[760px]">
-                <span className="text-[17px] leading-[1.5]">
-                  <b className="font-semibold" style={{ color: INK }}>Competitive takeaway: </b>
-                  Combine Luma’s visual simplicity with Eventbrite’s structured information hierarchy. Apply these principles to Movemint’s existing components and branding rather than directly copying either platform.
-                </span>
-              </Sticky>
             </div>
           </div>
 
@@ -525,26 +514,19 @@ export function Process() {
           <div className="mt-14 border-t pt-10" style={{ borderColor: "oklch(0.2 0.015 285 / 0.1)" }}>
             <h2 id="principles" className="scroll-mt-24 text-[20px] font-semibold tracking-[-0.01em]">Step 5 — Design principles</h2>
             <p className="mt-2 max-w-[68ch] text-[15px]" style={{ color: MUTED }}>To align with PMs and stakeholders, I usually define a set of high-level design principles to guide decisions and evaluate trade-offs throughout the design process.</p>
-            <ol className="mt-10 grid gap-14">
+            {/* three columns, one per principle: the principle on top, how it shows up in the design underneath */}
+            <ol className="mt-8 grid gap-5 md:grid-cols-3">
               {PRINCIPLES.map((x, i) => (
-                <li key={x.title} className="grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-center lg:gap-10">
-                  <div className="grid gap-3">
-                    <Sticky tone="yellow">
-                      <span className="mb-2 flex items-center gap-2.5 text-[17px] font-semibold leading-snug" style={{ color: INK }}>
-                        <Stamp n={i + 1} /> {x.title}
-                      </span>
-                      {x.body}
-                    </Sticky>
-                    <Sticky tone="green" className="sm:ml-8">
-                      <b className="font-semibold" style={{ color: INK }}>Application: </b>
-                      {x.app}
-                    </Sticky>
+                <li key={x.title} className="flex flex-col overflow-hidden rounded-[6px] shadow-[0_1px_2px_oklch(0.2_0.015_285/0.08),0_8px_18px_-10px_oklch(0.2_0.015_285/0.35)]">
+                  <div className="flex-1 p-5" style={{ backgroundColor: "oklch(0.95 0.09 95)" }}>
+                    <Stamp n={i + 1} />
+                    <p className="mt-2 text-[17px] font-semibold leading-snug [text-wrap:balance]" style={{ color: INK }}>{x.title}</p>
+                    <p className="mt-2 text-[14px] leading-[1.5] [text-wrap:pretty]" style={{ color: "oklch(0.3 0.015 285)" }}>{x.body}</p>
                   </div>
-                  <figure className={`pc-pin overflow-hidden rounded-lg bg-white ${x.img.frame}`} style={{ boxShadow: "0 0 0 1px oklch(0.2 0.015 285 / 0.1), 0 10px 24px -14px oklch(0.2 0.015 285 / 0.35)" }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={x.img.src} alt={x.img.alt} width={x.img.w} height={x.img.h} className="block h-full w-full object-cover object-top" />
-                    <figcaption className="sr-only">From the redesign</figcaption>
-                  </figure>
+                  <div className="p-5" style={{ backgroundColor: "oklch(0.93 0.07 155)" }}>
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.08em]" style={{ color: "oklch(0.38 0.08 155)" }}>In the design</p>
+                    <p className="mt-1.5 text-[14px] leading-[1.5] [text-wrap:pretty]" style={{ color: "oklch(0.3 0.015 285)" }}>{x.app}</p>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -573,7 +555,7 @@ export function Process() {
             <div className="grid gap-3">
               <Sticky tone="yellow">Once the event is live, status reads Live in one place, the completed setup collapses, and the action at the end of the facts strip becomes Copy event link.</Sticky>
               <div className="mt-2 grid gap-2 sm:ml-6">
-                {([["Try the interactive prototype", 1], ["Walk through the scenarios", 9], ["See the design system", 8]] as const).map(([t, v]) => (
+                {([["Try the interactive prototype", 1], ["Walk through the scenarios", 3], ["See the design system", 2]] as const).map(([t, v]) => (
                   <a key={t} href={`?v=${v}`} onClick={(e) => { e.preventDefault(); go(v); }} className="inline-flex min-h-11 items-center justify-between gap-3 rounded-[10px] bg-white px-4 text-[14px] font-semibold transition-transform duration-150 active:scale-[0.98]" style={{ boxShadow: "inset 0 0 0 1px oklch(0.2 0.015 285 / 0.12)" }}>
                     {t} <span aria-hidden="true" style={{ color: MUTED }}>→</span>
                   </a>
@@ -614,7 +596,7 @@ export function Process() {
                     <Sticky tone={x.final ? "yellow" : "orange"}>
                       <span className="mb-2 flex flex-wrap items-center gap-2.5 text-[17px] font-semibold leading-snug" style={{ color: INK }}>
                         <Stamp n={i + 1} /> {x.name}
-                        {x.final && <span className="rounded-md px-2 py-0.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-white" style={{ backgroundColor: RED }}>Chosen</span>}
+                        {x.final && <span className="rounded-md px-2 py-0.5 text-[12px] font-medium" style={{ backgroundColor: "white", color: INK, boxShadow: "inset 0 0 0 1px oklch(0.2 0.015 285 / 0.15)" }}>Picked for round 3</span>}
                       </span>
                       <b className="font-semibold" style={{ color: INK }}>{x.lead}. </b>
                       {x.body}

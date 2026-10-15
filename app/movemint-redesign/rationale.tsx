@@ -24,100 +24,100 @@ function Shot({ src, alt, caption, tone }: { src: string; alt: string; caption: 
   );
 }
 
+// principle tags = the three design principles from Step 5
+const P1 = "01 Prioritize action over information";
+const P2 = "02 Make progress visible and meaningful";
+const P3 = "03 Balance brand expression with usability";
+
 const DECISIONS: { title: string; before: string; after: string; why: string; principle: string; media?: React.ReactNode }[] = [
   {
-    title: "One status, one place",
-    before: "“Draft” appeared three times: the pill next to the title, the green “Ready to publish” banner, and a Status card.",
-    after: "A single status menu next to the title, with Movemint’s five real statuses (Live, Draft, Unlisted, Landing Page, Past Event). The poster stamp mirrors it; nothing else repeats it.",
-    why: "Saying the same thing three times costs space and attention and adds no information. The banner also pushed the actual work below the fold.",
-    principle: "Hierarchy is subtraction",
+    title: "One status, in one place",
+    before: "“Draft” appeared three times: a pill next to the title, a green “Ready to publish” banner, and a Status card.",
+    after: "One status menu next to the title, with Movemint’s five real statuses (Live, Draft, Unlisted, Landing Page, Past Event). The banner and the Status card are gone; the event URL sits under the title with Copy and Edit URL.",
+    why: "Saying the same thing three times costs space and attention and adds nothing. The banner also pushed the actual work below the fold.",
+    principle: P1,
   },
   {
-    title: "One primary action — always the next step",
-    before: "Brand red on Create Event, the active nav item, the progress bar, Publish and the AI button, all at equal weight. Publish sat small inside a banner.",
-    after: "Only the action that moves the event forward is filled: Set up, then Publish. Before setup is done the left column says what’s left and links straight to it; after publishing it offers “Copy event link”.",
-    why: "When everything is red, nothing is primary. A large grey disabled button reads as broken; telling the organizer what’s left — with a link — is the shorter path.",
-    principle: "One primary action per view",
+    title: "One action, on the line it belongs to",
+    before: "Brand red on Create Event, the active nav, the progress bar, Publish and the AI button, all at equal weight. Publish sat small inside a banner.",
+    after: "Only the action that moves the event forward is filled, and it appears where its task is: Set up on the open setup step, then Publish on the Publish line, then Copy event link once live.",
+    why: "When everything is red, nothing is primary. Putting the button on its own step answers “what do I do next?” and “why?” in the same place.",
+    principle: P1,
   },
   {
     title: "The brand red, made legible",
-    before: "Movemint red #FF4A5D with white text and as text: 3.29:1, fails WCAG AA. A red progress bar read as an error. Pure greys everywhere.",
-    after: "Raspberry #bd3061 for anything with text (buttons 5.59:1, red text 5.59:1 on white, 5.00:1 on its tint). Light raspberry #ec5482 for shapes only (3.43:1, above the 3:1 non-text bar). Green means Live and nothing else. Neutrals tinted toward the logo’s violet.",
+    before: "Movemint red #FF4A5D with white text and as text: 3.29:1, fails WCAG AA. A red progress bar read as an error.",
+    after: "Raspberry #bd3061 for anything with text (buttons 5.59:1). Light raspberry #ec5482 for shapes only (3.43:1, above the 3:1 non-text bar). Green means Live and nothing else. Neutrals tinted toward the logo’s violet.",
     why: "Keeps Movemint’s red family while passing contrast. Giving each color one meaning makes the page readable at a glance.",
-    principle: "Restraint reads as intent · contrast is a floor",
+    principle: P3,
   },
   {
-    title: "Type with a voice",
-    before: "Inter only, seven ad-hoc sizes (12–30px). Stat values were barely larger than their labels.",
-    after: "Inter for every piece of UI — the event title included — on a nine-role scale; dashboard figures share one “stat” style (Inter 24/600, tabular). Instrument Serif, which echoes the wordmark, appears only on the poster card. The Movemint logo is their original wordmark image.",
-    why: "One family keeps the working UI calm and scannable; the serif is saved for the single brand moment, so it actually stands out.",
-    principle: "Restraint · every size from a scale",
+    title: "Type with one voice, one brand moment",
+    before: "Inter only, seven ad-hoc sizes (12–30px). Figures were barely larger than their labels.",
+    after: "Inter for every piece of UI on a fixed role scale; the three overview figures share one stat style (28/600, tabular). Instrument Serif, which echoes the wordmark, appears once — the event name on the event card.",
+    why: "One family keeps the working UI calm and scannable; saving the serif for a single moment is what makes it feel like the brand.",
+    principle: P3,
   },
   {
-    title: "The event as the hero",
-    before: "The page opened on settings: a banner and three grey boxes.",
-    after: "A poster card in the logo gradient: event name, when, where, and a countdown, with the status stamped on it. It stays in view while the checklist scrolls.",
-    why: "Organizers think in events, not settings. The countdown answers the question behind every task — how much time is left.",
-    principle: "Name things by the user’s mental model",
-  },
-  {
-    title: "Numbers that lead — and lead somewhere",
-    before: "Three grey cards; 16px values; only Participants had an affordance, a bare arrow.",
-    after: "One strip with three facts. Participants → “View all” (the way into the attendee list and analytics). Required setup → 4/5 plus the optional count. Registration → Open/Closed with its window and a “Set window / Edit” link.",
-    why: "Each figure answers a question and links to where you act on it. Participants is the entry point to attendee analytics, so it gets a labelled link, not a guessable arrow.",
-    principle: "Specific beats generic",
+    title: "An overview you read in one line",
+    before: "Three identical grey cards (Status, Participants, Date); 16px values; only Participants had an affordance, a bare arrow.",
+    after: "The event card — name in serif, date, place and a “23 days to go” chip — opens the attendee preview. Beside it, three facts in one card: Participants (View all), Required setup (4/5 with the page’s only progress bar), Registration (Open/Closed and its window).",
+    why: "The card is the event at a glance; each fact answers one question and links to where you act on it. Label → value → one line in every cell keeps it scannable.",
+    principle: P2,
   },
   {
     title: "The checklist as a timeline",
-    before: "23 identical bordered rows in two flat lists. “5 of 23 tasks complete” sat next to a separate “80%”.",
-    after: "Today (required setup) → Publish → Before race day → Race day → After — the “before, during, and after” the page’s own description already promised. One progress number and bar.",
-    why: "Tasks have a natural order in time; showing it tells organizers what matters now and what can wait. Two different percentages for one checklist were confusing.",
-    principle: "Structure over flat lists",
+    before: "One long list with no hierarchy: 23 rows under small Required / Recommended labels, with “6 of 23 tasks complete” at the far right.",
+    after: "Stages on a rail — Today (required setup) → Publish → Before race day → Race day → After — the “before, during, and after” the page’s own description promised. Solid rail up to Publish, dashed after; one marker family whose color says done, now, locked or optional.",
+    why: "Tasks have a natural order in time. Showing it tells organizers what matters now and what can wait, without reading all 23.",
+    principle: P2,
   },
   {
     title: "Required vs optional, impossible to miss",
-    before: "A small “Required” heading, then “Recommended”; every optional task said “Not applicable”.",
-    after: "Required steps carry an ink “Required · 4 of 5” tag; optional groups a grey “Optional · 1 of 18”. The rail is solid along the required path (setup → publish) and dashed after it.",
-    why: "Three signals — tag, count and line style — so it reads even at a glance. “Not applicable” was both vague and wrong for tasks the organizer simply hadn’t done.",
-    principle: "Never rely on a single cue",
+    before: "Required and optional rows looked the same; every optional task read “Not applicable”.",
+    after: "The one open required step is the only tinted row, with its Set up button. Publish shows a lock until setup is done. Optional stages say “Optional, any order”.",
+    why: "Several quiet signals — tint, lock, label, rail style — make the split readable at a glance without adding loud badges.",
+    principle: P1,
   },
   {
-    title: "Done steps get out of the way",
-    before: "Completed rows kept full weight, with strikethrough, a lock icon and “Completed” on every row.",
-    after: "A thin muted check, no strikethrough, no green. Once everything required is done the list collapses into one row (“All 5 required steps done”), automatically after publishing.",
-    why: "Finished work is history. Quiet done-states let the one open step stand out.",
-    principle: "Done should recede, not shout",
+    title: "Done looks like Movemint’s done",
+    before: "Done rows kept full weight, plus a lock icon and “Completed” on every row.",
+    after: "Movemint’s own completed style — grey checked box, muted struck-through title, description kept — without the lock and label. Once every required step is done, the list folds into one “All 5 required steps done” row.",
+    why: "Finished work is history. Reusing the product’s existing completed state keeps it familiar; folding it lets the next step lead.",
+    principle: P2,
   },
   {
-    title: "Optional tasks you can scan",
-    before: "18 full-width bordered rows, one per task.",
-    after: "Grouped by purpose — Get found, Registration, On the day, After the race — in a two-column grid, each with an icon, title and its one-line description, inside one container per group.",
-    why: "Grouping turns a long list into four short decisions; shared rows keep the grid tidy while every task keeps its explanation.",
-    principle: "Group with progressive structure",
+    title: "Optional tasks you can tick off",
+    before: "18 full-width bordered rows in one list.",
+    after: "Grouped by purpose and stage — Get found, Registration, On the day, After the race — as two-column lists with a title, one-line description and a checkbox. A ticked task glides to the end of its list.",
+    why: "Grouping turns one long list into short, browsable sets; letting organizers mark tasks themselves matches how the original worked.",
+    principle: P2,
   },
   {
-    title: "Hidden features made visible",
-    before: "A row of unlabeled icons; the pencil (“Edit event URL handle”) only explained itself on hover. An “Insights” sub-tab sat inside the Insights tab.",
-    after: "The event URL is shown under the title with Copy link and Edit URL; editing happens in place with live validation (Enter saves, Esc cancels). Every remaining icon keeps its feature and gets a designed tooltip. The sub-tab is “Overview”.",
-    why: "If a feature needs a hover to be discovered, most people never find it. Repeating the tab name made the navigation feel circular.",
-    principle: "Visible beats discoverable",
+    title: "Context that follows you down the page",
+    before: "Scroll past the top and the event, its status and the countdown are gone.",
+    after: "A slim sticky bar slides in once the overview scrolls away: event, status, date and days to go. It shows the next action only while that task’s own line is off screen.",
+    why: "Keeps “which event, where it stands” in view without giving it a permanent column — a persistent action earns its place only when the real one can’t be seen.",
+    principle: P1,
   },
 ];
 
 const KEPT = [
   "Every feature and every piece of data — no additions, no removals",
-  "Navigation: sidebar, event tabs, Checkout dashboard",
+  "Navigation: sidebar (now collapsible, as in the original), event tabs, Checkout dashboard",
   "All 23 checklist tasks and Movemint’s own copy",
   "Quick actions: search, participants, financials, QR code, duplicate, preview",
+  "Movemint’s completed-task style and its five statuses",
   "Movemint AI — restyled, same entry point",
 ];
 
 const REJECTED: [string, string][] = [
-  ["Refined / Launch panel / Hero layouts", "Cleaner, but generic SaaS — nothing about Movemint"],
-  ["Start line (setup drawn as a race course)", "Memorable, but only 7 checkpoints fit; optional tasks fell off the metaphor"],
-  ["Poster or Timeline alone", "Each had one strong idea; the combination keeps both"],
+  ["Refined / Progress-first / Split / Table (round 1)", "Cleaner, but generic SaaS — nothing about Movemint"],
+  ["Start line (setup drawn as a race course)", "Memorable, but optional tasks fell off the metaphor"],
+  ["Combined (poster column + timeline)", "Kept context in view, but the column squeezed every task"],
+  ["Stages and Board layouts", "Hid tasks behind tabs, or scrolled sideways and implied a fixed order"],
+  ["Grey canvas with borderless cards", "Flattened the page into competing surfaces"],
   ["Crimson, ink, rose, plum, burnt coral accents", "Off-brand, or buttons lost the brand color"],
-  ["Amber status pill", "Read as a generic, generated component"],
   ["Modals and side sheets", "Hide the page the decision is about"],
 ];
 
@@ -127,15 +127,15 @@ function Img({ src, alt, max = "max-w-[820px]" }: { src: string; alt: string; ma
 }
 function Steps() {
   return (
-    <div className="grid gap-3 sm:grid-cols-3">
+    <div className="grid gap-3">
       {[
-        ["/deck/mm-r-02a.jpg", "Before setup is done", "Says what’s left — and links to it"],
-        ["/deck/mm-r-02b.jpg", "Ready", "The one filled button"],
-        ["/deck/mm-r-02c.jpg", "Live", "Next step: share the link"],
+        ["/deck/mm-r-02a.jpg", "Setup", "the open step carries Set up"],
+        ["/deck/mm-r-02b.jpg", "Ready", "Publish appears on the Publish line"],
+        ["/deck/mm-r-02c.jpg", "Live", "the same line becomes Copy event link"],
       ].map(([src, k, v]) => (
-        <figure key={k}>
+        <figure key={k} className="grid gap-1.5 sm:grid-cols-[120px_minmax(0,1fr)] sm:items-center sm:gap-4">
+          <figcaption className="text-[13px]"><span className="font-semibold">{k}</span> <span className="block" style={muted}>{v}</span></figcaption>
           <div className="overflow-hidden rounded-lg bg-white"><Img src={src} alt={`${k}: ${v}`} /></div>
-          <figcaption className="mt-2 text-[13px]"><span className="font-semibold">{k}</span> <span style={muted}>· {v}</span></figcaption>
         </figure>
       ))}
     </div>
@@ -168,30 +168,28 @@ function TypeExample() {
       <div className="grid gap-3">
         <p className="text-[12px] font-medium uppercase tracking-[0.08em]" style={muted}>Inter — the UI</p>
         <p className="text-[30px] font-bold leading-tight tracking-[-0.015em]">Startup Founders Bouldering Meetup</p>
-        <p className="flex items-baseline gap-4"><span className="text-[24px] font-semibold tabular-nums tracking-[-0.01em]">4<span style={{ color: B.faint }}>/5</span></span><span className="text-[18px] font-semibold">Event checklist</span></p>
+        <p className="flex items-baseline gap-4"><span className="text-[28px] font-semibold tabular-nums tracking-[-0.015em]">4<span style={muted}>/5</span></span><span className="text-[18px] font-semibold">Event checklist</span></p>
         <p className="text-[14px]" style={muted}>Pick the date and time participants can start signing up.</p>
       </div>
-      <div className="grid content-start gap-3 rounded-lg p-4 text-white" style={{ backgroundImage: B.gradientDiag }}>
-        <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/70">Serif — poster only</p>
-        <img src="/deck/movemint-logo.png" alt="Movemint" className="h-[18px] w-auto self-start brightness-0 invert" />
-        <p className="font-serif text-[38px] leading-[0.98]">Startup Founders Bouldering Meetup</p>
+      <div className="flex flex-col justify-between gap-5 rounded-lg px-5 py-4 text-white" style={{ backgroundImage: B.gradientDiag }}>
+        <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/70">Serif — the event card only</p>
+        <p className="font-serif text-[30px] leading-[1.02]">Startup Founders Bouldering Meetup</p>
       </div>
     </div>
   );
 }
 
 const MEDIA: Record<number, React.ReactNode> = {
-  0: <Img src="/deck/mm-r-01.jpg" alt="Status menu next to the title with Movemint’s five statuses" max="max-w-[720px]" />,
+  0: <Img src="/deck/mm-r-01.jpg" alt="Title with the status menu, the event URL with Copy and Edit URL, and the quick-action tools" />,
   1: <Steps />,
   2: <ColorExample />,
   3: <TypeExample />,
-  4: <Img src="/deck/mm-r-05.jpg" alt="Poster card in the logo gradient" max="max-w-[300px]" />,
-  5: <Img src="/deck/mm-r-06.jpg" alt="Stat strip: Participants with View all, Required setup, Registration with Set window" />,
-  6: <Img src="/deck/mm-r-07.jpg" alt="The checklist as a timeline from today to after the race" max="max-w-[620px]" />,
-  7: <Img src="/deck/mm-r-08.jpg" alt="Required and Optional tags with a solid then dashed rail" max="max-w-[600px]" />,
-  8: <Img src="/deck/mm-r-09.jpg" alt="Completed required steps with quiet checks, collapsible" max="max-w-[720px]" />,
-  9: <Img src="/deck/mm-r-10.jpg" alt="Optional tasks grouped in a two-column grid with descriptions" max="max-w-[720px]" />,
-  10: <Img src="/deck/mm-r-11.jpg" alt="Event URL under the title with Copy and Edit URL, and a designed tooltip" />,
+  4: <Img src="/deck/mm-r-05.jpg" alt="Overview: the event card beside Participants, Required setup and Registration" />,
+  5: <Img src="/deck/mm-r-07.jpg" alt="The checklist as a timeline from today to after the race" max="max-w-[560px]" />,
+  6: <Img src="/deck/mm-r-08.jpg" alt="Finish the setup: the one tinted open step with Set up above the completed steps" max="max-w-[760px]" />,
+  7: <Img src="/deck/mm-r-09.jpg" alt="Setup complete: all five required steps folded into one row" max="max-w-[760px]" />,
+  8: <Img src="/deck/mm-r-10.jpg" alt="Get found: optional tasks with checkboxes, titles and one-line descriptions" max="max-w-[420px]" />,
+  9: <Img src="/deck/mm-r-11.jpg" alt="Sticky bar: event name, status, date and days to go" />,
 };
 
 // `embedded`: rendered inside the Design process board — no page chrome, no before/after or summary (the board has both)

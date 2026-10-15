@@ -111,34 +111,29 @@ function ChecklistHead({ flow }: { flow: Flow }) {
 function Overview({ flow, ref }: { flow: Flow; ref?: React.Ref<HTMLDivElement> }) {
   const st = flow.stage;
   const regOpen = st === "live" && flow.opens.mode === "publish" && !flow.regClosed;
-  const live = st === "live";
-  const stamp = STATUSES.find((x) => x.key === flow.status)!.label;
-  const cell = "min-w-0 px-5 py-4";
+  const cell = "min-w-0 px-5 py-5";
   const row1 = "flex h-4 items-center justify-between gap-3";
-  const row2 = "mt-2 flex h-7 items-center gap-3";
-  const row3 = "mt-2 truncate text-[13px] leading-5";
+  const row2 = "mt-3 flex h-7 items-center gap-3";
+  const row3 = "mt-2.5 truncate text-[13px] leading-5";
   const labelC = `${label} leading-4`;
   return (
     <div ref={ref} className="@container mt-6">
       <div className="grid gap-3 @5xl:grid-cols-[minmax(0,1.45fr)_minmax(0,3fr)]">
       {/* the event card previews the public page, so clicking it opens Preview (Luma) */}
-      <button type="button" onClick={() => flow.notify("Opens your event page preview")} aria-label={`Preview the event page for ${flow.name}`} className={`${cell} group/ev rounded-xl text-left text-white transition-[filter,transform] duration-150 hover:brightness-[1.04] active:scale-[0.99]`} style={{ backgroundImage: B.gradientDiag }}>
-        <span className={row1}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/deck/movemint-logo.png" alt="Movemint" width={432} height={74} className="h-[13px] w-auto brightness-0 invert" />
-          <span
-            key={flow.status}
-            className="mm-stamp rotate-[-4deg] rounded-[4px] px-1.5 py-px text-[10px] font-bold uppercase leading-[14px] tracking-[0.12em]"
-            style={{ boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.9)", backgroundColor: live ? "white" : "transparent", color: live ? B.success : "white" }}
-          >
-            {stamp}
+      {/* just the event: the wordmark and status already live in the header, so the card has room to breathe */}
+      <button type="button" onClick={() => flow.notify("Opens your event page preview")} aria-label={`Preview the event page for ${flow.name}`} className="flex min-w-0 flex-col justify-between gap-5 rounded-xl px-6 py-5 text-left text-white transition-[filter,transform] duration-150 hover:brightness-[1.04] active:scale-[0.99]" style={{ backgroundImage: B.gradientDiag }}>
+        <span className="line-clamp-2 font-serif text-[30px] leading-[1.02] tracking-[-0.01em] [text-wrap:balance]" title={flow.name}>{flow.name}</span>
+        {/* when/where in quiet sans; the countdown is the one emphasized chip, sitting on the same line */}
+        <span className="flex items-end justify-between gap-3">
+          <span className="min-w-0 text-[13px] leading-snug text-white/85">
+            <span className="block">{EVENT.weekday}, {EVENT.date}</span>
+            <span className="block truncate">{EVENT.place}</span>
           </span>
+          <span className="shrink-0 rounded-full bg-white/20 px-2.5 py-1 text-[13px] font-semibold leading-none tabular-nums">{EVENT.daysAway} days to go</span>
         </span>
-        <span className={`${row2} font-serif text-[24px]`}><span className="truncate" title={flow.name}>{flow.name}</span></span>
-        <span className={`block ${row3} text-white/85`}>{EVENT.weekday.slice(0, 3)}, {EVENT.date} · {EVENT.place} · <span className="font-semibold text-white">{EVENT.daysAway} days</span></span>
       </button>
 
-      <dl className="grid grid-cols-1 rounded-xl bg-white sm:grid-cols-3">
+      <dl className="grid grid-cols-1 rounded-xl bg-white sm:grid-cols-3" style={{ boxShadow: `inset 0 0 0 1px ${B.line}` }}>
         <div className={`group ${cell}`}>
           <dt className={row1}><span className={labelC} style={{ color: B.muted }}>Participants</span><CardLink onClick={() => flow.notify("Opens Participants")}>View all</CardLink></dt>
           <dd className={`${row2} text-[28px] font-semibold tracking-[-0.015em] tabular-nums`}>{flow.participants.toLocaleString("en-US")}</dd>
@@ -146,12 +141,9 @@ function Overview({ flow, ref }: { flow: Flow; ref?: React.Ref<HTMLDivElement> }
         </div>
         <div className={`${cell} max-sm:border-t sm:border-l`} style={{ borderColor: B.line }}>
           <dt className={row1}><span className={labelC} style={{ color: B.muted }}>Required setup</span></dt>
-          <dd className={row2}>
-            <span className="text-[28px] font-semibold tracking-[-0.015em] tabular-nums">{flow.reqDone}<span style={{ color: B.muted }}>/5</span></span>
-            {/* the bar shares the value's row, so this cell keeps the same three rows as the others */}
-            <span className="h-1 min-w-0 flex-1 overflow-hidden rounded-full" style={{ backgroundColor: "oklch(0.2 0.015 285 / 0.07)" }} aria-hidden="true">
-              <span className="block h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style={{ width: `${(flow.reqDone / 5) * 100}%`, backgroundColor: B.accent }} />
-            </span>
+          <dd className={`${row2} text-[28px] font-semibold tracking-[-0.015em] tabular-nums`}><span>{flow.reqDone}<span style={{ color: B.muted }}>/5</span></span></dd>
+          <dd className="mt-3 h-1 overflow-hidden rounded-full" style={{ backgroundColor: "oklch(0.2 0.015 285 / 0.07)" }} aria-hidden="true">
+            <span className="block h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style={{ width: `${(flow.reqDone / 5) * 100}%`, backgroundColor: B.accent }} />
           </dd>
           <dd className={row3} style={{ color: B.muted }}>{st === "setup" ? `${5 - flow.reqDone} step before publishing` : st === "ready" ? "Ready to publish" : "All done"}</dd>
         </div>
@@ -216,7 +208,7 @@ function LinedList({ title, items, flow }: { title?: string; items: Rec[]; flow:
   return (
     <div className="min-w-0">
       {title && <p className={`${label} mb-2`} style={{ color: B.muted }}>{title}</p>}
-      <ul className="relative overflow-hidden rounded-xl bg-white">
+      <ul className="relative overflow-hidden rounded-xl border bg-white" style={{ borderColor: B.line }}>
         {sorted.map((r, i) => (
           <li
             key={r.title}
