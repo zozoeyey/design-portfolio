@@ -2,14 +2,14 @@
 // The clickable path every variant shares: 4/5 required → set when registration opens → ready → publish → live.
 // State lives in a tiny store so the status menu in the header and the page body stay in sync.
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { B, Icon, Tip, pressable } from "./shell";
+import { B, Icon, Tip, pressable, RECOMMENDED, REQUIRED } from "./shell";
 
 export type Stage = "setup" | "ready" | "live";
 export type Status = "live" | "draft" | "unlisted" | "landing" | "past";
 type Opens = { mode: "publish" | "schedule"; date: string; time: string };
-type State = { ready: boolean; status: Status; opens: Opens; toast: string; handle: string; urlEditing: boolean };
+type State = { ready: boolean; status: Status; opens: Opens; toast: string; handle: string; urlEditing: boolean; checked: string[]; largeCount: boolean; regClosed: boolean; longName: boolean };
 
-const INITIAL: State = { ready: false, status: "draft", opens: { mode: "publish", date: "2026-10-20", time: "09:00" }, toast: "", handle: "EevkbfU", urlEditing: false };
+const INITIAL: State = { ready: false, status: "draft", opens: { mode: "publish", date: "2026-10-20", time: "09:00" }, toast: "", handle: "EevkbfU", urlEditing: false, checked: RECOMMENDED.filter((r) => r.done).map((r) => r.title), largeCount: false, regClosed: false, longName: false };
 let state = INITIAL;
 const subs = new Set<() => void>();
 const set = (p: Partial<State>) => {
@@ -31,6 +31,10 @@ export const STATUSES: { key: Status; label: string; desc: string; icon: string 
   { key: "past", label: "Past Event", desc: "A race that already happened — no registration", icon: "trophy" },
 ];
 
+// Scenarios tab: put the shared store into a given state (after the page has mounted and reset itself).
+export const setFlow = (p: Partial<State>) => set(p);
+export const LONG_NAME = "2026 Bay Area Startup Founders & Friends Winter Bouldering Social at Mission Cliffs";
+
 export function useFlow() {
   const s = useStore();
   // each variant (and each replay) starts from the recorded state
@@ -49,7 +53,14 @@ export function useFlow() {
     stage,
     status: s.status,
     reqDone: s.ready ? 5 : 4,
-    done: s.ready ? 6 : 5,
+    participants: s.status === "live" && s.largeCount ? 1284 : 0,
+    regClosed: s.regClosed,
+    name: s.longName ? LONG_NAME : "Startup Founders Bouldering Meetup",
+    // optional tasks the organizer has ticked off themselves (like the original's checkboxes)
+    recDone: s.checked.length,
+    isChecked: (title: string) => s.checked.includes(title),
+    toggle: (title: string) => set({ checked: state.checked.includes(title) ? state.checked.filter((t) => t !== title) : [...state.checked, title] }),
+    done: (s.ready ? REQUIRED.length : REQUIRED.length - 1) + s.checked.length,
     opens: s.opens,
     regLine,
     toast: s.toast,
@@ -118,7 +129,7 @@ export function StatusMenu() {
                 <span className="mt-0.5" style={{ color: locked ? B.faint : x.key === "live" ? B.success : B.muted }}><Icon n={x.icon} /></span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[14px] font-medium" style={{ color: locked ? B.faint : B.ink }}>{x.label}</span>
-                  <span className="block text-[12px]" style={{ color: locked ? B.faint : B.muted }}>{locked ? "Finish the required setup first" : x.desc}</span>
+                  <span className="block text-[12px]" style={{ color: B.muted }}>{locked ? "Finish the required setup first" : x.desc}</span>
                 </span>
                 {on && <span className="mt-0.5" style={{ color: B.ink }}><Icon n="check" /></span>}
               </button>
@@ -221,7 +232,7 @@ function UrlForm({ initial }: { initial: string }) {
     >
       <div className="flex flex-wrap items-center gap-2">
         <label htmlFor="handle" className="sr-only">Event URL handle</label>
-        <div className="flex h-9 min-w-0 max-w-full items-center overflow-hidden rounded-lg" style={{ boxShadow: `inset 0 0 0 ${err ? 2 : 1}px ${err ? B.accent : B.line}` }}>
+        <div className="flex h-9 min-w-0 max-w-full items-center overflow-hidden rounded-lg focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[oklch(0.2_0.015_285)]" style={{ boxShadow: `inset 0 0 0 ${err ? 2 : 1}px ${err ? B.accent : B.line}` }}>
           <span className="flex h-full items-center px-2.5 font-mono text-[13px] tracking-tight" style={{ backgroundColor: B.surface, color: B.muted }}>movemint.cc/events/</span>
           <input
             id="handle"
@@ -232,7 +243,7 @@ function UrlForm({ initial }: { initial: string }) {
             autoComplete="off"
             aria-invalid={!!err}
             aria-describedby="handle-help"
-            className="h-full w-56 min-w-0 px-2 font-mono text-[16px] tracking-tight outline-none sm:text-[13px]"
+            className="h-full w-56 min-w-0 px-2 font-mono text-[16px] tracking-tight outline-none [@media(pointer:fine)]:text-[13px]"
           />
         </div>
         <button type="submit" disabled={!!err} className={`h-9 rounded-lg bg-white px-3 text-[13px] font-semibold disabled:cursor-not-allowed ${pressable}`} style={{ boxShadow: `inset 0 0 0 1px ${B.line}`, color: err ? B.faint : B.ink }}>Save</button>

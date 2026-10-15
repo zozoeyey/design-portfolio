@@ -26,6 +26,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Esc closes the mobile menu
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 px-6 pt-4 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none sm:px-12 md:px-20 ${
@@ -74,9 +82,11 @@ export default function Navbar() {
         {/* Mobile toggle */}
         <button
           type="button"
-          aria-label="Toggle menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 sm:hidden"
+          className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/60 before:absolute before:-inset-1 sm:hidden"
         >
           <span className="relative block h-3 w-4">
             <span
@@ -100,7 +110,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="glass absolute inset-x-6 top-20 rounded-[2rem] p-2 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)] sm:hidden">
+        <div id="mobile-menu" className="glass absolute inset-x-6 top-20 rounded-[2rem] p-2 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)] sm:hidden">
           <ul className="flex flex-col">
             {nav.map((item) => (
               <li key={item.label}>

@@ -1,20 +1,28 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Analytics } from "@vercel/analytics/next";
+import SiteAnalytics from "@/components/SiteAnalytics";
 
 export const metadata: Metadata = {
   title: "Zoey Yan — Product Designer",
   description:
     "Zoey Yan is a product designer who connects dots others don't see — designing and shipping end-to-end product experiences.",
-  metadataBase: new URL("https://zoeyyan.framer.website"),
+  metadataBase: new URL("https://zoeyyandesign.vercel.app"),
   openGraph: {
     title: "Zoey Yan — Product Designer",
     description:
       "Product designer who connects dots others don't see — designing and shipping end-to-end product experiences.",
     type: "website",
   },
+};
+
+// light-only site: say so, so native controls and scrollbars match
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-content",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -38,7 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );

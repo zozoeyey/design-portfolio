@@ -28,6 +28,7 @@ export default function DeckComments({
   const [error, setError] = useState("");
   const listRef = useRef<HTMLOListElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     try {
@@ -53,6 +54,7 @@ export default function DeckComments({
     e.preventDefault();
     if (busy) return;
     setError("");
+    setStatus("");
     if (!name.trim()) return setError("Add your name so I know who it’s from.");
     if (!text.trim()) return setError("Write a comment first.");
     setBusy(true);
@@ -69,6 +71,7 @@ export default function DeckComments({
         localStorage.setItem("deck-comment-name", name.trim());
       } catch {}
       if (data.comment) onPosted(data.comment);
+      setStatus("Comment posted");
       setText("");
       textRef.current?.focus();
     } catch {
@@ -136,6 +139,7 @@ export default function DeckComments({
           />
           {/* honeypot */}
           <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+          <p role="status" className="sr-only">{status}</p>
           {error && (
             <p role="alert" className="text-sm text-[oklch(0.5_0.19_27)]">{error}</p>
           )}
@@ -144,7 +148,7 @@ export default function DeckComments({
             <button
               type="submit"
               disabled={busy}
-              className="min-h-10 shrink-0 rounded-full bg-[rgb(26,34,83)] px-4 text-sm font-semibold text-white transition-transform duration-150 active:scale-[0.96] disabled:bg-[var(--gray-300)]"
+              className="min-h-10 min-w-[6.5rem] shrink-0 rounded-full bg-[rgb(26,34,83)] px-4 text-sm font-semibold text-white transition-transform duration-150 active:scale-[0.96] disabled:bg-[var(--gray-300)]"
             >
               {busy ? "Posting…" : "Post"}
             </button>

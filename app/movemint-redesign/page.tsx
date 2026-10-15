@@ -8,7 +8,9 @@ import { Shell } from "./shell";
 import { Combined, StartLine, Poster, Timeline } from "./variants";
 import { StatusMenu, EventUrl } from "./flow";
 import { DesignSystem } from "./ds";
-import { Rationale } from "./rationale";
+import { Scenarios } from "./scenarios";
+import { Process } from "./process";
+import { Banner, Stages, Board } from "./layouts";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -45,6 +47,11 @@ body:has(.mm-proto) > header, body:has(.mm-proto) > footer { display: none; }
 @keyframes mm-tip-r { from { opacity: 0; transform: translate(-2px, -50%) scale(0.97); } }
 @keyframes mm-tip { from { opacity: 0; transform: translate(-50%, -2px) scale(0.97); } }
 /* focus ring from the design system (ink), drawn inside for buttons in the joined tool group */
+/* sticky context bar: top of the viewport (the prototype picker now sits at the bottom) */
+.mm-proto { --mm-sticky-top: 12px; }
+.mm-ctx { opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1), transform 200ms cubic-bezier(0.23, 1, 0.32, 1); }
+.mm-ctx[data-shown] { opacity: 1; transform: none; pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { .mm-ctx { transform: none; } }
 .mm-proto :is(button, a):focus-visible { outline: 2px solid oklch(0.2 0.015 285); outline-offset: 2px; }
 .mm-proto .mm-tool:focus-visible { outline-offset: -2px; }
 .mm-drawer { animation: mm-drawer 260ms cubic-bezier(0.32, 0.72, 0, 1) both; }
@@ -65,23 +72,27 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ [
   const allowed = process.env.NODE_ENV === "development" || (!!secret && key === secret);
   if (!allowed) notFound();
 
-  const wrap = (el: React.ReactNode, k: string) => (
+  const wrap = (el: React.ReactNode, k: string, canvas = false) => (
     <div key={k} className={`mm-proto ${inter.variable}`}>
-      <Shell pill={<StatusMenu />} url={<EventUrl />}>{el}</Shell>
+      <Shell pill={<StatusMenu />} url={<EventUrl />} canvas={canvas}>{el}</Shell>
     </div>
   );
   return (
     <>
       <style>{CSS}</style>
       <Harness
-        names={["Combined", "Start line", "Poster", "Timeline", "Design system", "Design rationale"]}
+        names={["Final", "Combined", "Start line", "Poster", "Timeline", "Stages", "Board", "Design system", "Scenarios", "Design process"]}
         variants={[
-          wrap(<Combined />, "0"),
-          wrap(<StartLine />, "1"),
-          wrap(<Poster />, "2"),
-          wrap(<Timeline />, "3"),
-          <div key="4" className={inter.variable}><DesignSystem /></div>,
-          <div key="5" className={inter.variable}><Rationale /></div>,
+          wrap(<Banner />, "0", true),
+          wrap(<Combined />, "1"),
+          wrap(<StartLine />, "2"),
+          wrap(<Poster />, "3"),
+          wrap(<Timeline />, "4"),
+          wrap(<Stages />, "5"),
+          wrap(<Board />, "6"),
+          <div key="7" className={inter.variable}><DesignSystem /></div>,
+          <div key="8" className={inter.variable}><Scenarios /></div>,
+          <div key="9" className={inter.variable}><Process /></div>,
         ]}
       />
     </>

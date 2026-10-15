@@ -3,9 +3,9 @@ import { useState } from "react";
 import { B, EVENT, REQUIRED, RECOMMENDED, TOTAL, NEXT, Icon, SetUp, SubTabs, pressable, type Rec } from "./shell";
 import { useFlow, PublishButton, StatusPill, Toast, STATUSES, type Flow } from "./flow";
 
-const label = "text-[12px] font-medium uppercase tracking-[0.08em]";
+export const label = "text-[12px] font-medium uppercase tracking-[0.08em]";
 
-function Frame({ flow, children }: { flow: Flow; children: React.ReactNode }) {
+export function Frame({ flow, children }: { flow: Flow; children: React.ReactNode }) {
   const [sub, setSub] = useState(0);
   return (
     <>
@@ -25,15 +25,26 @@ function Check({ size = "size-5" }: { size?: string }) {
   );
 }
 
+// Movemint's own completed look: a grey filled checkbox with a grey check, title struck through, all muted.
+export const doneBox = { backgroundColor: "oklch(0.95 0.004 285)", boxShadow: "inset 0 0 0 1.5px oklch(0.86 0.006 285)", color: "oklch(0.55 0.012 285)" };
+export const emptyBox = { backgroundColor: "white", boxShadow: "inset 0 0 0 1.5px oklch(0.83 0.008 285)" };
+export function DoneBox() {
+  return (
+    <span className="flex size-4 shrink-0 items-center justify-center rounded-[4px]" style={doneBox} aria-hidden="true">
+      <Icon n="check" className="size-3" />
+    </span>
+  );
+}
+
 // Required steps: done ones quiet, the open one leads with its action. Once all are done the list
 // collapses behind a summary row: open while you finish (so the last check lands), closed after publishing.
-function RequiredList({ flow }: { flow: Flow }) {
+export function RequiredList({ flow, quiet = false }: { flow: Flow; quiet?: boolean }) {
   const allDone = flow.stage !== "setup";
   const [override, setOverride] = useState<boolean | null>(null);
   const open = !allDone || (override ?? flow.stage !== "live");
   const rows = REQUIRED.map((r) => ({ ...r, done: r.done || allDone }));
   return (
-    <div className="overflow-hidden rounded-xl" style={{ boxShadow: `inset 0 0 0 1px ${B.line}` }}>
+    <div className={`overflow-hidden rounded-xl ${quiet ? "bg-white" : ""}`} style={quiet ? undefined : { boxShadow: `inset 0 0 0 1px ${B.line}` }}>
       {allDone && (
         <button
           type="button"
@@ -57,13 +68,24 @@ function RequiredList({ flow }: { flow: Flow }) {
       >
         <ul className="min-h-0 overflow-hidden">
           {[...rows].sort((a, b) => Number(a.done) - Number(b.done)).map((r, i) => (
-            <li key={r.title} style={i || allDone ? { borderTop: `1px solid ${B.line}` } : undefined}>
+            <li key={r.title} style={i || allDone ? { borderTop: `1px solid ${quiet ? "oklch(0.2 0.015 285 / 0.06)" : B.line}` } : undefined}>
               {r.done ? (
-                <div className="flex items-center gap-3 px-4 py-2.5 text-[14px]">
-                  <Check />
-                  <span className="flex-1" style={{ color: B.muted }}>{r.title}</span>
-                  <span className="text-[13px]" style={{ color: B.faint }}>{r.title === NEXT.title ? flow.regLine : "Done"}</span>
-                </div>
+                quiet ? (
+                  // quiet: Movemint's completed style — checked grey box, struck-through title, description kept
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <DoneBox />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[14px] line-through decoration-[oklch(0.5_0.015_285/0.6)]" style={{ color: B.muted }}>{r.title}<span className="sr-only"> (done)</span></span>
+                      <span className="mt-0.5 block text-[13px]" style={{ color: B.muted }}>{r.title === NEXT.title ? flow.regLine : r.desc}</span>
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3 px-4 py-2.5 text-[14px]">
+                    <Check />
+                    <span className="flex-1" style={{ color: B.muted }}>{r.title}</span>
+                    <span className="text-[13px]" style={{ color: B.muted }}>{r.title === NEXT.title ? flow.regLine : "Done"}</span>
+                  </div>
+                )
               ) : (
                 <div style={{ backgroundColor: B.accentTint }}>
                   <div className="flex items-center gap-3 px-4 py-3.5">
@@ -252,10 +274,13 @@ export function StartLine() {
 }
 
 // The event as its own brand card (shared by Poster and Combined).
-function PosterCard({ flow, registered = true }: { flow: Flow; registered?: boolean }) {
+export function PosterCard({ flow, registered = true, compact = false }: { flow: Flow; registered?: boolean; compact?: boolean }) {
   const live = flow.stage === "live";
   return (
-    <article className="relative flex aspect-[4/5] w-full max-w-[400px] flex-col overflow-hidden rounded-2xl p-6 text-white sm:aspect-[16/10] sm:max-w-none lg:aspect-[4/5]" style={{ backgroundImage: B.gradientDiag }}>
+    <article
+      className={`relative flex w-full flex-col overflow-hidden rounded-2xl p-6 text-white ${compact ? "max-w-[400px] sm:max-w-none" : "aspect-[4/5] max-w-[400px] sm:aspect-[16/10] sm:max-w-none lg:aspect-[4/5]"}`}
+      style={{ backgroundImage: B.gradientDiag }}
+    >
       <div aria-hidden="true" className="absolute inset-0 opacity-40 mix-blend-soft-light" style={{ backgroundImage: "radial-gradient(circle at 20% 15%, white 0, transparent 45%), radial-gradient(circle at 85% 90%, black 0, transparent 50%)" }} />
       <div className="relative flex items-start justify-between">
         {/* the real wordmark, knocked out to white */}
@@ -269,7 +294,7 @@ function PosterCard({ flow, registered = true }: { flow: Flow; registered?: bool
           {STATUSES.find((x) => x.key === flow.status)!.label}
         </span>
       </div>
-      <h2 className="relative mt-auto font-serif text-[38px] leading-[0.98] tracking-[-0.01em] [text-wrap:balance]">{EVENT.name}</h2>
+      <h2 className={`relative mt-auto font-serif leading-[0.98] tracking-[-0.01em] [text-wrap:balance] ${compact ? "pt-12 text-[34px]" : "text-[38px]"}`}>{EVENT.name}</h2>
       <div className="relative mt-5 grid grid-cols-2 gap-3 border-t border-white/30 pt-4 text-[13px]">
         <p><span className="block text-white/70">When</span>{EVENT.weekday.slice(0, 3)}, {EVENT.date}</p>
         <p><span className="block text-white/70">Where</span>{EVENT.place}</p>
@@ -364,7 +389,7 @@ export function Poster() {
 }
 
 /* ───────────── 3 · Timeline: the checklist laid out before, during and after the event ───────────── */
-const GROUPS: { key: Rec["when"]; title: string }[] = [
+export const GROUPS: { key: Rec["when"]; title: string }[] = [
   { key: "promote", title: "Get found" },
   { key: "registration", title: "Registration" },
 ];
@@ -469,7 +494,7 @@ export function Timeline() {
 }
 
 /* ───────────── 0 · Combined: poster + stat cards + timeline, required vs optional made explicit ───────────── */
-function Tag({ kind, children }: { kind: "required" | "optional"; children: React.ReactNode }) {
+export function Tag({ kind, children }: { kind: "required" | "optional"; children: React.ReactNode }) {
   return (
     <span
       className="inline-flex h-6 items-center rounded-md px-2 text-[12px] font-medium"
@@ -480,14 +505,30 @@ function Tag({ kind, children }: { kind: "required" | "optional"; children: Reac
   );
 }
 
+// Timeline markers, one per state: done (quiet check) · now (raspberry ring) · gate (Publish, locked until setup is done) · anytime (optional stage)
+export function Mark({ state, icon, calm = false }: { state: "done" | "now" | "gate" | "anytime"; icon: string; calm?: boolean }) {
+  // calm: one family — same size, same 1.5px stroke; only the color says which state
+  const w = calm ? "1.5px" : null;
+  const style =
+    state === "done" ? (calm ? { backgroundColor: "oklch(0.62 0.01 285)", color: "white" } : { backgroundColor: B.surface, color: B.muted, boxShadow: `inset 0 0 0 1px ${B.line}` })
+    : state === "now" ? { backgroundColor: "white", color: B.accentStrong, boxShadow: `inset 0 0 0 ${w ?? "2px"} ${B.accent}` }
+    : state === "gate" ? { backgroundColor: "white", color: B.ink, boxShadow: `inset 0 0 0 1.5px ${B.ink}` }
+    : { backgroundColor: "white", color: B.muted, boxShadow: `inset 0 0 0 ${w ?? "1px"} ${B.faint}` };
+  return (
+    <span className={`relative z-10 flex items-center justify-center rounded-full ${calm ? "size-7" : "size-8"} ${state === "now" ? "mm-pulse" : ""}`} style={style}>
+      <Icon n={state === "done" ? "check" : icon} className="size-3.5" />
+    </span>
+  );
+}
+
 // Card link: labelled, 40px hit area via a pseudo-element, arrow nudges on hover. The card itself is not one big <a>.
-function CardLink({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+export function CardLink({ onClick, children, quiet = false }: { onClick: () => void; children: React.ReactNode; quiet?: boolean }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="relative -mr-1 inline-flex items-center gap-1 rounded-md px-1 text-[13px] font-medium before:absolute before:-inset-x-2 before:-inset-y-3"
-      style={{ color: B.ink }}
+      className={`relative -mr-1 inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md px-1 text-[13px] font-medium leading-4 transition-colors duration-150 before:absolute before:-inset-x-2 before:-inset-y-3 ${quiet ? "text-[oklch(0.5_0.015_285)] hover:text-[oklch(0.2_0.015_285)]" : ""}`}
+      style={quiet ? undefined : { color: B.ink }}
     >
       {children}
       <span className="transition-transform duration-150 group-hover:translate-x-0.5" style={{ color: B.muted }}><Icon n="chevron" className="size-3.5" /></span>
@@ -495,51 +536,78 @@ function CardLink({ onClick, children }: { onClick: () => void; children: React.
   );
 }
 
-// Optional task as a borderless tile: icon, title and its short description (no box, no truncation).
-function TaskTile({ r }: { r: Rec }) {
+// Optional task: a quiet tile on the grey surface. Two controls side by side (never nested):
+// the checkbox marks it done yourself, like the original; the rest of the tile opens the task.
+export function CheckTile({ r, flow, plain = false, lined = false }: { r: Rec; flow: Flow; plain?: boolean; lined?: boolean }) {
+  const on = flow.isChecked(r.title);
   return (
-    <button
-      type="button"
-      className="mm-tool group flex w-full min-w-0 items-start gap-3 px-4 py-3.5 text-left transition-colors duration-150 hover:bg-[oklch(0.975_0.004_285)]"
-    >
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: B.surface, color: B.muted }}><Icon n={r.done ? "check" : r.icon} /></span>
-      <span className="min-w-0 flex-1 pt-px">
-        <span className="flex items-center gap-1 text-[14px] font-medium" style={r.done ? { color: B.muted } : undefined}>
-          {r.title}
-          {r.done && <span className="text-[12px] font-normal" style={{ color: B.faint }}>· Done</span>}
-          <span className="opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100" style={{ color: B.faint }}><Icon n="chevron" className="size-3.5" /></span>
+    // lined: white cell inside a hairline grid, the same surface as the required list
+    <div className={`group flex h-full w-full min-w-0 items-start transition-colors duration-150 ${lined ? "bg-white hover:bg-[oklch(0.985_0.003_285)]" : "rounded-lg hover:bg-[oklch(0.955_0.005_285)]"}`} style={lined ? undefined : { backgroundColor: B.surface }}>
+      <button
+        type="button"
+        role="checkbox"
+        aria-checked={on}
+        aria-label={`Mark “${r.title}” done`}
+        onClick={() => flow.toggle(r.title)}
+        className="mm-tool relative ml-3.5 flex size-4 shrink-0 items-center justify-center self-center rounded-[4px] bg-white transition-[box-shadow,color] duration-150 before:absolute before:-inset-3"
+        style={on ? doneBox : emptyBox}
+      >
+        {on && <span key="on" className="mm-pop flex"><Icon n="check" className="size-3" /></span>}
+      </button>
+      <button type="button" onClick={() => flow.notify(`Opens ${r.title}`)} className="mm-tool flex min-w-0 flex-1 items-start gap-3 rounded-lg py-3 pl-3 pr-3.5 text-left">
+        <span className="min-w-0 flex-1">
+          <span className={`flex items-center gap-1 text-[14px] ${on ? "line-through decoration-[oklch(0.5_0.015_285/0.6)]" : ""}`} style={{ color: on ? B.muted : B.ink }}>
+            {r.title}
+            <span className="opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100" style={{ color: B.muted }}><Icon n="chevron" className="size-3.5" /></span>
+          </span>
+          <span className="mt-0.5 block text-[13px] leading-snug [text-wrap:pretty]" style={{ color: B.muted }}>
+            {r.desc}
+          </span>
         </span>
-        <span className="mt-0.5 block text-[13px] leading-snug [text-wrap:pretty]" style={{ color: B.muted }}>{r.desc}</span>
-      </span>
-    </button>
+        {!plain && <span className="mt-px flex size-7 shrink-0 items-center justify-center rounded-md" style={{ color: B.muted, backgroundColor: lined ? B.surface : "white" }}><Icon n={r.icon} className="size-3.5" /></span>}
+      </button>
+    </div>
   );
 }
-function TileGroup({ title, items }: { title: string; items: Rec[] }) {
+export function TileGroup({ title, items, flow, cols = 2, plain = false, lined = false }: { title?: string; items: Rec[]; flow: Flow; cols?: 1 | 2; plain?: boolean; lined?: boolean }) {
+  // tasks done at load sit at the end; ticking one later doesn't move it out from under the cursor
+  const sorted = [...items].sort((a, b) => Number(!!a.done) - Number(!!b.done));
   return (
     <div>
-      <p className={`${label} mb-2`} style={{ color: B.muted }}>{title}</p>
-      {/* one container per group, hairline dividers between tiles (gap-px over the line color) — cells in a row share a height */}
-      <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-xl sm:grid-cols-2" style={{ backgroundColor: B.line, boxShadow: `0 0 0 1px ${B.line}` }}>
-        {items.map((r) => (
-          <li key={r.title} className="flex min-w-0 bg-white"><TaskTile r={r} /></li>
-        ))}
-        {items.length % 2 === 1 && <li aria-hidden="true" className="hidden bg-white sm:block" />}
-      </ul>
+      {title && <p className={`${label} mb-2`} style={{ color: B.muted }}>{title}</p>}
+      {lined ? (
+        // one bordered container, hairline dividers (gap-px over the line color) — matches the required list
+        <ul className={`grid grid-cols-1 gap-px overflow-hidden rounded-xl ${cols === 2 ? "sm:grid-cols-2" : ""}`} style={{ backgroundColor: "oklch(0.2 0.015 285 / 0.07)", boxShadow: `inset 0 0 0 1px ${B.line}`, padding: 1 }}>
+          {sorted.map((r) => (
+            <li key={r.title} className="flex min-w-0 bg-white"><CheckTile r={r} flow={flow} lined /></li>
+          ))}
+          {cols === 2 && sorted.length % 2 === 1 && <li aria-hidden="true" className="hidden bg-white sm:block" />}
+        </ul>
+      ) : (
+        <ul className={`grid grid-cols-1 gap-2 ${cols === 2 ? "sm:grid-cols-2" : ""}`}>
+          {sorted.map((r) => (
+            <li key={r.title} className="flex min-w-0"><CheckTile r={r} flow={flow} plain={plain} /></li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
 
-// Timeline step without a date gutter: the date sits above the title, so the whole right column shares one left edge.
-function Stage({ when, title, tag, node, dashed = false, last = false, compact = false, children }: { when: string; title: string; tag?: React.ReactNode; node: React.ReactNode; dashed?: boolean; last?: boolean; compact?: boolean; children?: React.ReactNode }) {
+// Timeline step. On wide screens the date sits in its own right-aligned column so the dates read as an axis;
+// narrower, it sits above the title. Solid rail for the required path, dashed after Publish.
+export function Stage({ when, title, tag, node, dashed = false, last = false, compact = false, calm = false, children }: { when: string; title: string; tag?: React.ReactNode; node: React.ReactNode; dashed?: boolean; last?: boolean; compact?: boolean; calm?: boolean; children?: React.ReactNode }) {
+  // calm: hairline rail, 12px regular dates, a little more air between chapters
   return (
-    <li className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-4">
+    <li className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-4 xl:grid-cols-[112px_32px_minmax(0,1fr)] xl:gap-x-4">
+      <p className={`hidden pt-1.5 text-right leading-snug [text-wrap:balance] xl:block ${calm ? "text-[12px]" : "text-[13px] font-medium"}`} style={{ color: B.muted }}>{when}</p>
       <div className="relative flex justify-center">
         {node}
-        {!last && <span aria-hidden="true" className="absolute bottom-0 top-8 w-0" style={{ borderLeft: `${dashed ? 2 : 1}px ${dashed ? "dashed" : "solid"} ${dashed ? B.line : B.faint}` }} />}
+        {!last && <span aria-hidden="true" className={`absolute bottom-0 w-0 ${calm ? "top-7" : "top-8"}`} style={{ borderLeft: `${calm ? "1px" : "1.5px"} ${dashed ? "dashed" : "solid"} ${calm ? "oklch(0.2 0.015 285 / 0.2)" : B.faint}` }} />}
       </div>
-      <div className={`min-w-0 ${compact ? "pb-6" : "pb-10"}`}>
-        <p className="text-[12px] font-medium" style={{ color: B.muted }}>{when}</p>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <div className={`min-w-0 ${compact ? "pb-7" : calm ? "pb-12" : "pb-10"}`}>
+        <p className={`text-[12px] xl:hidden ${calm ? "" : "font-medium"}`} style={{ color: B.muted }}>{when}</p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 xl:pt-1">
           <h3 className="text-[18px] font-semibold">{title}</h3>
           {tag}
         </div>
@@ -550,28 +618,23 @@ function Stage({ when, title, tag, node, dashed = false, last = false, compact =
 }
 
 // Dashboard figures: one voice for all three (Inter 24/600, tabular). Serif stays on the poster and the title.
-const statValue = "mt-1.5 text-[24px] font-semibold leading-none tracking-[-0.01em] tabular-nums";
+export const statValue = "mt-1.5 text-[24px] font-semibold leading-none tracking-[-0.01em] tabular-nums";
 
 export function Combined() {
   const flow = useFlow();
   const st = flow.stage;
   const by = (k: Rec["when"]) => RECOMMENDED.filter((r) => r.when === k);
-  const recDone = RECOMMENDED.filter((r) => r.done).length;
+  const recDone = flow.recDone;
   const regOpen = st === "live" && flow.opens.mode === "publish";
   return (
     <Frame flow={flow}>
       <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
         {/* left: the event, and the one action, always in view */}
         <aside className="grid gap-4 lg:sticky lg:top-6">
-          <PosterCard flow={flow} registered={false} />
+          <PosterCard flow={flow} registered={false} compact />
           {st === "setup" ? (
-            // no grey placeholder button: say what's left and link straight to it
-            <p className="text-[14px] [text-wrap:pretty]" style={{ color: B.muted }}>
-              1 step left before you can publish:{" "}
-              <button type="button" onClick={flow.openSetup} className="font-medium underline decoration-from-font underline-offset-2" style={{ color: B.accentStrong }}>
-                {NEXT.title.toLowerCase()}
-              </button>
-            </p>
+            // no grey placeholder button and no second link: the Set up button in the checklist is the one way in
+            <p className="text-[14px] [text-wrap:pretty]" style={{ color: B.muted }}>1 step left before you can publish.</p>
           ) : st === "ready" ? (
             <>
               <PublishButton flow={flow} big className="w-full" />
@@ -599,29 +662,32 @@ export function Combined() {
         <div className="min-w-0">
           {/* one strip, three facts: dividers instead of three boxes; serif only for numbers */}
           <dl className="grid grid-cols-1 rounded-xl sm:grid-cols-3" style={{ boxShadow: `inset 0 0 0 1px ${B.line}` }}>
-            <div className="group px-5 py-4">
+            <div className="group px-5 py-5">
               <dt className="flex items-center justify-between">
                 <span className="text-[13px] font-medium" style={{ color: B.muted }}>Participants</span>
                 <CardLink onClick={() => flow.notify("Opens Participants")}>View all</CardLink>
               </dt>
               <dd className={statValue}>0</dd>
-              <dd className="mt-1 text-[13px]" style={{ color: B.muted }}>{st === "live" ? "Registration is open" : "No registrations yet"}</dd>
+              <dd className="mt-2 text-[13px]" style={{ color: B.muted }}>No registrations yet</dd>
             </div>
-            <div className="px-5 py-4 max-sm:border-t sm:border-l" style={{ borderColor: B.line }}>
+            {/* the one place setup progress is counted — and it names the next step */}
+            <div className="px-5 py-5 max-sm:border-t sm:border-l" style={{ borderColor: B.line }}>
               <dt className="text-[13px] font-medium" style={{ color: B.muted }}>Required setup</dt>
-              <dd className={statValue}>{flow.reqDone}<span style={{ color: B.faint }}>/5</span></dd>
-              <dd className="mt-1 text-[13px] tabular-nums" style={{ color: B.muted }}>{recDone} of {RECOMMENDED.length} optional done</dd>
+              <dd className={statValue}>{flow.reqDone}<span style={{ color: B.muted }}>/5</span></dd>
+              <dd className="mt-2 text-[13px] [text-wrap:pretty]" style={{ color: st === "setup" ? B.accentStrong : B.muted }}>
+                {st === "setup" ? `Next: ${NEXT.title.toLowerCase()}` : st === "ready" ? "Ready to publish" : `All done · ${recDone} of ${RECOMMENDED.length} optional`}
+              </dd>
             </div>
-            <div className="group px-5 py-4 max-sm:border-t sm:border-l" style={{ borderColor: B.line }}>
+            <div className="group px-5 py-5 max-sm:border-t sm:border-l" style={{ borderColor: B.line }}>
               <dt className="flex items-center justify-between">
                 <span className="text-[13px] font-medium" style={{ color: B.muted }}>Registration</span>
-                <CardLink onClick={flow.openSetup}>{st === "setup" ? "Set window" : "Edit"}</CardLink>
+                {st !== "setup" && <CardLink onClick={flow.openSetup}>Edit</CardLink>}
               </dt>
               <dd className={`${statValue} flex items-center gap-2`}>
                 <span className="size-2 rounded-full" style={{ backgroundColor: regOpen ? B.success : B.faint }} />
                 {regOpen ? "Open" : "Closed"}
               </dd>
-              <dd className="mt-1 text-[13px]" style={{ color: B.muted }}>{st === "setup" ? "Window not set" : flow.regLine}</dd>
+              <dd className="mt-2 text-[13px]" style={{ color: B.muted }}>{st === "setup" ? "Window not set" : st === "live" && flow.opens.mode === "publish" ? `Opened ${EVENT.today} at publish` : flow.regLine}</dd>
             </div>
           </dl>
 
@@ -629,21 +695,21 @@ export function Combined() {
             <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-3">
               <h2 className="text-[18px] font-semibold">Event checklist</h2>
               <div className="flex w-full items-center gap-3 sm:w-auto" role="progressbar" aria-label="Tasks complete" aria-valuemin={0} aria-valuemax={TOTAL} aria-valuenow={flow.done}>
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full sm:w-32 sm:flex-none" style={{ backgroundColor: B.surface }}>
+                <span className="text-[13px] tabular-nums" style={{ color: B.muted }}><span className="font-semibold" style={{ color: B.ink }}>{flow.done}</span> of {TOTAL} tasks</span>
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full sm:w-28 sm:flex-none" style={{ backgroundColor: B.surface, boxShadow: `inset 0 0 0 1px ${B.line}` }}>
                   <div className="h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style={{ width: `${(flow.done / TOTAL) * 100}%`, backgroundColor: B.accent }} />
                 </div>
-                <span className="text-[13px] tabular-nums" style={{ color: B.muted }}><span className="font-semibold" style={{ color: B.ink }}>{flow.done}</span> of {TOTAL} tasks complete</span>
               </div>
             </div>
-            <p className="mt-1 text-[14px] [text-wrap:pretty]" style={{ color: B.muted }}>A list of tasks to complete before, during, and after your event, from setup to post‑race wrap‑up.</p>
+            <p className="mt-1 max-w-[72ch] text-[14px] [text-wrap:pretty]" style={{ color: B.muted }}>A list of tasks to complete before, during, and after your event, from setup to post‑race wrap‑up.</p>
           </div>
 
           <ol className="mt-8">
             <Stage
               when={`Today · ${EVENT.today}`}
               title={st === "setup" ? "Finish the setup" : "Setup complete"}
-              tag={<Tag kind="required">Required · {flow.reqDone} of 5</Tag>}
-              node={<Node state={st === "setup" ? "now" : "done"} icon="circleDashed" />}
+              tag={<Tag kind="required">Required</Tag>}
+              node={<Mark state={st === "setup" ? "now" : "done"} icon="circleDashed" />}
             >
               <RequiredList flow={flow} />
             </Stage>
@@ -652,14 +718,14 @@ export function Combined() {
               when={st === "live" ? `Live · ${EVENT.today}` : st === "ready" ? "Ready now" : "After setup"}
               title={st === "live" ? "Published" : "Publish"}
               tag={<Tag kind="required">Required</Tag>}
-              node={<Node state={st === "live" ? "done" : st === "ready" ? "now" : "later"} icon="rocket" />}
+              node={<Mark state={st === "live" ? "done" : st === "ready" ? "now" : "gate"} icon={st === "setup" ? "lock" : "rocket"} />}
               dashed
               compact
             />
-            <Stage when="Before race day" title="Fill the start list" tag={<Tag kind="optional">Optional · {recDone} of {RECOMMENDED.length}</Tag>} node={<Node state="later" icon="megaphone" />} dashed>
+            <Stage when="Anytime before race day" title="Fill the start list" tag={<Tag kind="optional">Optional</Tag>} node={<Mark state="anytime" icon="megaphone" />} dashed>
               <div className="grid gap-5">
                 {GROUPS.map((g) => (
-                  <TileGroup key={g.key} title={g.title} items={by(g.key)} />
+                  <TileGroup key={g.key} title={g.title} items={by(g.key)} flow={flow} />
                 ))}
               </div>
             </Stage>
@@ -667,13 +733,13 @@ export function Combined() {
               when={`${EVENT.weekday.slice(0, 3)} · Nov 6`}
               title="Race day"
               tag={<Tag kind="optional">Optional</Tag>}
-              node={<span className="relative z-10 flex size-8 items-center justify-center rounded-full text-white" style={{ backgroundImage: B.gradientDiag }}><Icon n="flag" className="size-3.5" /></span>}
+              node={<Mark state="anytime" icon="flag" />}
               dashed
             >
-              <TileGroup title="On the day" items={by("raceday")} />
+              <TileGroup title="On the day" items={by("raceday")} flow={flow} />
             </Stage>
-            <Stage when="After" title="Wrap up" tag={<Tag kind="optional">Optional</Tag>} node={<Node state="later" icon="image" />} last>
-              <TileGroup title="After the race" items={by("after")} />
+            <Stage when="After" title="Wrap up" tag={<Tag kind="optional">Optional</Tag>} node={<Mark state="anytime" icon="image" />} last>
+              <TileGroup title="After the race" items={by("after")} flow={flow} />
             </Stage>
           </ol>
         </div>

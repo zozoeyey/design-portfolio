@@ -17,7 +17,12 @@ export default function CopyEmailButton({ className = "" }: { className?: string
       aria-label={copied ? "Email copied" : "Copy email address"}
       title={copied ? "Copied" : "Copy email"}
       onClick={async () => {
-        await navigator.clipboard.writeText(site.email);
+        try {
+          await navigator.clipboard.writeText(site.email);
+        } catch {
+          window.location.href = `mailto:${site.email}`; // clipboard blocked: open the mail app instead
+          return;
+        }
         setCopied(true);
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => setCopied(false), 1500);

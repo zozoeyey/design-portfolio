@@ -47,14 +47,14 @@ export default function Footer() {
             ))}
             {elsewhere.map((l) => (
               <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className={quiet}>
-                {l.label} ↗
+                {l.label} <span aria-hidden="true">↗</span>
               </a>
             ))}
           </nav>
           <div className="flex gap-6 text-gray-500">
             <span>© {site.copyright}</span>
             <a href="#top" className="transition-colors hover:text-black">
-              Back to top ↑
+              Back to top <span aria-hidden="true">↑</span>
             </a>
           </div>
         </div>

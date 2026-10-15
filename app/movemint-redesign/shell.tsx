@@ -4,6 +4,9 @@ import { cloneElement, useEffect, useId, useRef, useState } from "react";
 // Movemint organizer chrome (brand tokens) + real data, pre-publish state: 4 of 5 required steps done.
 
 // Brand tokens: Movemint red for shapes, raspberry for anything with text, cool neutrals tinted toward the logo gradient's violet.
+// Final: a soft grey canvas so white cards separate by surface, not by outline (Luma)
+export const CANVAS = "oklch(0.968 0.003 285)";
+
 export const B = {
   accent: "oklch(0.66 0.19 5)", // light raspberry #ec5482 — shapes without text (rings, pulse, progress); 3.43:1 vs white
   accentStrong: "oklch(0.54 0.18 5)", // raspberry #bd3061: anything carrying text — filled buttons (white text 5.59:1) and red-role text
@@ -87,6 +90,10 @@ const P: Record<string, string> = {
   circleDashed: "M10.1 2.2a9.9 9.9 0 0 1 3.8 0M17.6 3.7a10 10 0 0 1 2.7 2.7M21.8 10.1a9.9 9.9 0 0 1 0 3.8M20.3 17.6a10 10 0 0 1-2.7 2.7M13.9 21.8a9.9 9.9 0 0 1-3.8 0M6.4 20.3a10 10 0 0 1-2.7-2.7M2.2 13.9a9.9 9.9 0 0 1 0-3.8M3.7 6.4a10 10 0 0 1 2.7-2.7",
   alert: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 8v4M12 16h.01",
   checkCircle: "M21.8 10A10 10 0 1 1 17 3.3M9 11l3 3L22 4",
+  collapse: "M12 4v16M3 12h6M6 9l-3 3 3 3M21 12h-6M18 9l3 3-3 3",
+  lock: "M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z",
+  play: "M7 5v14l11-7z",
+  pause: "M8 5v14M16 5v14",
   eyeOff: "M10.7 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a18 18 0 0 1-2.2 3.2M6.6 6.6C3.9 8.3 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2M2 2l20 20",
   mail: "M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM3 7l9 6 9-6",
   trophy: "M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.5 1-1 1.2C7.9 18.8 7 20.2 7 22M14 14.7V17c0 .6.5 1 1 1.2 1.1.6 2 2 2 3.8M18 2H6v7a6 6 0 0 0 12 0z",
@@ -201,15 +208,17 @@ function Nav({ compact = false }: { compact?: boolean }) {
           <Icon n={ic} /> <span className={compact ? "sr-only" : ""}>{n}</span>
         </a>
         );
-        return compact ? <Tip key={n} label={n} side="right" className="mb-0.5 block [&>a]:mb-0">{link}</Tip> : link;
+        return compact ? <Tip key={n} label={n} side="right" className="mb-0.5 flex [&>a]:mb-0 [&>a]:w-full">{link}</Tip> : link;
       })}
     </nav>
   );
 }
 
 // Desktop: full sidebar. Tablet (md–lg): icon rail. Phone: ☰ opens a drawer.
-export function Shell({ children, pill, url }: { children: React.ReactNode; pill: React.ReactNode; url: React.ReactNode }) {
+export function Shell({ children, pill, url, title = EVENT.name, canvas = false }: { children: React.ReactNode; pill: React.ReactNode; url: React.ReactNode; title?: string; canvas?: boolean }) {
   const [menu, setMenu] = useState(false);
+  // desktop sidebar can be condensed to the icon rail, like Movemint's own ←|→ toggle
+  const [rail, setRail] = useState(false);
   useEffect(() => {
     if (!menu) return;
     const esc = (e: KeyboardEvent) => e.key === "Escape" && setMenu(false);
@@ -235,9 +244,24 @@ export function Shell({ children, pill, url }: { children: React.ReactNode; pill
         </nav>
       </header>
       <div className="flex">
-        <aside className="hidden w-[68px] shrink-0 px-3 pt-6 md:block lg:w-[232px]" style={{ borderRight: `1px solid ${B.line}` }}>
-          <div className="lg:hidden"><Nav compact /></div>
-          <div className="hidden lg:block"><Nav /></div>
+        <aside className={`hidden w-[68px] shrink-0 px-3 pt-4 md:block ${rail ? "" : "lg:w-[232px]"}`} style={{ borderRight: `1px solid ${B.line}` }}>
+          {/* the toggle exists where there's a choice: on tablets the rail is the only option */}
+          <div className={`mb-2 hidden lg:flex ${rail ? "justify-center" : "justify-end"}`}>
+            <Tip label={rail ? "Expand sidebar" : "Collapse sidebar"} side="right">
+              <button
+                type="button"
+                aria-label={rail ? "Expand sidebar" : "Collapse sidebar"}
+                aria-expanded={!rail}
+                onClick={() => setRail((r) => !r)}
+                className="mm-tool flex size-9 items-center justify-center rounded-lg transition-colors duration-150 hover:bg-[oklch(0.975_0.004_285)]"
+                style={{ color: B.muted }}
+              >
+                <Icon n="collapse" className="size-[18px]" />
+              </button>
+            </Tip>
+          </div>
+          <div className={rail ? "" : "lg:hidden"}><Nav compact /></div>
+          {!rail && <div className="hidden lg:block"><Nav /></div>}
         </aside>
         {menu && (
           <div className="fixed inset-0 z-50 bg-[oklch(0.2_0.015_285/0.3)] md:hidden" onClick={() => setMenu(false)}>
@@ -255,14 +279,14 @@ export function Shell({ children, pill, url }: { children: React.ReactNode; pill
             </div>
           </div>
         )}
-        <main className="min-w-0 flex-1 px-4 pb-32 pt-5 sm:px-6 lg:px-10 lg:pt-6">
+        <main className="min-w-0 flex-1 px-4 pb-32 pt-5 sm:px-6 lg:px-10 lg:pt-6" style={canvas ? { backgroundColor: CANVAS } : undefined}>
           <p className="flex items-center gap-1 text-[13px]" style={{ color: B.muted }}><Icon n="back" className="size-3.5" /> All events</p>
           {/* title + status + URL on the left, quick actions on the right (where the original kept its icons); they wrap under it when narrow */}
-          <div className="mt-3 flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <h1 className="text-[24px] font-bold leading-tight tracking-[-0.015em] [text-wrap:balance] sm:text-[30px]">{EVENT.name}</h1>
-                {pill}
+          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
+            <div className="min-w-0 lg:flex-1">
+              <div className="flex items-start gap-3">
+                <h1 className="line-clamp-2 min-w-0 text-[24px] font-bold leading-tight tracking-[-0.015em] [text-wrap:balance] sm:text-[30px]" title={title}>{title}</h1>
+                <div className="shrink-0 pt-0.5 sm:pt-1">{pill}</div>
               </div>
               {url}
             </div>

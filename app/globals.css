@@ -65,7 +65,23 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Keyboard focus: visible, neutral, never removed */
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+/* No double-tap-zoom wait on controls */
+button, a, input, select, textarea, [role="button"] {
+  touch-action: manipulation;
 }
 
 body {
@@ -344,10 +360,13 @@ blockquote {
     transparent
   );
   pointer-events: none;
-  transition: left 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+  /* sweep with transform, not left: 210% of the card = 382% of the sheen's own width */
+  transition: transform 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
 }
-.group:hover .plate-sheen {
-  left: 130%;
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .plate-sheen {
+    transform: translateX(382%) skewX(-18deg);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .plate-sheen {

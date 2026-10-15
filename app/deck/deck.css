@@ -316,8 +316,8 @@ body:has(.deck) > footer {
   box-shadow: inset 0 0 0 1px rgba(26, 34, 83, 0.14);
   transition: box-shadow 150ms ease;
 }
-.deck-field:focus { outline: none; box-shadow: inset 0 0 0 2px rgb(26, 34, 83); }
-@media (min-width: 641px) { .deck-field { font-size: 14px; } }
+.deck-field:focus { outline: 2px solid transparent; box-shadow: inset 0 0 0 2px rgb(26, 34, 83); }
+@media (min-width: 641px) and (pointer: fine) { .deck-field { font-size: 14px; } }
 @media print {
   .deck-comments { display: none; }
 }

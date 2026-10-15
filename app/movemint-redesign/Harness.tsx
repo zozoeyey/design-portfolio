@@ -40,7 +40,7 @@ export default function Harness({ names, variants }: { names: string[]; variants
   }, [variants.length]);
   return (
     <>
-      {current !== null && <div key={`${current}-${run}`}>{variants[current]}</div>}
+      {current !== null && <div key={`${current}-${run}`} className="pb-[72px]">{variants[current]}</div>}
       <nav className="proto-picker" aria-label="Prototype variants" data-ready={ready ? "" : undefined}>
         <span ref={hl} className="proto-picker-highlight" aria-hidden="true" />
         {names.map((n, i) => (

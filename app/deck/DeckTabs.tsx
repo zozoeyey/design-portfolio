@@ -150,6 +150,8 @@ export default function DeckTabs() {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
       if (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable || e.metaKey || e.ctrlKey || e.altKey) return;
+      // Space on a focused control presses it; it doesn't advance the slide
+      if (e.key === " " && t.closest("button, a, [role='button']")) return;
       if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); go(1); }
       else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); go(-1); }
       else if (e.key === "Home") { e.preventDefault(); go("first"); }

@@ -20,6 +20,10 @@
   font-size: 13px;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
+  /* phones: never wider than the screen; the tabs scroll instead */
+  max-width: calc(100vw - 24px);
+  overflow-x: auto;
+  scrollbar-width: none;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -47,6 +51,7 @@
 
 .proto-picker-item {
   position: relative; /* sits above the highlight */
+  white-space: nowrap;
   display: flex;
   align-items: center;
   height: 28px;

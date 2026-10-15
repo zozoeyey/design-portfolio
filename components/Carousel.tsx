@@ -34,6 +34,8 @@ export default function Carousel({
       className={`group/car relative overflow-hidden rounded-lg bg-white ${className}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
     >
       <div className="relative aspect-[16/10] w-full">
         {images.map((src, k) => (
@@ -57,7 +59,7 @@ export default function Carousel({
             type="button"
             aria-label="Previous image"
             onClick={(e) => { e.preventDefault(); go(-1); }}
-            className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black opacity-0 shadow-sm transition-opacity group-hover/car:opacity-100"
+            className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black opacity-0 shadow-sm transition-opacity group-hover/car:opacity-100 focus-visible:opacity-100"
           >
             ←
           </button>
@@ -65,7 +67,7 @@ export default function Carousel({
             type="button"
             aria-label="Next image"
             onClick={(e) => { e.preventDefault(); go(1); }}
-            className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black opacity-0 shadow-sm transition-opacity group-hover/car:opacity-100"
+            className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black opacity-0 shadow-sm transition-opacity group-hover/car:opacity-100 focus-visible:opacity-100"
           >
             →
           </button>

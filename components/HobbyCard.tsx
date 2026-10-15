@@ -33,14 +33,14 @@ export default function HobbyCard({
       onMouseLeave={() => setHover(false)}
       onFocus={() => setHover(true)}
       onBlur={() => setHover(false)}
-      className="block w-full text-left outline-none transition-transform duration-500"
+      className="block w-full rounded-2xl text-left transition-transform duration-500 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
       style={{
         perspective: "1400px",
         transform: `rotate(${flipped ? 0 : tilt}deg)`,
       }}
     >
       <div
-        className="relative aspect-[4/5] w-full transition-transform sm:aspect-[4/3] lg:aspect-[16/10] duration-700 ease-[cubic-bezier(.2,.8,.2,1)]"
+        className="relative aspect-[4/5] w-full transition-transform sm:aspect-[4/3] lg:aspect-[16/10] duration-700 ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none"
         style={{
           transformStyle: "preserve-3d",
           transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",

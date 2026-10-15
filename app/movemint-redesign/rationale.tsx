@@ -194,42 +194,13 @@ const MEDIA: Record<number, React.ReactNode> = {
   10: <Img src="/deck/mm-r-11.jpg" alt="Event URL under the title with Copy and Edit URL, and a designed tooltip" />,
 };
 
-export function Rationale() {
-  return (
-    <div className="mm-proto min-h-dvh px-4 pb-32 pt-8 sm:px-10" style={{ backgroundColor: "oklch(0.955 0.004 285)", color: B.ink, fontFamily: "var(--font-inter), -apple-system, sans-serif" }}>
-      <div className="mx-auto max-w-[1240px]">
-        <header className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-[12px] font-medium uppercase tracking-[0.08em]" style={muted}>Movemint organizer · Insights redesign</p>
-            <h1 className="mt-1 font-serif text-[38px] leading-none">Design rationale</h1>
-          </div>
-          <p className="max-w-[56ch] text-[14px] [text-wrap:pretty]" style={muted}>
-            A visual redesign of the Insights page an organizer lands on after creating an event. Brief: improve the visuals, add no features, keep the data — about two to three hours.
-          </p>
-        </header>
-
-        <section className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Shot src="/deck/mm-insights-current.jpg" alt="Original Movemint Insights page" caption="Draft, ready to publish — as shipped" tone="before" />
-          <Shot src="/deck/mm-after-setup.jpg" alt="Redesigned Insights page" caption="Same state, same data, redesigned" tone="after" />
-        </section>
-
-        <section className="mt-12 grid gap-4 md:grid-cols-3">
-          {[
-            ["Say each thing once", "One status, one number per fact, one place for the next step."],
-            ["Make the next step obvious", "Required before optional, now before later, one filled button."],
-            ["Bring the brand into the product", "The wordmark’s serif, the logo gradient and Movemint’s red family — used with restraint."],
-          ].map(([t, d], i) => (
-            <div key={t} className="rounded-xl bg-white p-6 shadow-[0_0_0_1px_oklch(0.2_0.015_285/0.06)]">
-              <p className="font-serif text-[32px] leading-none" style={{ color: B.accentStrong }}>{i + 1}</p>
-              <p className="mt-3 text-[18px] font-semibold">{t}</p>
-              <p className="mt-1 text-[14px] [text-wrap:pretty]" style={muted}>{d}</p>
-            </div>
-          ))}
-        </section>
-
-        <section className="mt-14">
-          <h2 className="text-[18px] font-semibold">What changed, and why</h2>
-          <ol className="mt-5 grid gap-4">
+// `embedded`: rendered inside the Design process board — no page chrome, no before/after or summary (the board has both)
+export function Rationale({ embedded = false }: { embedded?: boolean }) {
+  const body = (
+    <>
+        <section className={embedded ? "" : "mt-14"}>
+          {!embedded && <h2 className="text-[18px] font-semibold">What changed, and why</h2>}
+          <ol className={`grid gap-4 ${embedded ? "" : "mt-5"}`}>
             {DECISIONS.map((d, i) => (
               <li key={d.title} className="grid gap-x-8 gap-y-4 rounded-xl bg-white p-6 shadow-[0_0_0_1px_oklch(0.2_0.015_285/0.06)] sm:p-8 lg:grid-cols-[220px_minmax(0,1fr)]">
                 <div>
@@ -282,13 +253,48 @@ export function Rationale() {
           </div>
         </section>
 
-        <section className="mt-14">
+        {!embedded && <section className="mt-14">
           <h2 className="text-[18px] font-semibold">After publishing</h2>
           <p className="mt-1 max-w-[65ch] text-[14px]" style={muted}>The same page once the event is live: status reads Live in one place, setup has collapsed, and the left column offers the next useful step — sharing the link.</p>
           <div className="mt-5 max-w-[820px]">
             <Shot src="/deck/mm-after-live.jpg" alt="Redesigned Insights page after publishing" caption="Live — setup collapsed, next step is sharing" tone="after" />
           </div>
+        </section>}
+    </>
+  );
+  if (embedded) return <div style={{ color: B.ink }}>{body}</div>;
+  return (
+    <div className="mm-proto min-h-dvh px-4 pb-32 pt-8 sm:px-10" style={{ backgroundColor: "oklch(0.955 0.004 285)", color: B.ink, fontFamily: "var(--font-inter), -apple-system, sans-serif" }}>
+      <div className="mx-auto max-w-[1240px]">
+        <header className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-[12px] font-medium uppercase tracking-[0.08em]" style={muted}>Movemint organizer · Insights redesign</p>
+            <h1 className="mt-1 font-serif text-[38px] leading-none">Design rationale</h1>
+          </div>
+          <p className="max-w-[56ch] text-[14px] [text-wrap:pretty]" style={muted}>
+            A visual redesign of the Insights page an organizer lands on after creating an event. Brief: improve the visuals, add no features, keep the data — about two to three hours.
+          </p>
+        </header>
+
+        <section className="mt-10 grid gap-6 lg:grid-cols-2">
+          <Shot src="/deck/mm-insights-current.jpg" alt="Original Movemint Insights page" caption="Draft, ready to publish — as shipped" tone="before" />
+          <Shot src="/deck/mm-after-setup.jpg" alt="Redesigned Insights page" caption="Same state, same data, redesigned" tone="after" />
         </section>
+
+        <section className="mt-12 grid gap-4 md:grid-cols-3">
+          {[
+            ["Say each thing once", "One status, one number per fact, one place for the next step."],
+            ["Make the next step obvious", "Required before optional, now before later, one filled button."],
+            ["Bring the brand into the product", "The wordmark’s serif, the logo gradient and Movemint’s red family — used with restraint."],
+          ].map(([t, d], i) => (
+            <div key={t} className="rounded-xl bg-white p-6 shadow-[0_0_0_1px_oklch(0.2_0.015_285/0.06)]">
+              <p className="font-serif text-[32px] leading-none" style={{ color: B.accentStrong }}>{i + 1}</p>
+              <p className="mt-3 text-[18px] font-semibold">{t}</p>
+              <p className="mt-1 text-[14px] [text-wrap:pretty]" style={muted}>{d}</p>
+            </div>
+          ))}
+        </section>
+        {body}
       </div>
     </div>
   );

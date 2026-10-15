@@ -24,6 +24,7 @@ export async function generateMetadata({
   return {
     title: `${project.name} — Zoey Yan`,
     description: project.summary,
+    openGraph: { title: `${project.name} — Zoey Yan`, description: project.summary, type: "article" },
   };
 }
 
