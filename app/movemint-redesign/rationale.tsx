@@ -9,7 +9,7 @@ function Shot({ src, alt, caption, tone }: { src: string; alt: string; caption: 
   return (
     <figure className="min-w-0">
       <div className="overflow-hidden rounded-xl bg-white shadow-[0_0_0_1px_oklch(0.2_0.015_285/0.08),0_8px_24px_-12px_oklch(0.2_0.015_285/0.25)]">
-        <img src={src} alt={alt} className="block aspect-[2400/1289] w-full object-cover object-top" />
+        <img src={src} alt={alt} width={2400} height={1289} loading="lazy" decoding="async" className="block aspect-[2400/1289] w-full object-cover object-top" />
       </div>
       <figcaption className="mt-3 flex items-center gap-2 text-[13px]" style={muted}>
         <span
@@ -29,101 +29,74 @@ const P1 = "01 Prioritize action over information";
 const P2 = "02 Make progress visible and meaningful";
 const P3 = "03 Balance brand expression with usability";
 
-const DECISIONS: { title: string; before: string; after: string; why: string; principle: string; media?: React.ReactNode }[] = [
+const DECISIONS: { title: string; before: string; after: string; user: string; business: string; principle: string; media?: React.ReactNode }[] = [
   {
     title: "One status, in one place",
-    before: "“Draft” appeared three times: a pill next to the title, a green “Ready to publish” banner, and a Status card.",
-    after: "One status menu next to the title, with Movemint’s five real statuses (Live, Draft, Unlisted, Landing Page, Past Event). The banner and the Status card are gone; the event URL sits under the title with Copy and Edit URL.",
-    why: "Saying the same thing three times costs space and attention and adds nothing. The banner also pushed the actual work below the fold.",
+    before: "“Draft” appeared three times: a pill, a green banner and a Status card.",
+    after: "One status menu next to the title; the banner and Status card are gone.",
+    user: "Where the event stands is clear at a glance, and the freed space goes to the work itself.",
+    business: "Fewer “is my event live?” questions to support.",
     principle: P1,
   },
   {
     title: "One action, on the line it belongs to",
-    before: "Brand red on Create Event, the active nav, the progress bar, Publish and the AI button, all at equal weight. Publish sat small inside a banner.",
-    after: "Only the action that moves the event forward is filled, and it appears where its task is: Set up on the open setup step, then Publish on the Publish line, then Copy event link once live.",
-    why: "When everything is red, nothing is primary. Putting the button on its own step answers “what do I do next?” and “why?” in the same place.",
+    before: "Brand red on five things at equal weight; Publish sat small inside a banner.",
+    after: "Only the next action is filled, on its own step: Set up, then Publish, then Copy event link.",
+    user: "No hunting for what to do next — the path from draft to live is a straight line.",
+    business: "Shorter time to publish — the first success metric, and the moment an event starts earning.",
     principle: P1,
-  },
-  {
-    title: "The brand red, made legible",
-    before: "Movemint red #FF4A5D with white text and as text: 3.29:1, fails WCAG AA. A red progress bar read as an error.",
-    after: "Raspberry #bd3061 for anything with text (buttons 5.59:1). Light raspberry #ec5482 for shapes only (3.43:1, above the 3:1 non-text bar). Green means Live and nothing else. Neutrals tinted toward the logo’s violet.",
-    why: "Keeps Movemint’s red family while passing contrast. Giving each color one meaning makes the page readable at a glance.",
-    principle: P3,
-  },
-  {
-    title: "Type with one voice, one brand moment",
-    before: "Inter only, seven ad-hoc sizes (12–30px). Figures were barely larger than their labels.",
-    after: "Inter for every piece of UI on a fixed role scale; the three overview figures share one stat style (28/600, tabular). Instrument Serif, which echoes the wordmark, appears once — the event name on the event card.",
-    why: "One family keeps the working UI calm and scannable; saving the serif for a single moment is what makes it feel like the brand.",
-    principle: P3,
   },
   {
     title: "An overview you read in one line",
-    before: "Three identical grey cards (Status, Participants, Date); 16px values; only Participants had an affordance, a bare arrow.",
-    after: "The event card — name in serif, date, place and a “23 days to go” chip — opens the attendee preview. Beside it, three facts in one card: Participants (View all), Required setup (4/5 with the page’s only progress bar), Registration (Open/Closed and its window).",
-    why: "The card is the event at a glance; each fact answers one question and links to where you act on it. Label → value → one line in every cell keeps it scannable.",
+    before: "Three identical grey cards; only Participants had an affordance, a bare arrow.",
+    after: "The event card beside three facts — Participants, Required setup, Registration — each with a link to act on.",
+    user: "The three questions organizers bring are answered before scrolling.",
+    business: "A labelled way into attendee analytics, one of the product’s core features.",
     principle: P2,
   },
   {
-    title: "The checklist as a timeline",
-    before: "One long list with no hierarchy: 23 rows under small Required / Recommended labels, with “6 of 23 tasks complete” at the far right.",
-    after: "Stages on a rail — Today (required setup) → Publish → Before race day → Race day → After — the “before, during, and after” the page’s own description promised. Solid rail up to Publish, dashed after; one marker family whose color says done, now, locked or optional.",
-    why: "Tasks have a natural order in time. Showing it tells organizers what matters now and what can wait, without reading all 23.",
-    principle: P2,
-  },
-  {
-    title: "Required vs optional, impossible to miss",
-    before: "Required and optional rows looked the same; every optional task read “Not applicable”.",
-    after: "The one open required step is the only tinted row, with its Set up button. Publish shows a lock until setup is done. Optional stages say “Optional, any order”.",
-    why: "Several quiet signals — tint, lock, label, rail style — make the split readable at a glance without adding loud badges.",
-    principle: P1,
-  },
-  {
-    title: "Done looks like Movemint’s done",
-    before: "Done rows kept full weight, plus a lock icon and “Completed” on every row.",
-    after: "Movemint’s own completed style — grey checked box, muted struck-through title, description kept — without the lock and label. Once every required step is done, the list folds into one “All 5 required steps done” row.",
-    why: "Finished work is history. Reusing the product’s existing completed state keeps it familiar; folding it lets the next step lead.",
+    title: "A checklist with a shape",
+    before: "One long list: 23 equal rows, required and optional alike, done rows still at full weight.",
+    after: "Stages on a timeline; the one open required step tinted with Set up; finished steps in Movemint’s completed style, folded once done.",
+    user: "What matters now, what’s optional and what’s finished are visible without reading all 23.",
+    business: "Fewer events stuck in Draft — the second success metric (required-vs-optional accuracy).",
     principle: P2,
   },
   {
     title: "Optional tasks you can tick off",
     before: "18 full-width bordered rows in one list.",
-    after: "Grouped by purpose and stage — Get found, Registration, On the day, After the race — as two-column lists with a title, one-line description and a checkbox. A ticked task glides to the end of its list.",
-    why: "Grouping turns one long list into short, browsable sets; letting organizers mark tasks themselves matches how the original worked.",
+    after: "Short lists grouped by purpose and stage, each with a checkbox.",
+    user: "Easy to browse, and organizers can keep their own checklist, as in the original.",
+    business: "More use of the revenue features — merchandise, donations, performance marketing, referrals.",
     principle: P2,
   },
   {
     title: "Context that follows you down the page",
     before: "Scroll past the top and the event, its status and the countdown are gone.",
-    after: "A slim sticky bar slides in once the overview scrolls away: event, status, date and days to go. It shows the next action only while that task’s own line is off screen.",
-    why: "Keeps “which event, where it stands” in view without giving it a permanent column — a persistent action earns its place only when the real one can’t be seen.",
+    after: "A slim sticky bar with the event, status and days to go; the next action joins only when its own line is off screen.",
+    user: "Organizers running several races never lose track of which one they’re editing.",
+    business: "Supports multi-event organizers — the efficiency they praised in the reviews.",
     principle: P1,
+  },
+  {
+    title: "One visual system",
+    before: "Movemint red with white text failed contrast (3.29:1); seven ad-hoc type sizes.",
+    after: "A raspberry from the same red family (5.59:1), green for Live only, Inter on a fixed scale, the serif saved for the event name.",
+    user: "Readable for everyone, and each color means one thing.",
+    business: "Meets WCAG AA while staying recognisably Movemint.",
+    principle: P3,
   },
 ];
 
-const KEPT = [
-  "Every feature and every piece of data — no additions, no removals",
-  "Navigation: sidebar (now collapsible, as in the original), event tabs, Checkout dashboard",
-  "All 23 checklist tasks and Movemint’s own copy",
-  "Quick actions: search, participants, financials, QR code, duplicate, preview",
-  "Movemint’s completed-task style and its five statuses",
-  "Movemint AI — restyled, same entry point",
-];
-
-const REJECTED: [string, string][] = [
-  ["Refined / Progress-first / Split / Table (round 1)", "Cleaner, but generic SaaS — nothing about Movemint"],
-  ["Start line (setup drawn as a race course)", "Memorable, but optional tasks fell off the metaphor"],
-  ["Combined (poster column + timeline)", "Kept context in view, but the column squeezed every task"],
-  ["Stages and Board layouts", "Hid tasks behind tabs, or scrolled sideways and implied a fixed order"],
-  ["Grey canvas with borderless cards", "Flattened the page into competing surfaces"],
-  ["Crimson, ink, rose, plum, burnt coral accents", "Off-brand, or buttons lost the brand color"],
-  ["Modals and side sheets", "Hide the page the decision is about"],
-];
-
 /* ── examples for each decision ── */
+// intrinsic sizes so each image reserves its space before it loads
+const DIMS: Record<string, [number, number]> = {
+  "/deck/mm-r-01.jpg": [2304, 194], "/deck/mm-r-05.jpg": [2304, 360], "/deck/mm-r-07.jpg": [2304, 2874], "/deck/mm-r-08.jpg": [2304, 906],
+  "/deck/mm-r-09.jpg": [2304, 320], "/deck/mm-r-02a.jpg": [1944, 176], "/deck/mm-r-02b.jpg": [2296, 262], "/deck/mm-r-02c.jpg": [2296, 254], "/deck/mm-r-10.jpg": [980, 888], "/deck/mm-r-11.jpg": [2312, 152],
+};
 function Img({ src, alt, max = "max-w-[820px]" }: { src: string; alt: string; max?: string }) {
-  return <img src={src} alt={alt} className={`block h-auto w-full ${max}`} />;
+  const [w, h] = DIMS[src] ?? [];
+  return <img src={src} alt={alt} width={w} height={h} loading="lazy" decoding="async" className={`block h-auto w-full ${max}`} />;
 }
 function Steps() {
   return (
@@ -182,14 +155,11 @@ function TypeExample() {
 const MEDIA: Record<number, React.ReactNode> = {
   0: <Img src="/deck/mm-r-01.jpg" alt="Title with the status menu, the event URL with Copy and Edit URL, and the quick-action tools" />,
   1: <Steps />,
-  2: <ColorExample />,
-  3: <TypeExample />,
-  4: <Img src="/deck/mm-r-05.jpg" alt="Overview: the event card beside Participants, Required setup and Registration" />,
-  5: <Img src="/deck/mm-r-07.jpg" alt="The checklist as a timeline from today to after the race" max="max-w-[560px]" />,
-  6: <Img src="/deck/mm-r-08.jpg" alt="Finish the setup: the one tinted open step with Set up above the completed steps" max="max-w-[760px]" />,
-  7: <Img src="/deck/mm-r-09.jpg" alt="Setup complete: all five required steps folded into one row" max="max-w-[760px]" />,
-  8: <Img src="/deck/mm-r-10.jpg" alt="Get found: optional tasks with checkboxes, titles and one-line descriptions" max="max-w-[420px]" />,
-  9: <Img src="/deck/mm-r-11.jpg" alt="Sticky bar: event name, status, date and days to go" />,
+  2: <Img src="/deck/mm-r-05.jpg" alt="Overview: the event card beside Participants, Required setup and Registration" />,
+  3: <Img src="/deck/mm-r-08.jpg" alt="Finish the setup: the one tinted open step with Set up above the completed steps" max="max-w-[760px]" />,
+  4: <Img src="/deck/mm-r-10.jpg" alt="Get found: optional tasks with checkboxes, titles and one-line descriptions" max="max-w-[420px]" />,
+  5: <Img src="/deck/mm-r-11.jpg" alt="Sticky bar: event name, status, date and days to go" />,
+  6: <div className="grid gap-4"><ColorExample /><TypeExample /></div>,
 };
 
 // `embedded`: rendered inside the Design process board — no page chrome, no before/after or summary (the board has both)
@@ -206,11 +176,12 @@ export function Rationale({ embedded = false }: { embedded?: boolean }) {
                   <h3 className="mt-1 text-[18px] font-semibold leading-snug [text-wrap:balance]">{d.title}</h3>
                   <p className="mt-3 inline-flex rounded-md px-2 py-0.5 text-[12px] font-medium" style={{ backgroundColor: B.surface, color: B.muted }}>{d.principle}</p>
                 </div>
-                <dl className="grid gap-4 text-[14px] leading-relaxed md:grid-cols-3">
+                <dl className="grid gap-x-6 gap-y-4 text-[14px] leading-relaxed md:grid-cols-2 xl:grid-cols-4">
                   {[
                     ["Before", d.before],
                     ["After", d.after],
-                    ["Why", d.why],
+                    ["For organizers", d.user],
+                    ["For Movemint", d.business],
                   ].map(([k, v]) => (
                     <div key={k}>
                       <dt className="text-[12px] font-medium uppercase tracking-[0.08em]" style={{ color: k === "After" ? B.accentStrong : B.muted }}>{k}</dt>
@@ -229,27 +200,6 @@ export function Rationale({ embedded = false }: { embedded?: boolean }) {
           </ol>
         </section>
 
-        <section className="mt-14 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-xl bg-white p-6 shadow-[0_0_0_1px_oklch(0.2_0.015_285/0.06)] sm:p-8">
-            <h2 className="text-[18px] font-semibold">Kept on purpose</h2>
-            <ul className="mt-4 grid gap-2.5 text-[14px]">
-              {KEPT.map((k) => (
-                <li key={k} className="flex gap-2.5"><span aria-hidden="true" style={muted}>—</span>{k}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-xl bg-white p-6 shadow-[0_0_0_1px_oklch(0.2_0.015_285/0.06)] sm:p-8">
-            <h2 className="text-[18px] font-semibold">Explored and rejected</h2>
-            <dl className="mt-4 grid gap-3 text-[14px]">
-              {REJECTED.map(([k, v]) => (
-                <div key={k}>
-                  <dt className="font-medium">{k}</dt>
-                  <dd style={muted}>{v}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </section>
 
         {!embedded && <section className="mt-14">
           <h2 className="text-[18px] font-semibold">After publishing</h2>

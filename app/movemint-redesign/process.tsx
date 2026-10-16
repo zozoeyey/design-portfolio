@@ -8,13 +8,20 @@ import CaseStudyContents, { type ContentsSection } from "@/components/CaseStudyC
 const INK = "oklch(0.24 0.015 285)";
 const MUTED = "oklch(0.45 0.015 285)";
 const RED = "oklch(0.54 0.18 5)"; // accentStrong — markers and stamps
+// Four note colors, one meaning each:
+// yellow = the content · pink = a problem or pain point · green = what it means for the design ·
+// blue = method, open questions and metrics. Older tone names map onto these.
+const YELLOW = "oklch(0.95 0.09 95)";
+const PINK = "oklch(0.92 0.06 5)";
+const GREEN = "oklch(0.93 0.07 155)";
+const BLUE = "oklch(0.92 0.05 240)";
 const STICKY = {
-  yellow: "oklch(0.95 0.09 95)",
-  pink: "oklch(0.92 0.06 5)",
-  green: "oklch(0.93 0.07 155)",
-  blue: "oklch(0.92 0.05 240)",
-  violet: "oklch(0.92 0.05 300)",
-  orange: "oklch(0.93 0.07 65)",
+  yellow: YELLOW,
+  pink: PINK,
+  green: GREEN,
+  blue: BLUE,
+  orange: PINK,
+  violet: BLUE,
 } as const;
 type Tone = keyof typeof STICKY;
 
@@ -50,7 +57,7 @@ function Shot({ src, alt, w, h, children }: { src: string; alt: string; w: numbe
   return (
     <figure className="relative overflow-hidden rounded-lg bg-white" style={{ boxShadow: "0 0 0 1px oklch(0.2 0.015 285 / 0.1), 0 10px 24px -14px oklch(0.2 0.015 285 / 0.35)" }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} width={w} height={h} className="block h-auto w-full" />
+      <img src={src} alt={alt} width={w} height={h} loading="lazy" decoding="async" className="block h-auto w-full" />
       {children}
     </figure>
   );
@@ -122,12 +129,6 @@ const COMPETITORS = [
     ],
   },
 ];
-const REVIEWS = [
-  { src: "/deck/mm-rev-aapi.jpg", w: 1432, h: 864, alt: "AAPI 5K review, Feb 26, 2025: easy to use for first-time and seasoned race directors; a registration page takes minutes" },
-  { src: "/deck/mm-rev-marin.jpg", w: 1432, h: 710, alt: "Marin Mile review, Jul 1, 2025: super easy to use as an organizer; great participant feedback about registration" },
-  { src: "/deck/mm-rev-chris.jpg", w: 1432, h: 518, alt: "Chris Mcqueen review, Feb 25, 2025: over 7 races a year; one platform to manage multiple races saves time" },
-  { src: "/deck/mm-rev-afaic.jpg", w: 1432, h: 518, alt: "As Far As I'm Concerned review, Feb 2, 2024: perfect for free community rides; donations and waivers at registration" },
-];
 const INSIGHTS = [
   {
     title: "Simplicity is essential for organizers of different experience levels.",
@@ -152,6 +153,18 @@ const INSIGHTS = [
   },
 ];
 
+const QA: [string, string, [string, string][]][] = [
+  ["User priorities", "Which information do organizers look for first when reviewing an event?", [
+    ["Clarity over complexity", "Organizers prefer a dashboard where event status, registration information, and next steps are immediately visible without unnecessary visual clutter."],
+  ]],
+  ["Usability challenges", "Which aspects of the current visual presentation create friction during actual organizer workflows?", [
+    ["Actionable guidance", "Organizers benefit from knowing what needs attention first, particularly which setup tasks are required versus optional."],
+    ["Contextual progress", "Organizers may find it easier to understand event preparation when tasks are visually grouped around the event lifecycle, from initial setup to race day and post-event wrap-up."],
+  ]],
+  ["Visual constraints", "Which existing design tokens, components, and accessibility standards should guide the redesign?", [
+    ["Build on Movemint’s own system", "Reuse Movemint’s existing components, statuses, completed-task style and brand red, with WCAG AA contrast as the floor."],
+  ]],
+];
 const METRICS = [
   { title: "Time to identify next action", body: "Reduce the time it takes organizers to locate their next required setup task.", dir: "down" },
   { title: "Task prioritization accuracy", body: "Increase the percentage of organizers who can correctly distinguish required tasks from optional recommendations.", dir: "up" },
@@ -173,7 +186,7 @@ const PRINCIPLES = [
   {
     title: "Balance brand expression with usability",
     body: "Create a distinctive, engaging interface without compromising readability, consistency, or operational efficiency.",
-    app: "Use a poster-inspired event card to communicate event identity, paired with restrained UI components and consistent spacing throughout the operational dashboard.",
+    app: "A single expressive event card — the event name in Movemint’s serif on the logo gradient — paired with restrained, consistent UI components everywhere else on the dashboard.",
     img: { src: "/deck/mm-r-05.jpg", w: 664, h: 814, alt: "Redesign: the poster-style event card in Movemint’s logo gradient", frame: "mx-auto w-full max-w-[300px]" },
   },
 ];
@@ -200,7 +213,7 @@ const ROUND1: [string, string, string, number][] = [
 ];
 const ROUND3: [string, string, string, number, number, boolean][] = [
   ["Combined", "Poster column + timeline (round 2)", "/deck/mm-iter3-combined.jpg", 1250, 5, false],
-  ["Banner", "Compact event strip, full-width timeline", "/deck/mm-iter3-banner.jpg", 1250, 1, true],
+  ["Banner", "Poster as a short band, full-width timeline", "/deck/mm-iter3-banner.jpg", 1250, 1, true],
   ["Stages", "One stage of tasks at a time", "/deck/mm-iter3-stages.jpg", 1250, 9, false],
   ["Board", "The lifecycle as columns", "/deck/mm-iter3-board.jpg", 1250, 10, false],
 ];
@@ -215,20 +228,18 @@ const CONTENTS: ContentsSection[] = [
   { id: "brief", label: "Brief", level: 1 },
   { id: "problem", label: "01 Problem definition", level: 1 },
   { id: "discovery", label: "02 Discovery", level: 1 },
-  { id: "define", label: "Define & frame the problem", level: 2 },
   { id: "audit", label: "UX audit", level: 2 },
   { id: "competitors", label: "Competitor scan", level: 2 },
   { id: "users", label: "User understanding", level: 2 },
   { id: "framing", label: "03 Framing", level: 1 },
   { id: "assumptions", label: "Assumptions", level: 2 },
-  { id: "constraints", label: "Constraints", level: 2 },
   { id: "principles", label: "Design principles", level: 2 },
   { id: "final", label: "04 Final design", level: 1 },
   { id: "iterations", label: "05 Design iterations", level: 1 },
   { id: "round1", label: "Round 1 — First versions", level: 2 },
   { id: "round2", label: "Round 2 — Four directions", level: 2 },
   { id: "decision", label: "Round 2 decision", level: 2 },
-  { id: "round3", label: "Round 3 — Final layout", level: 2 },
+  { id: "round3", label: "Round 3 — Layout", level: 2 },
   { id: "rationale", label: "06 Design rationale", level: 1 },
   { id: "next", label: "07 Takeaways & next steps", level: 1 },
 ];
@@ -242,7 +253,6 @@ function go(v: number) {
 }
 const TAKEAWAYS: [string, string][] = [
   ["Hierarchy came from subtraction", "The biggest gains came from removing repetition — “Draft” appeared three times — which freed the space for the next step to lead."],
-  ["Brand and accessibility weren’t at odds", "A raspberry from Movemint’s own red family kept the brand while passing contrast, so the color now carries meaning instead of noise."],
   ["The constraint sharpened the work", "With no new features allowed, every improvement had to come from hierarchy, grouping and type — the same components, used more deliberately."],
 ];
 const NEXT: [string, string][] = [
@@ -271,13 +281,7 @@ export function Process() {
 
         {/* ── 01 ── */}
         <Section label="01  Problem definition" tone="yellow" id="problem">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-            <div>
-              <Label>What’s the task?</Label>
-              <Sticky tone="yellow" className="min-h-[180px]">
-                <span className="text-[16px] leading-[1.5]">Redesign an existing screen within Movemint’s organizer experience to improve its visual presentation, with a focus on visual design rather than introducing new features or changing established workflows.</span>
-              </Sticky>
-            </div>
+          <div>
             <div>
               <Label>What’s the challenge?</Label>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -290,27 +294,8 @@ export function Process() {
 
         {/* ── 02 ── */}
         <Section label="02  Discovery" tone="green" id="discovery">
-          <h2 id="define" className="scroll-mt-24 text-[20px] font-semibold tracking-[-0.01em]">Step 1 — Define &amp; frame the problem</h2>
-          <div className="mt-6 grid gap-8 md:grid-cols-2">
-            <div>
-              <Label>What we know</Label>
-              <div className="grid gap-4">
-                <Sticky tone="green" title="Product context">Movemint is an event management platform for athletic events, supporting registration, participant management, communications, and race-day operations.</Sticky>
-                <Sticky tone="green" title="Existing experience">The Event Insights page includes event status, participant count, event date, and a checklist that tracks setup and operational tasks.</Sticky>
-              </div>
-            </div>
-            <div>
-              <Label>What we don’t know</Label>
-              <div className="grid gap-4">
-                <Sticky tone="violet" title="User priorities">Which information do organizers look for first when reviewing an event?</Sticky>
-                <Sticky tone="violet" title="Usability challenges">Which aspects of the current visual presentation create friction during actual organizer workflows?</Sticky>
-                <Sticky tone="violet" title="Visual constraints">Which existing design tokens, components, and accessibility standards should guide the redesign?</Sticky>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-14 scroll-mt-24 border-t pt-10" style={{ borderColor: "oklch(0.2 0.015 285 / 0.1)" }} id="audit">
-            <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Step 2A — UX audit</h2>
+          <div className="scroll-mt-24" id="audit">
+            <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Step 1 — UX audit</h2>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <Sticky tone="blue" title="Objective">Identify visual design opportunities through a heuristic evaluation of Movemint’s existing Event Insights interface.</Sticky>
               <Sticky tone="blue" title="Method">Reviewed the provided organizer dashboard screen, focusing on information hierarchy, readability, consistency, and visual density.</Sticky>
@@ -376,7 +361,7 @@ export function Process() {
 
           {/* ── Step 2B ── */}
           <div className="mt-14 scroll-mt-24 border-t pt-10" style={{ borderColor: "oklch(0.2 0.015 285 / 0.1)" }} id="competitors">
-            <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Step 2B — Competitor scan</h2>
+            <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Step 2 — Competitor scan</h2>
             <div className="mt-6 max-w-[620px]">
               <Sticky tone="blue" title="Objective">Understand how other event management platforms establish information hierarchy and organize event-related information.</Sticky>
             </div>
@@ -394,7 +379,7 @@ export function Process() {
                       </div>
                     ))}
                   </div>
-                  <Sticky tone="orange">{c.body}</Sticky>
+                  <Sticky tone="yellow">{c.body}</Sticky>
                   <Sticky tone="green" className="sm:ml-8">
                     <b className="font-semibold" style={{ color: INK }}>Takeaway: </b>
                     {c.take}
@@ -415,7 +400,7 @@ export function Process() {
 
           {/* ── Step 2C ── */}
           <div className="mt-14 scroll-mt-24 border-t pt-10" style={{ borderColor: "oklch(0.2 0.015 285 / 0.1)" }} id="users">
-            <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Step 2C — User understanding</h2>
+            <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Step 3 — User understanding</h2>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <Sticky tone="blue" title="Objective">Understand what organizers value in an event management platform and identify priorities that should inform the visual redesign.</Sticky>
               <Sticky tone="blue" title="Method">
@@ -425,22 +410,11 @@ export function Process() {
             </div>
 
             <div className="mt-10">
-              <Label>Reviews</Label>
-              <div className="columns-1 gap-5 md:columns-2 [&>*]:mb-5 [&>*]:break-inside-avoid">
-                {REVIEWS.map((r) => (
-                  <div key={r.src} className="pc-pin">
-                    <Shot src={r.src} alt={r.alt} w={r.w} h={r.h} />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-10">
               <Label>Three key insights</Label>
               <ol className="grid gap-10">
                 {INSIGHTS.map((x, i) => (
                   <li key={x.title} className="grid gap-4 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-start">
-                    <Sticky tone="pink">
+                    <Sticky tone="yellow">
                       <span className="mb-2 flex items-center gap-2.5 text-[15px] font-semibold leading-snug" style={{ color: INK }}>
                         <Stamp n={i + 1} /> {x.title}
                       </span>
@@ -476,18 +450,26 @@ export function Process() {
 
         {/* ── 03 ── */}
         <Section label="03  Framing" tone="violet" id="framing">
-          <h2 id="assumptions" className="scroll-mt-24 text-[20px] font-semibold tracking-[-0.01em]">Step 3 — Assumptions</h2>
-          <p className="mt-2 max-w-[68ch] text-[15px]" style={{ color: MUTED }}>Since I couldn’t run user interviews within this time-box, I worked under the following assumptions.</p>
+          <h2 id="assumptions" className="scroll-mt-24 text-[20px] font-semibold tracking-[-0.01em]">Step 4 — Assumptions</h2>
+          <p className="mt-2 max-w-[68ch] text-[15px]" style={{ color: MUTED }}>Since I couldn’t run user interviews within this time-box, each open question got a working assumption, drawn from the audit, the competitor benchmarks and the reviews.</p>
           <div className="mt-8">
-            <Label>A. User preferences · from secondary research + competitor benchmarks</Label>
-            <div className="grid gap-4 md:grid-cols-3">
-              <Sticky tone="violet" title="Clarity over complexity">Organizers prefer a dashboard where event status, registration information, and next steps are immediately visible without unnecessary visual clutter.</Sticky>
-              <Sticky tone="violet" title="Actionable guidance">Organizers benefit from knowing what needs attention first, particularly which setup tasks are required versus optional.</Sticky>
-              <Sticky tone="violet" title="Contextual progress">Organizers may find it easier to understand event preparation when tasks are visually grouped around the event lifecycle, from initial setup to race day and post-event wrap-up.</Sticky>
+            <div className="mb-3 hidden grid-cols-[minmax(0,5fr)_24px_minmax(0,7fr)] gap-4 md:grid">
+              <Label>What we didn’t know</Label><span /><Label>What I assumed</Label>
             </div>
+            <ol className="grid gap-5">
+              {QA.map(([q, qd, as]) => (
+                <li key={q} className="grid gap-3 md:grid-cols-[minmax(0,5fr)_24px_minmax(0,7fr)] md:items-start md:gap-4">
+                  <Sticky tone="violet" title={q}>{qd}</Sticky>
+                  <span aria-hidden="true" className="hidden pt-5 text-center text-[18px] md:block" style={{ color: MUTED }}>→</span>
+                  <div className="grid gap-3">
+                    {as.map(([t, d]) => <Sticky key={t} tone="yellow" title={t}>{d}</Sticky>)}
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
           <div className="mt-10">
-            <Label>B. Success metrics · hypothetical</Label>
+            <Label>Success metrics · hypothetical</Label>
             <div className="grid gap-4 md:grid-cols-3">
               {METRICS.map((m) => (
                 <Sticky key={m.title} tone="blue">
@@ -500,15 +482,6 @@ export function Process() {
               ))}
             </div>
             <p className="mt-4 text-[13px] italic" style={{ color: MUTED }}>These are proposed evaluation metrics, not measured outcomes.</p>
-          </div>
-
-          <div className="mt-14 border-t pt-10" style={{ borderColor: "oklch(0.2 0.015 285 / 0.1)" }}>
-            <h2 id="constraints" className="scroll-mt-24 text-[20px] font-semibold tracking-[-0.01em]">Step 4 — Constraints</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <Sticky tone="pink" title="Time-boxed execution">Complete the audit, research, exploration, and high-fidelity redesign within 2–3 hours, prioritizing the highest-impact visual changes.</Sticky>
-              <Sticky tone="pink" title="Existing functionality">Preserve the current organizer workflows, task content, and available actions without adding features or introducing new technical requirements.</Sticky>
-              <Sticky tone="pink" title="Limited user validation">Rely on heuristic evaluation, secondary research, and competitor benchmarks rather than direct user interviews or usability testing.</Sticky>
-            </div>
           </div>
 
           <div className="mt-14 border-t pt-10" style={{ borderColor: "oklch(0.2 0.015 285 / 0.1)" }}>
@@ -553,7 +526,7 @@ export function Process() {
               <Shot src="/deck/mm-after-live.jpg" alt="The redesigned Insights page once the event is live" w={2400} h={1289} />
             </div>
             <div className="grid gap-3">
-              <Sticky tone="yellow">Once the event is live, status reads Live in one place, the completed setup collapses, and the action at the end of the facts strip becomes Copy event link.</Sticky>
+              <Sticky tone="yellow">Once the event is live, status reads Live in one place, the completed setup folds into one row, and the Publish line becomes Copy event link.</Sticky>
               <div className="mt-2 grid gap-2 sm:ml-6">
                 {([["Try the interactive prototype", 1], ["Walk through the scenarios", 3], ["See the design system", 2]] as const).map(([t, v]) => (
                   <a key={t} href={`?v=${v}`} onClick={(e) => { e.preventDefault(); go(v); }} className="inline-flex min-h-11 items-center justify-between gap-3 rounded-[10px] bg-white px-4 text-[14px] font-semibold transition-transform duration-150 active:scale-[0.98]" style={{ boxShadow: "inset 0 0 0 1px oklch(0.2 0.015 285 / 0.12)" }}>
@@ -593,7 +566,7 @@ export function Process() {
                 <li key={x.name} className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-start lg:gap-10">
                   <Peek src={x.src} alt={`${x.name}: ${x.lead}`} h={x.h} tall />
                   <div className="grid gap-3">
-                    <Sticky tone={x.final ? "yellow" : "orange"}>
+                    <Sticky tone="yellow">
                       <span className="mb-2 flex flex-wrap items-center gap-2.5 text-[17px] font-semibold leading-snug" style={{ color: INK }}>
                         <Stamp n={i + 1} /> {x.name}
                         {x.final && <span className="rounded-md px-2 py-0.5 text-[12px] font-medium" style={{ backgroundColor: "white", color: INK, boxShadow: "inset 0 0 0 1px oklch(0.2 0.015 285 / 0.15)" }}>Picked for round 3</span>}
@@ -628,7 +601,7 @@ export function Process() {
                   <Peek src={src} alt={`${t}: ${d}`} h={h} />
                   <figcaption className="flex items-start justify-between gap-4">
                     <span>
-                      <span className="flex items-center gap-2 text-[14px] font-semibold">{t}{chosen && <span className="rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-white" style={{ backgroundColor: RED }}>Final</span>}</span>
+                      <span className="flex items-center gap-2 text-[14px] font-semibold">{t}{chosen && <span className="rounded-md px-2 py-0.5 text-[11px] font-medium" style={{ backgroundColor: "white", color: INK, boxShadow: "inset 0 0 0 1px oklch(0.2 0.015 285 / 0.15)" }}>Picked for polish</span>}</span>
                       <span className="block text-[13px]" style={{ color: MUTED }}>{d}</span>
                     </span>
                     <a href={`?v=${v}`} onClick={(e) => { e.preventDefault(); go(v); }} className="shrink-0 text-[13px] font-semibold underline underline-offset-2">Open</a>
@@ -637,11 +610,12 @@ export function Process() {
               ))}
             </div>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
-              <Sticky tone="yellow" title="Final: Banner">The poster shrinks to a compact event strip — date, location and countdown, with the brand gradient kept as one small accent — and the title isn’t repeated. The timeline runs the full width: about a third more room for every task.</Sticky>
+              <Sticky tone="yellow" title="Picked: Banner">The poster shrinks to a short band above the facts, and the timeline runs the full width — about a third more room for every task.</Sticky>
               <Sticky tone="pink" title="Why not Stages or Board">Stages hides tasks behind tabs and Board scrolls sideways and implies a fixed order — both change how the page works, not just how it looks.</Sticky>
-              <Sticky tone="green" title="What Banner keeps">The same order as the original page (event, facts, checklist) and all three principles: action first, visible progress, and brand with restraint — the gradient as an accent, not a billboard.</Sticky>
+              <Sticky tone="green" title="What Banner keeps">The same order as the original page (event, facts, checklist) and all three principles: action first, visible progress, and brand with restraint.</Sticky>
             </div>
           </div>
+
         </Section>
 
         {/* ── 06 ── */}

@@ -175,11 +175,15 @@ export function StatusPill({ flow }: { flow: Flow }) {
   );
 }
 
+// The live region is always mounted (an element inserted with its text isn't reliably announced); only the pill shows/hides.
 export function Toast({ flow }: { flow: Flow }) {
-  if (!flow.toast) return null;
   return (
-    <div role="status" className="mm-toast fixed bottom-24 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2.5 text-[14px] font-medium text-white" style={{ backgroundColor: B.ink }}>
-      <span style={{ color: "oklch(0.8 0.12 155)" }}><Icon n="check" /></span> {flow.toast}
+    <div role="status" aria-live="polite">
+      {flow.toast && (
+        <div className="mm-toast fixed bottom-24 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2.5 text-[14px] font-medium text-white" style={{ backgroundColor: B.ink }}>
+          <span style={{ color: "oklch(0.8 0.12 155)" }}><Icon n="check" /></span> {flow.toast}
+        </div>
+      )}
     </div>
   );
 }

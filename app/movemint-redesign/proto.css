@@ -98,3 +98,15 @@
   bottom: auto;
   top: 24px;
 }
+
+/* phones: four tabs fit without scrolling */
+@media (max-width: 479px) {
+  .proto-picker { font-size: 12px; bottom: 14px; }
+  .proto-picker-item { padding: 0 6px; }
+  .proto-picker-divider, .proto-picker-replay { display: none; }
+}
+/* fixed bottom-right controls sit above the picker instead of under it */
+@media (max-width: 1279px) {
+  body:has(.proto-picker) .mm-ai,
+  body:has(.proto-picker) [data-contents-pill] { bottom: 76px !important; }
+}

@@ -112,8 +112,11 @@ export function Scenarios() {
   // keep ?key= (the page's access key) for the embedded copy
   useEffect(() => {
     const k = new URLSearchParams(location.search).get("key");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    /* eslint-disable react-hooks/set-state-in-effect */
     setBase(k ? `&key=${encodeURIComponent(k)}` : "");
+    // on a phone, preview at phone width instead of a shrunken desktop
+    if (matchMedia("(max-width: 639px)").matches) setDevice("phone");
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
   const src = `?v=1&bare=1&scn=${s}${long ? "&long=1" : ""}${large ? "&large=1" : ""}${base}`;
   const cur = SCENARIOS.find((x) => x.key === s)!;
@@ -150,7 +153,7 @@ export function Scenarios() {
             <Toggle on={large} label="Large participant count" onChange={setLarge} />
             {large && <p className="px-2 text-[12px]" style={{ color: B.muted }}>1,284 participants once the event is live (a draft can’t have registrations).</p>}
           </div>
-          <p className="border-t pt-3 text-[12px] leading-snug" style={{ borderColor: B.line, color: B.muted }}>The page on the right is fully live at the chosen width: scroll it, press Set up and Publish, tick tasks, open the status menu.</p>
+          <p className="border-t pt-3 text-[12px] leading-snug" style={{ borderColor: B.line, color: B.muted }}>The preview is fully live at the chosen width: scroll it, press Set up and Publish, tick tasks, open the status menu.</p>
         </aside>
 
         <Frame src={src} width={dev.w} />
