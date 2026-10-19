@@ -7,11 +7,12 @@ import { loadComments, type DeckComment } from "@/lib/deckComments";
 // Deck controls. Two decks in one page (ValueGlance / Canmarket) and two views:
 //  - Present (default): one slide fills the window; ←/→, Space, PageUp/Down, Home/End, swipe; F = fullscreen.
 //  - Scroll: every slide stacked, as before (handy for printing or html-to-design).
-// State lives in the URL — ?deck=vg|cm, ?view=scroll, #<slide> — so any slide has its own link.
+// State lives in the URL — ?deck=vg|cm|takehome, ?view=scroll, #<slide> — so any slide has its own link.
 // Slide changes are instant on purpose: they're keyboard-driven and happen dozens of times a talk.
 const TABS = [
   ["vg", "ValueGlance"],
   ["cm", "Canmarket.ai"],
+  ["takehome", "Take-home"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 type View = "present" | "scroll";

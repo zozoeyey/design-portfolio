@@ -11,6 +11,8 @@ import RootOverlap from "./RootOverlap";
 import StudyMarket from "./StudyMarket";
 import FirstValue, { FirstValueHeader } from "./FirstValue";
 import DesignSystem from "./DesignSystem";
+import TwoDirections from "./TwoDirections";
+import UserWork from "./UserWork";
 import "./deck.css";
 
 export const metadata: Metadata = {
@@ -1427,12 +1429,16 @@ export default function Deck() {
         <FirstValueHeader />
         <FirstValue />
       </Slide>
-      <Visual theme="cm" title="Explore two directions">
-        <Img src="s49" alt="Direction 1: inline analysis. Direction 2: deferred report" />
-      </Visual>
-      <Visual theme="cm" title="Choose inline analysis" sub={["Show the work → trust", "live feedback", "users can edit"]}>
-        <Img src="s50" alt="Campaign builder with editable core selling points" />
-      </Visual>
+      {/* Explore two directions: Review & Refine vs Guided Questions */}
+      <Slide theme="cm" className="flex flex-col !pb-[3cqw] !pt-[4.2cqw]">
+        <h2 className="s-title">Explore two directions</h2>
+        <TwoDirections />
+      </Slide>
+      {/* Decide what users should do: what AI infers vs what users decide */}
+      <Slide theme="cm" className="flex flex-col !pb-[3.4cqw] !pt-[4.2cqw]">
+        <h2 className="s-title">Decide what users should do</h2>
+        <UserWork />
+      </Slide>
       {/* Pushback: the CEO (abstract avatar) and their words in a speech bubble (same as VG "The first pushback") */}
       <Slide theme="cm" className="flex flex-col">
         <p className="s-eyebrow">Design review</p>
@@ -1502,6 +1508,14 @@ export default function Deck() {
         </div>
       </Slide>
 
+      </div>
+      <div data-part="takehome" className="contents">
+      {/* ---------------- Take-home ---------------- */}
+      <Slide theme="cm" className="flex flex-col justify-center">
+        <p className="s-eyebrow">Take-home exercise</p>
+        <h2 className="s-display mt-[1.2cqw]">Take-home</h2>
+        <p className="s-sub">Slides coming soon.</p>
+      </Slide>
       </div>
       {/* ---------------- Close ---------------- */}
       {["Q & A", "Thank you!"].map((t) => (

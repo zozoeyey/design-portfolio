@@ -86,7 +86,7 @@ That’s the kind of ownership I want to bring to a team: defining the problem c
   "cm:Research similar tools": `- Goal: fewest questions → first AI result`,
   "cm:Map the path to first value": `- The gap to first value — keep it short`,
   "cm:Explore two directions": `- Inline analysis vs deferred report`,
-  "cm:Choose inline analysis": `- Show the work → trust; live feedback; users can edit`,
+  "cm:Decide what users should do": `- Show the work → trust; live feedback; users can edit`,
   "cm:Hit real pushback": `- CEO: “Just give them a result.”`,
   "cm:Dig into the concern": ``,
   "cm:Validate with users": ``,
