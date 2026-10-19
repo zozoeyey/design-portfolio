@@ -72,3 +72,33 @@ export function TrustIcon({ className }: P) {
     </svg>
   );
 }
+
+/** Prompt-first — a chat bubble with lines of text. */
+export function PromptIcon({ className }: P) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H9l-4 4v-4.2A1.5 1.5 0 0 1 4 14.5z" />
+      <path d="M8 8.5h8M8 11.5h5" />
+    </svg>
+  );
+}
+
+/** Assessment-first — a magnifier inside scan corners. */
+export function ScanIcon({ className }: P) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M3.5 8V5.5a2 2 0 0 1 2-2H8M16 3.5h2.5a2 2 0 0 1 2 2V8M20.5 16v2.5a2 2 0 0 1-2 2H16M8 20.5H5.5a2 2 0 0 1-2-2V16" />
+      <circle cx="11.5" cy="11.5" r="3" />
+      <path d="M13.7 13.7 16 16" />
+    </svg>
+  );
+}
+
+/** Guided setup — a checklist. */
+export function ChecklistIcon({ className }: P) {
+  return (
+    <svg {...base} className={className}>
+      <path d="m3.5 6.5 1.5 1.5 3-3M3.5 13.5l1.5 1.5 3-3M3.5 19.5h4M11.5 6.5h9M11.5 13h9M11.5 19.5h9" />
+    </svg>
+  );
+}

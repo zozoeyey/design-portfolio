@@ -84,7 +84,7 @@ That’s the kind of ownership I want to bring to a team: defining the problem c
   "cm:Turn ambiguity into 3 pillars": `- Focused scope · Fast time-to-value · Trustworthy AI output`,
   "cm:Going deep: onboarding": `- Deep dive on onboarding`,
   "cm:Research similar tools": `- Goal: fewest questions → first AI result`,
-  "cm:Map the flow": `- The gap to first value — keep it short`,
+  "cm:Map the path to first value": `- The gap to first value — keep it short`,
   "cm:Explore two directions": `- Inline analysis vs deferred report`,
   "cm:Choose inline analysis": `- Show the work → trust; live feedback; users can edit`,
   "cm:Hit real pushback": `- CEO: “Just give them a result.”`,
@@ -95,6 +95,6 @@ That’s the kind of ownership I want to bring to a team: defining the problem c
   "cm:Iterate to final version #2": ``,
   "cm:It became the front door": `- CTO: “Buildable, right signal.” User: “I’d actually use it.”`,
   "cm:Balancing tradeoffs": `- Model needs vs user effort: the smallest thing serving both`,
-  "cm:Own the design system": `- design.md, style guide → Claude Code, hi-fi → component library`,
+  "cm:Turn the design system into code": `- design.md, style guide → Claude Code, hi-fi → component library`,
   "cm:Hands-on, not hand-off": `- Built and deployed the frontend myself with Figma MCP + Claude Code`,
 };

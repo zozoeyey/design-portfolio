@@ -12,7 +12,6 @@ import { loadComments, type DeckComment } from "@/lib/deckComments";
 const TABS = [
   ["vg", "ValueGlance"],
   ["cm", "Canmarket.ai"],
-  ["redesign", "Redesign"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 type View = "present" | "scroll";

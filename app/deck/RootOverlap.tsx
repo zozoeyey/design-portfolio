@@ -41,8 +41,8 @@ function Venn({ w = "34cqw", text = 1 }: { w?: string; text?: number }) {
 }
 export default function RootOverlap() {
   return (
-    <div className="my-auto grid grid-cols-[auto_minmax(0,1fr)] items-center gap-[5cqw]">
-      <Venn w="33cqw" />
+    <div className="my-auto grid grid-cols-[auto_minmax(0,1fr)] items-center gap-[4cqw]">
+      <Venn w="42cqw" text={1.25} />
       <div>
         <Root />
       </div>

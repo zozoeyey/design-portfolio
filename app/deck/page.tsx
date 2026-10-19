@@ -2,12 +2,15 @@
 // excluded from search. One long page, one 16:9 card per slide.
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
-import { DensityIcon, DecisionIcon, SystemIcon, FocusIcon, SpeedIcon, TrustIcon } from "./icons";
+import { DensityIcon, DecisionIcon, SystemIcon, FocusIcon, SpeedIcon, TrustIcon, PromptIcon, ScanIcon, ChecklistIcon } from "./icons";
 import FeatureFlow from "@/components/FeatureFlow";
 import CanmarketCardMotion from "@/components/CanmarketCardMotion";
 import DeckTabs from "./DeckTabs";
 import AmbiguityConverge from "./AmbiguityConverge";
 import RootOverlap from "./RootOverlap";
+import StudyMarket from "./StudyMarket";
+import FirstValue, { FirstValueHeader } from "./FirstValue";
+import DesignSystem from "./DesignSystem";
 import "./deck.css";
 
 export const metadata: Metadata = {
@@ -15,7 +18,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type Theme = "intro" | "vg" | "cm" | "mm";
+type Theme = "intro" | "vg" | "cm";
 
 // deck copies cropped to the app window (no baked blue gradient), shown on the warm panel
 const CM_F1 = "/deck/cm-f1.mp4";
@@ -1316,30 +1319,33 @@ export default function Deck() {
         <AmbiguityConverge />
       </Slide>
       {/* Build alignment: the CEO's vision notes and the pitch deck feed one shared definition */}
-      <Slide theme="cm" className="flex flex-col">
+      <Slide theme="cm" className="flex flex-col !py-[4.5cqw]">
         <p className="s-eyebrow">Discovery</p>
         <h2 className="s-title mt-[0.8cqw]">Build alignment</h2>
-      <div className="mt-[2.4cqw] grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_5cqw_minmax(0,0.8fr)] items-center">
-        <div className="flex min-h-0 flex-col gap-[1.4cqw]">
+        <p className="s-sub">Aligned the team on product framing before defining scope</p>
+      <div className="mt-[2cqw] grid min-h-0 flex-1 grid-cols-[minmax(0,1.2fr)_4cqw_minmax(0,0.75fr)] items-center">
+        <div className="flex h-full min-h-0 flex-col gap-[1cqw]">
           {[
             ["s41a", "CEO's vision notes", "AI-CMO positioning notes"],
             ["s41b", "Pitch deck", "Market pain slide from the pitch deck"],
+            ["s41c", "Industry expert interview", "Notes from an AI marketing session with an industry expert"],
           ].map(([src, label, alt]) => (
-            <figure key={src} className="flex items-center gap-[1.4cqw] rounded-[1.4cqw] bg-[var(--cm-tint)] p-[1.2cqw]">
+            <figure key={src} className="flex min-h-0 flex-1 items-center gap-[1.4cqw] rounded-[1.2cqw] bg-[var(--cm-tint)] p-[0.8cqw]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/deck/${src}.jpg`} alt={alt} className="h-[11cqw] w-auto rounded-[0.6cqw] bg-white shadow-[0_0_0_1px_rgb(40_30_20/0.08)]" />
-              <figcaption className="text-[1.3cqw] font-bold text-[var(--ink)]">{label}</figcaption>
+              <img src={`/deck/${src}.jpg`} alt={alt} className="h-full w-[30cqw] shrink-0 rounded-[0.6cqw] bg-white object-cover object-top shadow-[0_0_0_1px_rgb(40_30_20/0.08)]" />
+              <figcaption className="text-[1.3cqw] font-bold leading-snug text-[var(--ink)]">{label}</figcaption>
             </figure>
           ))}
         </div>
-        <svg viewBox="0 0 50 100" className="h-[60%] w-full" fill="none" stroke="var(--c)" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true" preserveAspectRatio="none">
-          <path d="M0 25 C 30 25, 25 50, 48 50" vectorEffect="non-scaling-stroke" />
-          <path d="M0 75 C 30 75, 25 50, 48 50" vectorEffect="non-scaling-stroke" />
+        <svg viewBox="0 0 50 100" className="h-full w-full" fill="none" stroke="var(--c)" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true" preserveAspectRatio="none">
+          <path d="M0 17 C 30 17, 25 50, 48 50" vectorEffect="non-scaling-stroke" />
+          <path d="M0 50 L 48 50" vectorEffect="non-scaling-stroke" />
+          <path d="M0 83 C 30 83, 25 50, 48 50" vectorEffect="non-scaling-stroke" />
         </svg>
         <div className="rounded-[1.6cqw] bg-[var(--c)] p-[2.6cqw] text-white">
           <p className="text-[1.1cqw] font-bold uppercase tracking-[0.12em] text-white/75">Shared definition</p>
-          <p className="mt-[1cqw] text-[2.6cqw] font-bold leading-tight">An AI CMO that does the work, end to end</p>
-          <p className="mt-[1.2cqw] text-[1.35cqw] leading-snug text-white/85">Not more tools: one agent that plans, creates, runs and measures campaigns.</p>
+          <p className="mt-[1cqw] text-[2.6cqw] font-bold leading-tight">An AI CMO for resource-limited SMBs</p>
+          <p className="mt-[1.2cqw] text-[1.35cqw] leading-snug text-white/85">One system that plans, creates, runs, and measures campaigns end to end.</p>
         </div>
       </div>
       </Slide>
@@ -1349,30 +1355,12 @@ export default function Deck() {
         <h2 className="s-title mt-[0.8cqw]">Find the root problem</h2>
         <RootOverlap />
       </Slide>
-      {/* Study the market: current solution → its problem (same row language as "Dig into the concern") */}
-      <Slide theme="cm" className="flex flex-col !pt-[4cqw]">
-        <h2 className="s-title">Study the market</h2>
-        <p className="s-sub">
-          <Dots items={["Competitive analysis", "opportunity: affordable, end-to-end"]} />
-        </p>
-        <div className="my-auto grid grid-cols-[minmax(0,0.85fr)_4cqw_minmax(0,1.3fr)] items-center gap-x-[1.6cqw] gap-y-[1.3cqw] pb-[1cqw]">
-          <p className="s-eyebrow">Current solution</p>
-          <span />
-          <p className="s-eyebrow">Problem</p>
-          {[
-            ["Expensive agencies", "Slow, costly, don’t understand performance"],
-            ["AI content tools", "Fast but random, no memory"],
-            ["In-house team", "Can’t do both brand + performance well"],
-            ["Founder doing it all", "No time, no system, inconsistent"],
-          ].map(([who, problem]) => (
-            <div key={who} className="contents">
-              <p className="rounded-[1.2cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] px-[2cqw] py-[1.4cqw] text-[1.9cqw] font-bold text-black">{who}</p>
-              <svg viewBox="0 0 40 12" className="w-full" fill="none" stroke="var(--c)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M2 6h34M31 1.5 36 6l-5 4.5" />
-              </svg>
-              <p className="font-serif text-[2.1cqw] leading-snug text-[var(--gray-700)]">{problem}</p>
-            </div>
-          ))}
+      {/* Study the market: a screenshot of the FigJam affinity wall from discovery */}
+      <Slide theme="cm" className="flex flex-col !px-[3cqw] !pb-[2.4cqw] !pt-[2.8cqw]">
+        <p className="s-eyebrow">Discovery</p>
+        <h2 className="s-title mt-[0.5cqw] !text-[2.2cqw]">Study the market</h2>
+        <div className="mt-[1.4cqw] flex min-h-0 flex-1 flex-col">
+          <StudyMarket />
         </div>
       </Slide>
       <Cards
@@ -1392,45 +1380,52 @@ export default function Deck() {
         va={CM_F1}
         vb={CM_F2}
       />
-      <Visual theme="cm" title="Research similar tools" sub={["Goal: fewest questions → first AI result"]}>
-        <Img src="s47" alt="Onboarding from an AI business builder, HubSpot Website Grader and Looka" />
-      </Visual>
-      {/* Map the flow: rebuilt in the deck palette — the stretch before first value is the part to keep short */}
-      <Slide theme="cm" className="flex flex-col">
-        <p className="s-eyebrow">Explore the onboarding shape</p>
-        <h2 className="s-title mt-[0.8cqw]">Map the flow</h2>
-        <p className="s-sub">Goal: fewest questions → first AI result</p>
-        <div className="cm-panel mt-[3cqw] flex flex-1 flex-col justify-center">
-          <ol className="flex items-center justify-center gap-[1.2cqw]">
-            {[
-              ["Sign up", ""],
-              ["Assessment", "URL + 8 Qs"],
-              ["AI report", "first value"],
-              ["Dashboard", ""],
-              ["Campaigns", ""],
-            ].map(([t, sub], i, all) => (
-              <li key={t} className="flex items-center gap-[1.2cqw]">
-                <span
-                  className={`flex h-[7cqw] w-[11cqw] flex-col items-center justify-center rounded-[1cqw] text-center text-[1.5cqw] font-bold ${
-                    i === 2 ? "bg-[var(--c)] text-white" : i < 2 ? "bg-white text-[var(--ink)] shadow-[0_0_0_1px_rgb(40_30_20/0.1)]" : "bg-white/60 text-gray-500 shadow-[0_0_0_1px_rgb(40_30_20/0.06)]"
-                  }`}
-                >
-                  {t}
-                  {sub && <span className={`mt-[0.3cqw] text-[1.05cqw] font-medium ${i === 2 ? "text-white/85" : "text-gray-500"}`}>{sub}</span>}
-                </span>
-                {i < all.length - 1 && (
-                  <svg viewBox="0 0 24 12" className="w-[1.8cqw]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: "var(--c)" }}>
-                    <path d="M1 6h20M16 1.5 21 6l-5 4.5" />
-                  </svg>
-                )}
-              </li>
-            ))}
-          </ol>
-          <div className="mx-auto mt-[1.6cqw] grid w-[63.4cqw] grid-cols-[38.4cqw_1fr] gap-[3cqw] text-[1.25cqw]">
-            <p className="border-t-[0.2cqw] border-[var(--c)] pt-[0.8cqw] text-center font-bold text-[var(--c)]">The gap to first value — keep it short</p>
-            <p className="border-t-[0.2cqw] border-gray-300 pt-[0.8cqw] text-center text-gray-500">Core product</p>
-          </div>
+      {/* Research similar tools: the three references shown on their own, each labelled by its onboarding approach */}
+      <Slide theme="cm" className="flex flex-col !px-[4.5cqw]">
+        <h2 className="s-title pl-[2.25cqw]">Research similar tools</h2>
+        <div className="mt-[7cqw] flex items-start justify-center gap-[1.6cqw]">
+          {[
+            {
+              Icon: PromptIcon, title: "Prompt-First", desc: "Minimal structured input", tool: "Durable",
+              imgs: [["research-builder", "Durable AI business builder: one prompt box, start for free"]],
+            },
+            {
+              Icon: ScanIcon, title: "Assessment-First", desc: "Leverage existing data", tool: "HubSpot Website Grader",
+              imgs: [["research-hubspot", "HubSpot Website Grader: website and email, then a score"]],
+            },
+            {
+              Icon: ChecklistIcon, title: "Guided Setup", desc: "Structured user input", tool: "Looka",
+              imgs: [
+                ["research-looka-1", "Looka: enter your company name"],
+                ["research-looka-2", "Looka: pick your industry"],
+                ["research-looka-3", "Looka: pick some colors you like"],
+              ],
+            },
+          ].map(({ Icon, title, desc, tool, imgs }) => (
+            <figure key={tool} className="shrink-0">
+              {imgs.length === 1 ? (
+                <Img src={imgs[0][0]} alt={imgs[0][1]} className="h-[29cqw] w-[30cqw] object-cover" />
+              ) : (
+                <div className="flex h-[29cqw] w-[25cqw] flex-col gap-[0.6cqw]">
+                  {imgs.map(([src, alt]) => (
+                    <Img key={src} src={src} alt={alt} className="min-h-0 w-full flex-1 object-cover object-top" />
+                  ))}
+                </div>
+              )}
+              <figcaption className="mt-[1.2cqw] flex flex-col items-center text-center">
+                <Icon className="h-[2cqw] w-[2cqw] text-[var(--c)]" />
+                <span className="mt-[0.6cqw] text-[1.5cqw] font-bold text-[var(--ink)]">{title}</span>
+                <span className="mt-[0.2cqw] text-[1.25cqw] text-gray-600">{desc}</span>
+                <span className="mt-[0.3cqw] text-[1cqw] text-gray-400">{tool}</span>
+              </figcaption>
+            </figure>
+          ))}
         </div>
+      </Slide>
+      {/* Map the path to first value: onboarding service blueprint, stage 03 = first value moment */}
+      <Slide theme="cm" className="flex flex-col !px-[3cqw] !pb-[2.2cqw] !pt-[2.6cqw]">
+        <FirstValueHeader />
+        <FirstValue />
       </Slide>
       <Visual theme="cm" title="Explore two directions">
         <Img src="s49" alt="Direction 1: inline analysis. Direction 2: deferred report" />
@@ -1492,64 +1487,21 @@ export default function Deck() {
           <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--c)] px-[1.2cqw] py-[0.5cqw] text-[1.15cqw] font-bold text-white">Smallest thing serving both</span>
         </div>
       </Slide>
-      <Visual theme="cm" title="Own the design system" sub={["design.md", "style guide → Claude Code", "hi-fi → component library → reviewed"]}>
-        <Img src="s59" alt="Color system schema, CSS variables and component folders" />
-      </Visual>
-      <Visual theme="cm" title="Hands-on, not hand-off" sub={["Built + deployed frontend myself", "Figma MCP + Claude Code", "real-time feasibility w/ CTO"]}>
-        <Img src="s60" alt="Building the onboarding in VS Code while on a call with the CTO" />
-      </Visual>
+      {/* Turn the design system into code: rules → design.md → code, shown as the artifacts */}
+      <Slide theme="cm" className="flex flex-col !px-[4cqw] !pb-[3cqw] !pt-[3.4cqw]">
+        <p className="s-eyebrow">Design system</p>
+        <h2 className="s-title mt-[0.5cqw]">Turn the design system into code</h2>
+        <p className="mt-[0.6cqw] text-[1.3cqw] leading-snug text-[var(--gray-700)]">Created reusable tokens, components, and documentation for consistent implementation.</p>
+        <DesignSystem />
+      </Slide>
+      <Slide theme="cm" className="flex flex-col !pb-[3cqw] !pt-[4.2cqw]">
+        <h2 className="s-title">Hands-on, not hand-off</h2>
+        <p className="s-sub">Took designs from Figma to working frontend, building alongside engineers and validating feasibility in real time.</p>
+        <div className="mt-[1.6cqw] flex min-h-0 flex-1 items-center justify-center">
+          <Img src="s60" alt="Building the onboarding in VS Code while on a call with the CTO" className="h-full w-auto" />
+        </div>
+      </Slide>
 
-      </div>
-      <div data-part="redesign" className="contents">
-      {/* ---------------- Design exercise · Movemint Insights ---------------- */}
-      <Slide theme="mm" className="flex flex-col justify-center">
-        <p className="s-eyebrow">Design exercise · Movemint organizer dashboard</p>
-        <h2 className="s-display mt-[1.2cqw]">Insights, redesigned</h2>
-        <p className="s-sub max-w-[52cqw]">
-          A visual pass on the first screen organizers see after creating an event. Same data, same features.
-        </p>
-      </Slide>
-      <Slide theme="mm" className="flex flex-col">
-        <p className="s-eyebrow">Where I started</p>
-        <h2 className="s-title mt-[0.8cqw]">The current Insights page</h2>
-        <div className="mt-[2.4cqw] flex min-h-0 flex-1 justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/deck/mm-insights-current.jpg"
-            alt="Movemint Insights page for a draft event: a green Ready to publish banner, three grey stat cards, and the event checklist"
-            className="s-img h-full w-auto"
-          />
-        </div>
-      </Slide>
-      <Slide theme="mm" className="flex flex-col">
-        <p className="s-eyebrow">What I noticed</p>
-        <h2 className="s-title mt-[0.8cqw]">Everything has the same volume</h2>
-        <div className="mt-[2.4cqw] grid min-h-0 flex-1 grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] gap-[3cqw]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/deck/mm-insights-checklist.jpg"
-            alt="The checklist: every task is a bordered card at the same weight, completed ones struck through"
-            className="s-img self-center"
-          />
-          <ol className="flex flex-col justify-center gap-[1.4cqw]">
-            {[
-              ["One status, said three times", "Draft pill, green banner and Status card all say the same thing, while Publish sits small inside the banner."],
-              ["Red means everything", "Create Event, the active nav, the progress bar, Publish and the AI button all share the brand red."],
-              ["Numbers don’t lead", "Stat values are barely bigger than their labels; 0 participants has no context."],
-              ["Done looks like to-do", "23 identical bordered rows; finished tasks keep full weight with strikethrough."],
-              ["Unclear words", "“Not applicable” on every optional task; an Insights tab inside the Insights tab."],
-            ].map(([t, d], i) => (
-              <li key={t} className="flex gap-[1.2cqw]">
-                <span className="text-[1.4cqw] font-bold tabular-nums text-[var(--c)]">{i + 1}</span>
-                <span>
-                  <span className="block text-[1.45cqw] font-bold text-[var(--ink)]">{t}</span>
-                  <span className="s-body mt-[0.2cqw] block">{d}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </Slide>
       </div>
       {/* ---------------- Close ---------------- */}
       {["Q & A", "Thank you!"].map((t) => (

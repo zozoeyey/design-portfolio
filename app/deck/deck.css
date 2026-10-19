@@ -37,14 +37,6 @@ body:has(.deck) > footer {
   --ink: oklch(0.25 0.02 260);    /* titles */
   --cm-tint: oklch(0.97 0.012 70); /* warm light panel */
 }
-/* Movemint design exercise: their brand red as the accent, near-black titles */
-.slide[data-theme="mm"] {
-  --c: rgb(239, 68, 90);
-  --ink: #111;
-}
-.slide[data-theme="mm"] .s-title,
-.slide[data-theme="mm"] .s-display { color: var(--ink); }
-.slide[data-theme="mm"] .s-img { background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08); border-radius: 1cqw; }
 .slide[data-theme="cm"] .s-title,
 .slide[data-theme="cm"] .s-display { color: var(--ink); }
 /* one screenshot treatment: white, thin outline, no shadow, on a warm panel */
@@ -113,11 +105,7 @@ body:has(.deck) > footer {
 
 /* Project tabs: show one project's slides at a time (shared intro + close stay in both). */
 .deck[data-show="vg"] [data-part="cm"],
-.deck[data-show="vg"] [data-part="redesign"],
-.deck[data-show="cm"] [data-part="vg"],
-.deck[data-show="cm"] [data-part="redesign"],
-.deck[data-show="redesign"] [data-part="vg"],
-.deck[data-show="redesign"] [data-part="cm"] {
+.deck[data-show="cm"] [data-part="vg"] {
   display: none;
 }
 /* floats bottom-centre so it never covers a slide title */
