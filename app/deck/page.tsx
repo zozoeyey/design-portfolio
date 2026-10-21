@@ -13,6 +13,7 @@ import FirstValue, { FirstValueHeader } from "./FirstValue";
 import DesignSystem from "./DesignSystem";
 import TwoDirections from "./TwoDirections";
 import UserWork from "./UserWork";
+import ContextPillars from "./ContextPillars";
 import "./deck.css";
 
 export const metadata: Metadata = {
@@ -387,7 +388,7 @@ export default function Deck() {
             01<span className="s-dot">·</span>Product Design/Engineering Intern<span className="s-dot">·</span>Oct 2025 – Jan 2026, Jun – Sep 2026
           </p>
           <h2 className="s-display mt-[0.8cqw] !text-[4.4cqw]">ValueGlance</h2>
-          <p className="s-sub !mt-[0.4cqw]">Fintech Webapp ｜ Figma, Claude Code, Linear</p>
+          <p className="s-sub !mt-[0.4cqw]">Fintech SaaS Webapp ｜ Figma, Claude Code, Linear</p>
         </div>
         <div className="mt-[3cqw] flex w-full flex-1 items-center justify-center gap-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -547,18 +548,29 @@ export default function Deck() {
         </div>
         <h2 className="sr-only">Discovery: from execution to ownership</h2>
       </Slide>
-      {/* Pages 11–13: the three discovery questions, one image each (Side caption layout) */}
+      {/* Understand the product & business context: three pillars, each with its evidence fitted whole on a tint panel */}
+      <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
+        <p className="s-eyebrow">
+          <span className="tabular-nums text-[var(--c)]">01</span>
+          <span className="s-dot">·</span>
+          Why?
+        </p>
+        <h2 className="s-title mt-[0.8cqw]">Understand the product &amp; business context</h2>
+        <ContextPillars />
+      </Slide>
+      {/* Pages 12–13: the remaining discovery questions, one image each (Side caption layout) */}
       {[
-        {
-          q: "Why?",
-          title: "Understand the business",
-          line: "The CEO’s investing seminars showed the goal: revamp the system, not polish charts.",
-          visual: <Img src="s13" alt="My notes from the CEO's investing seminars" />,
-        },
         {
           q: "For whom?",
           title: "Validate with real users",
           line: "What I flagged in my audit matched what investors reported.",
+          extra: (
+            <figure className="mt-[2.4cqw]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/deck/vg-survey.jpg" alt="User survey responses: how respondents use ValueGlance, investing experience, how often they check the market, and device" className="block w-full rounded-[0.6cqw] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.08)]" />
+              <figcaption className="s-cap mt-[0.6cqw]">20+ user survey responses</figcaption>
+            </figure>
+          ),
           visual: (
             // static phone mockup with the three problem spots pinned, findings beside it
             <div className="flex h-full items-center gap-[2.4cqw]">
@@ -614,12 +626,13 @@ export default function Deck() {
         <Slide key={p.q} theme="vg" className="grid grid-cols-[minmax(0,0.62fr)_minmax(0,1.38fr)] gap-[3.6cqw] !pr-[3cqw]">
           <div className="flex flex-col justify-center">
             <p className="s-eyebrow">
-              <span className="tabular-nums text-[var(--c)]">0{i + 1}</span>
+              <span className="tabular-nums text-[var(--c)]">0{i + 2}</span>
               <span className="s-dot">·</span>
               {p.q}
             </p>
             <h2 className="s-title mt-[1cqw]">{p.title}</h2>
             <p className="s-body mt-[1.4cqw]">{p.line}</p>
+            {"extra" in p && p.extra}
           </div>
           <div className="flex min-h-0 items-center justify-center rounded-[1.4cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] p-[2.4cqw]">
             {p.visual}
@@ -821,19 +834,21 @@ export default function Deck() {
             />
             {/* dim the other three explorations */}
             <span aria-hidden="true" className="absolute bg-white/65" style={{ left: "42.5%", top: "30%", width: "47%", height: "63.5%" }} />
+            {/* the two chosen directions, enlarged in place over their originals (crops of the same screenshot) */}
             {[
-              { left: "12%", label: "Direction 1 · On-chart tooltip" },
-              { left: "27.7%", label: "Direction 2 · Off-chart tooltip" },
+              { x: 12, at: "11%", label: "Direction 1 · On-chart tooltip" },
+              { x: 27.7, at: "26.8%", label: "Direction 2 · Off-chart tooltip" },
             ].map((d) => (
-              <span
-                key={d.label}
-                className="absolute flex items-end justify-center rounded-[0.6cqw] border-[0.25cqw] border-[var(--c)]"
-                style={{ left: d.left, top: "34.4%", width: "13.6%", height: "58.2%" }}
-              >
-                <span className="mb-[-1.1cqw] whitespace-nowrap rounded-full bg-[var(--c)] px-[0.9cqw] py-[0.3cqw] text-[0.95cqw] font-bold text-white">
-                  {d.label}
-                </span>
-              </span>
+              <figure key={d.label} className="absolute top-[27%] flex w-[15.5%] flex-col items-center" style={{ left: d.at }}>
+                <div
+                  className="relative w-full overflow-hidden rounded-[0.8cqw] bg-white shadow-[0_0_0_0.2cqw_var(--c),0_1.6cqw_3.2cqw_-1cqw_rgba(20,30,60,0.45)]"
+                  style={{ aspectRatio: `${13.6 * 3016} / ${58.2 * 1486}` }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/deck/vg-ai-explore.jpg" alt={d.label} className="absolute max-w-none" style={{ width: `${(100 / 13.6) * 100}%`, left: `${(-d.x / 13.6) * 100}%`, top: `${(-34.4 / 58.2) * 100}%` }} />
+                </div>
+                <figcaption className="relative -mt-[1.1cqw] whitespace-nowrap rounded-full bg-[var(--c)] px-[1cqw] py-[0.35cqw] text-[1.05cqw] font-bold text-white">{d.label}</figcaption>
+              </figure>
             ))}
           </div>
         </div>
@@ -851,57 +866,42 @@ export default function Deck() {
           </p>
           <h2 className="s-title mt-[1cqw]">Off-chart tooltip</h2>
           <p className="s-body mt-[1.4cqw]">The readout moves below the chart, so the finger never covers the data and nothing runs off screen.</p>
-          <div className="mt-[2.4cqw] flex items-center gap-[1cqw] rounded-[1cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] px-[1.4cqw] py-[1.1cqw]">
-            <svg viewBox="0 0 24 24" className="h-[1.8cqw] w-[1.8cqw] shrink-0 text-[var(--c)]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
-              <path d="M10.5 18.5h3" />
-              <path d="M9 9l2.5 2.5L15 8" />
-            </svg>
-            <p className="text-[1.15cqw] leading-snug text-[var(--c)]">
-              <b>Prototyped</b> on mobile to test it with a real finger before committing.
-            </p>
-          </div>
         </div>
-        <div className="flex min-h-0 items-center justify-center rounded-[1.4cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] p-[2.4cqw]">
+        <div className="flex min-h-0 flex-col items-center justify-center rounded-[1.4cqw] bg-[color-mix(in_oklab,var(--c)_6%,var(--white-100))] p-[2.4cqw]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/deck/offchart-proto-clean.jpg"
             alt="Off-chart tooltip prototype: the chart above, every metric for the scrubbed date listed below it"
-            className="max-h-full w-auto rounded-[1cqw] bg-white"
+            className="min-h-0 max-h-full w-auto rounded-[1cqw] bg-white"
           />
+          <p className="s-cap mt-[1cqw] shrink-0">Prototyped in Figma</p>
         </div>
       </Slide>
-      {/* First pushback: the CTO (abstract avatar) and their words in a speech bubble */}
-      <Slide theme="vg" className="flex flex-col">
+      {/* First pushback: the CTO's concern (compact) and the walkthrough that validated it, as a 4-frame storyboard.
+          Frames outline the area each step happens in; regions are % of each screenshot. */}
+      <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
         <p className="s-eyebrow">Design review</p>
         <h2 className="s-title mt-[0.8cqw]">The first pushback</h2>
-        <div className="my-auto flex items-end gap-[3cqw] pl-[2cqw]">
+        <div className="mt-[1.8cqw] flex items-end gap-[1.4cqw]">
           <figure className="flex shrink-0 flex-col items-center">
-            <svg viewBox="0 0 120 120" className="h-[12cqw] w-[12cqw]" role="img" aria-label="The CTO">
+            <svg viewBox="0 0 120 120" className="h-[4.6cqw] w-[4.6cqw]" role="img" aria-label="The CTO">
               <circle cx="60" cy="60" r="60" fill="color-mix(in oklab, var(--c) 8%, white)" />
               <circle cx="60" cy="46" r="20" fill="var(--c)" />
               <path d="M22 112 C 24 84, 42 72, 60 72 C 78 72, 96 84, 98 112 Z" fill="var(--c)" />
             </svg>
-            <figcaption className="mt-[1cqw] text-[1.3cqw] font-bold text-black">CTO</figcaption>
+            <figcaption className="mt-[0.4cqw] text-[0.95cqw] font-bold text-black">CTO</figcaption>
           </figure>
-          <blockquote className="relative mb-[4cqw] rounded-[2cqw] rounded-bl-[0.4cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))] px-[3cqw] py-[2.6cqw] font-serif text-[2.1cqw] italic leading-snug text-black">
+          <blockquote className="relative mb-[1.6cqw] rounded-[1.4cqw] rounded-bl-[0.3cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))] px-[1.8cqw] py-[1.1cqw] font-serif text-[1.6cqw] italic leading-snug text-black">
             <span
               aria-hidden="true"
-              className="absolute -left-[1.4cqw] bottom-0 h-[1.6cqw] w-[1.6cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))]"
+              className="absolute -left-[1cqw] bottom-0 h-[1.1cqw] w-[1.1cqw] bg-[color-mix(in_oklab,var(--c)_7%,var(--white-100))]"
               style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             />
-            “Now that the tooltip’s at the bottom, the metric-picking still lives in a separate section further down. So if a
-            user just wants to swap one metric, they have to leave the chart, scroll to that section, pick, and scroll back.
-            That’s a lot of steps.”
+            “To swap one metric, users leave the chart, scroll down, pick, and scroll back. That’s a lot of steps.”
           </blockquote>
         </div>
-      </Slide>
-      {/* Validate the concern: the round trip to swap one metric, walked through as a 4-frame storyboard.
-          Frames outline the area each step happens in; regions are % of each screenshot. */}
-      <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
-        <p className="s-eyebrow">Swapping one metric, step by step</p>
-        <h2 className="s-title mt-[0.8cqw]">Validate the concern</h2>
-        <ol className="mt-[2cqw] grid min-h-0 flex-1 grid-cols-4 gap-[2cqw]">
+        <p className="mt-[1.4cqw] text-[1.15cqw] font-semibold text-[var(--c)]">I walked through it myself: four steps to swap one metric</p>
+        <ol className="mt-[1.2cqw] grid min-h-0 flex-1 grid-cols-4 gap-[2cqw]">
           {[
             { label: "Leave the chart", src: "pushback-step1", ratio: "1501/3270", top: "14%", h: "52%", arrow: "" },
             { label: "Scroll down", src: "pushback-scroll", ratio: "1160/2520", top: "45.5%", h: "19%", arrow: "↓" },
@@ -1075,16 +1075,9 @@ export default function Deck() {
           />
         </div>
       </Slide>
-      {/* Handoff = the PR. Close-up: #1334 (title, before/after, changes; thread: handed off → review → approved & merged).
-          Mid shot: the count — 25 merged PRs authored by zoeyyanvg in fpp-admin/financial-tool. */}
+      {/* Handoff = the PR. Close-up: #1334 (title, before/after, changes; thread: handed off → review → approved & merged). */}
       <Slide theme="vg" className="flex flex-col !pb-[3cqw] !pt-[3.6cqw]">
-        <div className="flex items-end justify-between">
-          <h2 className="s-title">Drive the handoff</h2>
-          <p className="flex items-baseline gap-[0.8cqw] leading-none">
-            <span className="text-[3.6cqw] font-bold tracking-tight text-[var(--c)]">25</span>
-            <span className="text-[1.5cqw] font-medium text-[var(--gray-700)]">PRs merged</span>
-          </p>
-        </div>
+        <h2 className="s-title">Drive the handoff</h2>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/deck/handoff-title.jpg"

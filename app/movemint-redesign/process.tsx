@@ -3,6 +3,7 @@
 // and screenshots of the current Insights page pasted in with numbered markers.
 import { useState } from "react";
 import { Rationale } from "./rationale";
+import { DesignSystem } from "./ds";
 import CaseStudyContents, { type ContentsSection } from "@/components/CaseStudyContents";
 
 const INK = "oklch(0.24 0.015 285)";
@@ -240,8 +241,9 @@ const CONTENTS: ContentsSection[] = [
   { id: "round2", label: "Round 2 — Four directions", level: 2 },
   { id: "decision", label: "Round 2 decision", level: 2 },
   { id: "round3", label: "Round 3 — Layout", level: 2 },
-  { id: "rationale", label: "06 Design rationale", level: 1 },
-  { id: "next", label: "07 Takeaways & next steps", level: 1 },
+  { id: "system", label: "06 Design system", level: 1 },
+  { id: "rationale", label: "07 Design rationale", level: 1 },
+  { id: "next", label: "08 Takeaways & next steps", level: 1 },
 ];
 
 // switch the picker to another tab, keeping ?key= and the rest of the query
@@ -619,13 +621,19 @@ export function Process() {
         </Section>
 
         {/* ── 06 ── */}
-        <Section label="06  Design rationale" tone="blue" id="rationale">
+        <Section label="06  Design system" tone="yellow" id="system">
+          <p className="mb-8 max-w-[68ch] text-[15px]" style={{ color: MUTED }}>Cool neutrals tinted toward the logo’s violet, one accent for “do this next”, the logo gradient for brand moments only. Contrast is computed from the tokens (WCAG 2).</p>
+          <DesignSystem embedded />
+        </Section>
+
+        {/* ── 07 ── */}
+        <Section label="07  Design rationale" tone="blue" id="rationale">
           <p className="mb-8 max-w-[68ch] text-[15px]" style={{ color: MUTED }}>What changed from the original, why, and where it shows up in the redesign.</p>
           <Rationale embedded />
         </Section>
 
-        {/* ── 07 ── */}
-        <Section label="07  Takeaways & next steps" tone="green" id="next">
+        {/* ── 08 ── */}
+        <Section label="08  Takeaways & next steps" tone="green" id="next">
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
               <Label>Takeaways</Label>

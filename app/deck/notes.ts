@@ -13,9 +13,9 @@ export const NOTES: Record<string, string> = {
   "shared:Thank you!": `Thank you.`,
 
   // ---------- ValueGlance ----------
-  "vg:ValueGlance": `ValueGlance is a financial web app that helps individual investors evaluate stocks for long-term value investing.
+  "vg:ValueGlance": `ValueGlance is a B2C financial analytics webapp that helps individual investors evaluate stocks using complex financial metrics.
 
-It brings financial quality and valuation data together so investors can understand whether a company is fundamentally strong and whether it's trading at a reasonable price. I was a product design and engineer intern. I worked on a small team of around 10 people, including the CEO, CTO, engineers, and other designers.
+Although the product is consumer-facing, the design challenges are very similar to those in data-heavy SaaS applications: organizing complex information, supporting analytical decisions, and building reusable components across the product. I was a product design and engineer intern. I worked on a small team of around 10 people, including the CEO, CTO, engineers, and other designers.
 
 Let me quickly introduce three features I worked on.`,
   "vg:Feature 1 Mobile watchlist data visualization redesign": `The first is the mobile data visualization redesign.
@@ -35,13 +35,15 @@ Initially, I was asked to redesign a mobile tooltip and help build a component l
 But before jumping into Figma, I wanted to understand why the existing experience wasn't working.
 
 I approached this from three angles: the business, the users, and engineering.`,
-  "vg:Understand the business": `First, I wanted to understand the business context.
+  "vg:Understand the product & business context": `First, I wanted to understand the business context.
 
-I joined the CEO's investing seminars to learn how investors actually use financial metrics to make decisions.
+I attended the CEO's investing seminars to understand the investment philosophy and core financial metrics.
 
-One important insight was that ValueGlance helps investors quickly filter out weak companies, rather than deeply analyzing every stock.
+Second, I reviewed Google Analytics to understand user engagement and navigation patterns.
 
-That helped me understand which information was important to surface.`,
+And third, I studied internal feature documentation and UX audits to understand existing workflows and design decisions.
+
+Together, these helped me understand the business goals, user behavior, and product structure.`,
   "vg:Validate with real users": `Next, I audited the mobile experience and compared my findings with existing survey responses.
 
 Three issues consistently appeared: tooltips could cover the chart or overflow the screen, timeline controls overlapped important information, and the visual hierarchy made financial data difficult to read on mobile.
@@ -82,15 +84,13 @@ This helped me decide what to prioritize in the default view.`,
 The first kept the tooltip anchored to the selected point. This made the connection between the data point and its value immediate, but still created overlap problems.
 
 The second moved the metric readout outside the chart. This preserved the full trend but introduced some distance between the point and its values.`,
-  "vg:Off-chart tooltip": `So I went with the second direction — the off-chart readout. My rationale came down to a couple of angles. From a usability perspective, moving the detail off the chart meant it could never run off-screen or cover the data — the single most common complaint I'd found. And from a workflow perspective, users could now see the full trend and the point's values at the same time, instead of the readout blocking the chart they were reading. A fixed readout area also gave me room to let people customize which metrics they see, which mattered since our users ranged from beginners to veterans. The tradeoff was giving up the tight point-to-value link — but for a problem about things covering and overflowing the screen, an unobstructed chart was clearly the right call.`,
-  "vg:The first pushback": `So that was my first action — exploring different design directions. With that decision made, the second thing I did was I mocked up the first version and brought it to a design review with the CTO and other designers — and that's where the first real pushback came in.
-The metrics data was now below the chart, but metric selection still lived in another section farther down. To swap a metric, users had to leave the chart, make a change, and scroll back. SO the issue wasn't that the tooltip was wrong — our CTO was worried I'd split one task into two separate flows.`,
-  "vg:Validate the concern": `To understand the concern, I walked through the prototype myself.
+  "vg:Off-chart tooltip": `So I went with the second direction — the off-chart readout, and prototyped quickly in Figma. My rationale came down to a couple of angles. From a usability perspective, moving the detail off the chart meant it could never run off-screen or cover the data — the single most common complaint I'd found. And from a workflow perspective, users could now see the full trend and the point's values at the same time, instead of the readout blocking the chart they were reading. A fixed readout area also gave me room to let people customize which metrics they see, which mattered since our users ranged from beginners to veterans. The tradeoff was giving up the tight point-to-value link — but for a problem about things covering and overflowing the screen, an unobstructed chart was clearly the right call.`,
+  "vg:The first pushback": `I brought the first version to a design review with the CTO and other designers, and that's where the first real pushback came in.
 
-I realized that every metric adjustment interrupted the chart-reading experience.
+The metrics were now below the chart, but picking them still lived in a section farther down. So to swap one metric, users had to leave the chart, scroll down, pick, and scroll back.
 
-This wasn't a formal usability study, but it helped us identify a specific interaction problem that the first design hadn't addressed.`,
-  "vg:Reframe the problem": `That feedback helped me realize the problem was bigger than chart readability.
+I validated the flow and walked through it myself, step by step, and the concern held up: every adjustment interrupted the chart-reading. It wasn't a formal usability study, but it pinpointed an interaction problem my first design hadn't addressed.`,
+  "vg:Reframe the problem": `That feedback helped me confirm that the problem was bigger than just chart readability.
 
 Initially, I was asking, "How do we make financial data easier to read on mobile?"
 
@@ -130,12 +130,9 @@ But in return, the main chart became easier to read, while users still had clear
   "vg:Rebuild the components": `Beyond designing the experience, I also rebuilt the underlying components to make them reusable.
 
 I documented sizing, interaction states, and responsive behavior.`,
-  "vg:Drive the handoff": `I stayed involved during implementation, using Linear and GitHub pull requests to communicate requirements, review changes, and resolve issues.
-
-The redesign made it through review and into production.
+  "vg:Drive the handoff": `I stayed involved during implementation, using Linear and GitHub pull requests to communicate requirements, review changes, and resolve issues. This is an example of how we comminucate reviews through our PR to merging.
 
 One thing I'd like to measure next is whether users can locate values, interpret metrics, and customize the chart without losing their place.
-
 Those would be more meaningful indicators of success than simply measuring how much work was shipped.`,
   "vg:Ownership means looking beyond the initial request.": `Looking back, this project taught me two important things.
 

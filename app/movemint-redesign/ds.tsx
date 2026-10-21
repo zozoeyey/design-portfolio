@@ -146,9 +146,14 @@ const ICON_SETS: [string, string[]][] = [
   ["Timeline & actions", ["check", "lock", "rocket", "megaphone", "flag", "image", "chevron", "sparkle"]],
 ];
 
-export function DesignSystem() {
+// `embedded`: rendered inside the Design process board — no page background or header, the board supplies both.
+export function DesignSystem({ embedded = false }: { embedded?: boolean }) {
   return (
-    <div className="mm-proto min-h-dvh px-4 pb-32 pt-8 sm:px-10" style={{ backgroundColor: "oklch(0.955 0.004 285)", color: B.ink, fontFamily: "var(--font-inter), -apple-system, sans-serif" }}>
+    <div
+      className={embedded ? "" : "mm-proto min-h-dvh px-4 pb-32 pt-8 sm:px-10"}
+      style={embedded ? { color: B.ink } : { backgroundColor: "oklch(0.955 0.004 285)", color: B.ink, fontFamily: "var(--font-inter), -apple-system, sans-serif" }}
+    >
+      {!embedded && (
       <header className="mx-auto mb-10 flex max-w-[1240px] flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-[12px] font-medium uppercase tracking-[0.08em]" style={{ color: B.muted }}>Movemint organizer · Insights redesign</p>
@@ -158,6 +163,7 @@ export function DesignSystem() {
           Cool neutrals tinted toward the logo’s violet, one accent for “do this next”, the logo gradient for brand moments only. Contrast is computed from the tokens (WCAG 2).
         </p>
       </header>
+      )}
 
       <div className="mx-auto grid max-w-[1240px] gap-8">
         <Frame title="01 Color" note="click a swatch to copy">

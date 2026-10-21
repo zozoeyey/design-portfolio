@@ -10,6 +10,7 @@ import { StatusMenu, EventUrl } from "./flow";
 import { DesignSystem } from "./ds";
 import { Scenarios, LivePage } from "./scenarios";
 import { Process } from "./process";
+import { OldInterface } from "./OldInterface";
 import { Stages, Board } from "./layouts";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -84,7 +85,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ [
         names={["Final Design", "Design system", "Scenarios", "Design process", "Combined", "Start line", "Poster", "Timeline", "Stages", "Board"]}
         visible={4}
         variants={[
-          <div key="0" className={`mm-proto ${inter.variable}`}><LivePage /></div>,
+          <div key="0" className={`mm-proto ${inter.variable}`}><LivePage /><OldInterface /></div>,
           <div key="1" className={inter.variable}><DesignSystem /></div>,
           <div key="2" className={inter.variable}><Scenarios /></div>,
           <div key="3" className={inter.variable}><Process /></div>,

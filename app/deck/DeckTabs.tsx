@@ -205,14 +205,14 @@ export default function DeckTabs() {
     )}
     <div className="deck-bar" data-view={view} data-idle={idle ? "" : undefined}>
       {view === "present" && (
-        <div className="deck-bar-group">
-          <button type="button" className="deck-icon-btn" aria-label="Previous slide" onClick={() => go(-1)} disabled={idx === 0}>
+        <div className="deck-bar-group deck-nav">
+          <button type="button" className="deck-icon-btn deck-prev" aria-label="Previous slide" onClick={() => go(-1)} disabled={idx === 0}>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
           </button>
           <span className="deck-count" aria-live="polite">
             {Math.min(idx + 1, count)} <span className="opacity-50">/ {count}</span>
           </span>
-          <button type="button" className="deck-icon-btn" aria-label="Next slide" onClick={() => go(1)} disabled={idx >= count - 1}>
+          <button type="button" className="deck-icon-btn deck-next" aria-label="Next slide" onClick={() => go(1)} disabled={idx >= count - 1}>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
@@ -237,7 +237,7 @@ export default function DeckTabs() {
         ))}
       </nav>
       )}
-      <div className="deck-bar-group">
+      <div className="deck-bar-group deck-tools">
         {view === "present" && (
           <button
             type="button"
