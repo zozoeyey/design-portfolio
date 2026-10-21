@@ -7,14 +7,15 @@ import { loadComments, type DeckComment } from "@/lib/deckComments";
 // Deck controls. Two decks in one page (ValueGlance / Canmarket) and two views:
 //  - Present (default): one slide fills the window; ←/→, Space, PageUp/Down, Home/End, swipe; F = fullscreen.
 //  - Scroll: every slide stacked, as before (handy for printing or html-to-design).
-// State lives in the URL — ?deck=vg|cm|takehome, ?view=scroll, #<slide> — so any slide has its own link.
+// State lives in the URL — ?deck=vg|cm, ?view=scroll, #<slide> — so any slide has its own link.
 // Slide changes are instant on purpose: they're keyboard-driven and happen dozens of times a talk.
 const TABS = [
   ["vg", "ValueGlance"],
   ["cm", "Canmarket.ai"],
-  ["takehome", "Take-home"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
+// Decks that still open by URL (?deck=cm) but get no tab button.
+const HIDDEN: ReadonlySet<Tab> = new Set<Tab>(["cm"]);
 type View = "present" | "scroll";
 
 function slidesFor(tab: Tab): HTMLElement[] {
@@ -216,9 +217,10 @@ export default function DeckTabs() {
           </button>
         </div>
       )}
+      {TABS.filter(([k]) => !HIDDEN.has(k)).length > 1 && (
       <nav aria-label="Choose deck" className="deck-tabs">
         <span ref={pill} aria-hidden="true" className="deck-tabs-pill" />
-        {TABS.map(([k, label], i) => (
+        {TABS.map(([k, label], i) => HIDDEN.has(k) ? null : (
           <button
             key={k}
             ref={(el) => {
@@ -234,6 +236,7 @@ export default function DeckTabs() {
           </button>
         ))}
       </nav>
+      )}
       <div className="deck-bar-group">
         {view === "present" && (
           <button

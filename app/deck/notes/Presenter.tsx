@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { NOTES } from "../notes";
 import { loadComments, timeAgo, type DeckComment } from "@/lib/deckComments";
 
-type State = { tab: "vg" | "cm" | "takehome"; i: number; count: number; key: string; title: string; next: string };
+type State = { tab: "vg" | "cm"; i: number; count: number; key: string; title: string; next: string };
 
 // Private presenter view. Talks to the deck window over a same-origin BroadcastChannel:
 // it shows the current slide's notes and the next slide, and ←/→ here drive the deck.
@@ -66,7 +66,7 @@ export default function Presenter() {
     <main className="deck-notes mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-6 py-6 text-black">
       <header className="flex items-center justify-between gap-4 text-sm text-gray-500">
         <span className="font-semibold uppercase tracking-[0.12em]">
-          Speaker notes · {s ? ({ vg: "ValueGlance", cm: "Canmarket.ai", takehome: "Take-home" }[s.tab]) : "waiting for the deck…"}
+          Speaker notes · {s ? ({ vg: "ValueGlance", cm: "Canmarket.ai" }[s.tab]) : "waiting for the deck…"}
         </span>
         <span className="flex items-center gap-3 tabular-nums">
           <span className="text-base font-semibold text-black">{mm}:{ss}</span>

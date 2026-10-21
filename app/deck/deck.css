@@ -105,11 +105,7 @@ body:has(.deck) > footer {
 
 /* Project tabs: show one project's slides at a time (shared intro + close stay in both). */
 .deck[data-show="vg"] [data-part="cm"],
-.deck[data-show="vg"] [data-part="takehome"],
-.deck[data-show="cm"] [data-part="vg"],
-.deck[data-show="cm"] [data-part="takehome"],
-.deck[data-show="takehome"] [data-part="vg"],
-.deck[data-show="takehome"] [data-part="cm"] {
+.deck[data-show="cm"] [data-part="vg"] {
   display: none;
 }
 /* floats bottom-centre so it never covers a slide title */

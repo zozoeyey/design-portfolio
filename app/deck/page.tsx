@@ -606,7 +606,7 @@ export default function Deck() {
         },
         {
           q: "Is it feasible?",
-          title: "Check it with engineering",
+          title: "Check with engineering",
           line: "Walked the chart in DevTools with the CTO and front-end engineers.",
           visual: <Img src="s15" alt="Reviewing the chart in DevTools with the CTO over Zoom" />,
         },
@@ -1509,14 +1509,6 @@ export default function Deck() {
       </Slide>
 
       </div>
-      <div data-part="takehome" className="contents">
-      {/* ---------------- Take-home ---------------- */}
-      <Slide theme="cm" className="flex flex-col justify-center">
-        <p className="s-eyebrow">Take-home exercise</p>
-        <h2 className="s-display mt-[1.2cqw]">Take-home</h2>
-        <p className="s-sub">Slides coming soon.</p>
-      </Slide>
-      </div>
       {/* ---------------- Close ---------------- */}
       {["Q & A", "Thank you!"].map((t) => (
         <Slide key={t} theme="intro" className="flex flex-col justify-center">
@@ -1524,6 +1516,19 @@ export default function Deck() {
             <Logo size={88} />
           </span>
           <h2 className="s-display mt-[1.6cqw] !text-[4.6cqw]">{t}</h2>
+          {t === "Thank you!" && (
+            <p className="s-sub mt-[1.6cqw]">
+              See my take-home:{" "}
+              <a
+                href="https://zoeyyandesign.vercel.app/movemint-redesign?key=1VauASEx_d9Fq5RZ&v=1"
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-[var(--c)] underline decoration-[0.1cqw] underline-offset-[0.3cqw]"
+              >
+                Movemint Insights redesign →
+              </a>
+            </p>
+          )}
         </Slide>
       ))}
     </main>
