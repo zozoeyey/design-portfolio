@@ -37,6 +37,25 @@ body:has(.deck) > footer {
   --ink: oklch(0.25 0.02 260);    /* titles */
   --cm-tint: oklch(0.97 0.012 70); /* warm light panel */
 }
+/* H-1B deck: the Movemint Insights redesign design system (app/movemint-redesign/DESIGN.md) — Inter,
+   cool neutrals tinted toward violet (hue 285), raspberry for text, light raspberry for shapes only. */
+.slide[data-theme="mm"] {
+  --c: oklch(0.54 0.18 5);           /* accentStrong: anything carrying text */
+  --mm-accent: oklch(0.66 0.19 5);   /* shapes without text */
+  --mm-tint: oklch(0.965 0.02 5);
+  --ink: oklch(0.2 0.015 285);
+  --mm-muted: oklch(0.5 0.015 285);
+  --mm-surface: oklch(0.975 0.004 285);
+  --mm-line: oklch(0.2 0.015 285 / 0.09);
+  --mm-gradient: linear-gradient(90deg, oklch(0.74 0.15 35), oklch(0.66 0.16 320), oklch(0.62 0.15 285), oklch(0.74 0.12 235));
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+}
+.slide[data-theme="mm"] .s-title,
+.slide[data-theme="mm"] .s-display { color: var(--ink); letter-spacing: -0.02em; }
+.slide[data-theme="mm"] .s-eyebrow,
+.slide[data-theme="mm"] .s-sub,
+.slide[data-theme="mm"] .s-body { color: var(--mm-muted); }
 .slide[data-theme="cm"] .s-title,
 .slide[data-theme="cm"] .s-display { color: var(--ink); }
 /* one screenshot treatment: white, thin outline, no shadow, on a warm panel */
@@ -105,7 +124,12 @@ body:has(.deck) > footer {
 
 /* Project tabs: show one project's slides at a time (shared intro + close stay in both). */
 .deck[data-show="vg"] [data-part="cm"],
-.deck[data-show="cm"] [data-part="vg"] {
+.deck[data-show="vg"] [data-part="h1b"],
+.deck[data-show="cm"] [data-part="vg"],
+.deck[data-show="cm"] [data-part="h1b"],
+.deck[data-show="h1b"] [data-part="vg"],
+.deck[data-show="h1b"] [data-part="cm"],
+.deck[data-show="h1b"] > section.slide {
   display: none;
 }
 /* floats bottom-centre so it never covers a slide title */

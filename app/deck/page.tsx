@@ -1,6 +1,7 @@
 // Portfolio review deck — October 2026. Unlisted: nothing links here and it is
 // excluded from search. One long page, one 16:9 card per slide.
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import Logo from "@/components/Logo";
 import { DensityIcon, DecisionIcon, SystemIcon, FocusIcon, SpeedIcon, TrustIcon, PromptIcon, ScanIcon, ChecklistIcon } from "./icons";
 import FeatureFlow from "@/components/FeatureFlow";
@@ -14,14 +15,20 @@ import DesignSystem from "./DesignSystem";
 import TwoDirections from "./TwoDirections";
 import UserWork from "./UserWork";
 import ContextPillars from "./ContextPillars";
+import { H1bWhy, H1bWhat, H1bCap, H1bProcess, H1bCost, H1bEmployer, H1bFee } from "./H1b";
+
+// Inter for the H-1B deck (Movemint design system)
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 import "./deck.css";
+import { notFound } from "next/navigation";
+import { h1bAllowed } from "./h1bAccess";
 
 export const metadata: Metadata = {
   title: "Portfolio review — Zoey Yan",
   robots: { index: false, follow: false },
 };
 
-type Theme = "intro" | "vg" | "cm";
+type Theme = "intro" | "vg" | "cm" | "mm";
 
 // deck copies cropped to the app window (no baked blue gradient), shown on the warm panel
 const CM_F1 = "/deck/cm-f1.mp4";
@@ -276,7 +283,10 @@ function IterationFocus({ v, label, src = "", ratio = "", alt = "", bare = false
   );
 }
 
-export default function Deck() {
+export default async function Deck({ searchParams }: { searchParams: Promise<{ [k: string]: string | string[] | undefined }> }) {
+  const { deck, key } = await searchParams;
+  const h1b = h1bAllowed(key);
+  if (deck === "h1b" && !h1b) notFound();
   return (
     <main className="deck" data-show="vg" data-mode="present">
       <DeckTabs />
@@ -419,8 +429,21 @@ export default function Deck() {
           </p>
           <div className="mt-[1.6cqw] flex min-h-0 flex-1 justify-center">
             {src === "flow" ? (
-              // the shipped flow, coded: tap → arrow → next screen
-              <FeatureFlow className="w-[78cqw] self-center" />
+              // the portfolio project-card recording, cropped to the phone (the video's gradient background is
+              // cut away; the phone sits at x 510–930, y 57–933 of the 1440×990 frame) and clipped to its corners
+              <div className="relative h-full self-center overflow-hidden rounded-[13%/6.3%]" style={{ aspectRatio: "420 / 876" }}>
+                <video
+                  className="absolute max-w-none"
+                  style={{ width: `${(1440 / 420) * 100}%`, left: `${(-510 / 420) * 100}%`, top: `${(-57 / 876) * 100}%` }}
+                  src="/media/valueglance/card.mp4"
+                  poster="/media/valueglance/card-poster.jpg"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                />
+              </div>
             ) : src === "laptop" || src === "tokens" ? (
               // Product recordings on a static laptop. Screener: click-through (browser chrome cropped).
               // Tokens: six design-tokens page walkthroughs joined with fades through white, each with a chapter pill.
@@ -1502,6 +1525,80 @@ export default function Deck() {
       </Slide>
 
       </div>
+      {h1b && (
+      <div data-part="h1b" className={`contents ${inter.variable}`}>
+      {/* ---------------- H-1B (hidden tab: /deck?deck=h1b) ---------------- */}
+      {/* Cover: title + question, then a brand panel (logo gradient — the deck's one other brand moment) with byline + disclaimer */}
+      <Slide theme="mm" className="flex flex-col !pb-[4cqw] !pt-[4.6cqw]">
+        <h2 className="s-display mt-[3cqw] flex items-baseline gap-[1.2cqw] !text-[4.4cqw]">
+          H-1B visa guide for
+          <span className="sr-only">Movemint</span>
+          {/* Movemint's own wordmark; its baseline sits on the title's */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/deck/movemint-logo.png" alt="" aria-hidden="true" className="h-[4cqw] w-auto translate-y-[0.55cqw] self-baseline" />
+        </h2>
+        <div className="mt-[3cqw] flex flex-1 flex-col justify-end rounded-[1.4cqw] p-[2.6cqw] text-white" style={{ backgroundImage: "var(--mm-gradient)" }}>
+          <p className="text-[1.5cqw] font-semibold">Prepared by Zoey Yan</p>
+          <p className="mt-[0.5cqw] text-[1.05cqw] text-white/90">
+            Disclaimer: this presentation is for informational purposes only and does not constitute legal advice or opinions.
+          </p>
+        </div>
+      </Slide>
+      {/* Why H-1B: two groups, the case for the company and the case for Zoey */}
+      <Slide theme="mm" className="flex flex-col !pb-[3.4cqw] !pt-[4.2cqw]">
+        <p className="s-eyebrow">Work authorization</p>
+        <h2 className="s-title mt-[0.8cqw]">Why H-1B?</h2>
+        <H1bWhy />
+      </Slide>
+      {/* What is H-1B: the definition, then how Zoey meets it */}
+      <Slide theme="mm" className="flex flex-col !pb-[3cqw] !pt-[4.2cqw]">
+        <p className="s-eyebrow">Work authorization</p>
+        <h2 className="s-title mt-[0.8cqw]">What is H-1B?</h2>
+        <H1bWhat />
+      </Slide>
+      {/* The process: register → results → petition, with the yearly dates */}
+      <Slide theme="mm" className="flex flex-col !pb-[3cqw] !pt-[4.2cqw]">
+        <p className="s-eyebrow">Work authorization</p>
+        <h2 className="s-title mt-[0.8cqw]">What’s the process?</h2>
+        <H1bProcess />
+      </Slide>
+      {/* The cost: every government fee, small vs larger employer, plus attorney */}
+      <Slide theme="mm" className="flex flex-col !pb-[3cqw] !pt-[4.2cqw]">
+        <p className="s-eyebrow">Work authorization</p>
+        <h2 className="s-title mt-[0.8cqw]">What does it cost?</h2>
+        <H1bCost />
+      </Slide>
+      {/* Shared path (OPT → STEM OPT), then the lottery branches: selected vs not selected */}
+      <Slide theme="mm" className="flex flex-col !pb-[3cqw] !pt-[4.2cqw]">
+        <p className="s-eyebrow">Work authorization</p>
+        <h2 className="s-title mt-[0.8cqw]">What happens if I get H-1B, and if I don’t</h2>
+        <H1bEmployer />
+      </Slide>
+      {/* Closing: the photo full-bleed on the right, the sign-off on the left */}
+      <Slide theme="mm" className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] !p-0">
+        <div className="flex flex-col justify-center px-[6cqw]">
+          <h2 className="s-display !text-[4.4cqw] leading-[1.05]">Could we make this work together?</h2>
+          <p className="mt-[1.6cqw] text-[1.7cqw] leading-snug text-[var(--mm-muted)]">
+            I’m very excited about joining Movemint and would love to build my future with the team.
+          </p>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/deck/h1b-rider.jpg" alt="A mountain biker grinning mid-race under a blue sky" className="h-full w-full object-cover object-[40%_center]" />
+      </Slide>
+      {/* Appendix — the cap: 85,000 a year, split 65k regular / 20k master's, chosen by lottery */}
+      <Slide theme="mm" className="flex flex-col !pb-[3.4cqw] !pt-[4.2cqw]">
+        <p className="s-eyebrow">Additional info</p>
+        <h2 className="s-title mt-[0.8cqw]">How many H-1B visas are issued every year?</h2>
+        <H1bCap />
+      </Slide>
+      {/* Appendix — the $100,000 fee: not being collected, and wouldn't apply to an F-1 change of status */}
+      <Slide theme="mm" className="flex flex-col !pb-[3cqw] !pt-[4.2cqw]">
+        <p className="s-eyebrow">Additional info</p>
+        <h2 className="s-title mt-[0.8cqw]">What about the $100,000 H-1B fee?</h2>
+        <H1bFee />
+      </Slide>
+      </div>
+      )}
       {/* ---------------- Close ---------------- */}
       {["Q & A", "Thank you!"].map((t) => (
         <Slide key={t} theme="intro" className="flex flex-col justify-center">

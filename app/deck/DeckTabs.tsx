@@ -7,21 +7,24 @@ import { loadComments, type DeckComment } from "@/lib/deckComments";
 // Deck controls. Two decks in one page (ValueGlance / Canmarket) and two views:
 //  - Present (default): one slide fills the window; ←/→, Space, PageUp/Down, Home/End, swipe; F = fullscreen.
 //  - Scroll: every slide stacked, as before (handy for printing or html-to-design).
-// State lives in the URL — ?deck=vg|cm, ?view=scroll, #<slide> — so any slide has its own link.
+// State lives in the URL — ?deck=vg|cm|h1b, ?view=scroll, #<slide> — so any slide has its own link.
 // Slide changes are instant on purpose: they're keyboard-driven and happen dozens of times a talk.
 const TABS = [
   ["vg", "ValueGlance"],
   ["cm", "Canmarket.ai"],
+  ["h1b", "H-1B"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 // Decks that still open by URL (?deck=cm) but get no tab button.
-const HIDDEN: ReadonlySet<Tab> = new Set<Tab>(["cm"]);
+const HIDDEN: ReadonlySet<Tab> = new Set<Tab>(["cm", "h1b"]);
+// Decks that skip the shared closing slides (Q & A, Thank you).
+const STANDALONE: ReadonlySet<Tab> = new Set<Tab>(["h1b"]);
 type View = "present" | "scroll";
 
 function slidesFor(tab: Tab): HTMLElement[] {
   return [...document.querySelectorAll<HTMLElement>(".deck section.slide")].filter((s) => {
     const part = s.closest<HTMLElement>("[data-part]")?.dataset.part;
-    return !part || part === tab;
+    return part === tab || (!part && !STANDALONE.has(tab));
   });
 }
 
